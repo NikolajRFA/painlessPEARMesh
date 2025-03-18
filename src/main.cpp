@@ -115,6 +115,7 @@ void sendMessage() {
 
 void receivedCallback(uint32_t from, String & msg) {
   Serial.printf("startHere: Received from %u msg=%s\n", from, msg.c_str());
+  Serial.println(mesh.subConnectionJson());
 }
 
 void newConnectionCallback(uint32_t nodeId) {
