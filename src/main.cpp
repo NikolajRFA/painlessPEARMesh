@@ -25,7 +25,11 @@ void changedConnectionCallback();
 
 uint32_t chipId;
 
+Scheduler userScheduler;
+
 painlessMesh mesh;
+void sendMessage();
+Task taskSendMessage(TASK_SECOND * 1, TASK_FOREVER, &sendMessage);
 
 void setup()
 {
@@ -79,19 +83,46 @@ void setup()
 
   mesh.onReceive(&receivedCallback);
   mesh.onChangedConnections(&changedConnectionCallback);
+
+  if (chipId == CHIP2)
+  {
+    Serial.println("Adding send message task");
+    userScheduler.addTask(taskSendMessage);
+    taskSendMessage.enable();
+  }
+
 }
 
 void loop()
 {
   mesh.update();
+  userScheduler.execute();
 }
 
 void receivedCallback(uint32_t from, String &msg)
 {
-  Serial.printf("bridge: Received from %u msg=%s\n", from, msg.c_str());
+  Serial.printf("Received from %u msg=%s\n", from, msg.c_str());
 }
 
 void changedConnectionCallback()
 {
   Serial.println(mesh.subConnectionJson());
+}
+
+void sendMessage()
+{
+  Serial.println("Entered send message");
+  String msg = "Hello from 2";
+
+  Serial.println("Sending message");
+  bool messageSent = mesh.sendSingle(CHIP3, msg);
+  if (messageSent) {
+    Serial.println("Message send successfully");
+  }
+  else
+  {
+    Serial.println("Something went wrong when sending message");
+  }
+
+  taskSendMessage.setInterval( random(TASK_SECOND * 1, TASK_SECOND * 5));  
 }
