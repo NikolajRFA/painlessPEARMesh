@@ -40,7 +40,7 @@ void setup()
   WiFi.disconnect();
 
   chipId = 0;
-  chipId |= MAC[2] << 24;  // Big endian (aka "network order"):
+  chipId |= MAC[2] << 24; // Big endian (aka "network order"):
   chipId |= MAC[3] << 16;
   chipId |= MAC[4] << 8;
   chipId |= MAC[5];
@@ -53,53 +53,27 @@ void setup()
   // Channel set to 6. Make sure to use the same channel for your mesh and for you other
   // network (STATION_SSID)
 
-  if (chipId == CHIP1)
+  switch (chipId)
   {
+  case CHIP1:
     mesh.init(MESH_PREFIX1, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-  }
-  else if (chipId == CHIP2)
-  {
+    mesh.setRoot(true);
+  case CHIP2:
     mesh.init(MESH_PREFIX2, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-  }
-  else if (chipId == CHIP3)
-  {
+    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
+  case CHIP3:
     mesh.init(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-  }
-  else if (chipId == CHIP4)
-  {
+    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
+  case CHIP4:
     mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-  }
-
-  if (chipId == CHIP2)
-  {
-    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
-  }
-  else if (chipId == CHIP3)
-  {
-    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
-  }
-  else if (chipId == CHIP4)
-  {
     mesh.stationManual(MESH_PREFIX2, STATION_PASSWORD, STATION_PORT, station_ip);
   }
 
-  if (chipId == CHIP1)
-  {
-    mesh.setRoot(true);
-  }
   //  This node and all other nodes should ideally know the mesh contains a root, so call this on all nodes
   mesh.setContainsRoot(true);
 
   mesh.onReceive(&receivedCallback);
   mesh.onChangedConnections(&changedConnectionCallback);
-
-  if (chipId == CHIP2)
-  {
-    Serial.println("Adding send message task");
-    userScheduler.addTask(taskSendMessage);
-    taskSendMessage.enable();
-  }
-
 }
 
 void loop()
@@ -125,7 +99,8 @@ void sendMessage()
 
   Serial.println("Sending message");
   bool messageSent = mesh.sendSingle(CHIP3, msg);
-  if (messageSent) {
+  if (messageSent)
+  {
     Serial.println("Message send successfully");
   }
   else
@@ -133,5 +108,5 @@ void sendMessage()
     Serial.println("Something went wrong when sending message");
   }
 
-  taskSendMessage.setInterval( random(TASK_SECOND * 1, TASK_SECOND * 5));  
+  taskSendMessage.setInterval(random(TASK_SECOND * 1, TASK_SECOND * 5));
 }
