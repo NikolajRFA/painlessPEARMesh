@@ -32,6 +32,9 @@ painlessMesh mesh;
 void sendMessage();
 Task taskSendMessage(TASK_SECOND * 1, TASK_FOREVER, &sendMessage);
 
+void changeParent();
+Task taskChangeParent(TASK_SECOND * 10, TASK_FOREVER, &changeParent);
+
 void setup()
 {
   WiFi.begin();
@@ -67,6 +70,8 @@ void setup()
   case CHIP4:
     mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
     mesh.stationManual(MESH_PREFIX2, STATION_PASSWORD, STATION_PORT, station_ip);
+    userScheduler.addTask(taskChangeParent);
+    taskChangeParent.enable();
   }
 
   //  This node and all other nodes should ideally know the mesh contains a root, so call this on all nodes
@@ -109,4 +114,17 @@ void sendMessage()
   }
 
   taskSendMessage.setInterval(random(TASK_SECOND * 1, TASK_SECOND * 5));
+}
+
+bool parentIsChanged = false;
+void changeParent()
+{
+  if (mesh.isConnected(CHIP1) && !parentIsChanged)
+  {
+    Serial.println("Changing parent...");
+    mesh.stop();
+    mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
+    mesh.stationManual(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, station_ip);
+    parentIsChanged = true;
+  }
 }
