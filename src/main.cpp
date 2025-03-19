@@ -11,6 +11,7 @@
 #define MESH_PREFIX1 "painless1"
 #define MESH_PREFIX2 "painless2"
 #define MESH_PREFIX3 "painless3"
+#define MESH_PREFIX4 "painless4"
 #define MESH_PASSWORD "somethingSneaky"
 #define MESH_PORT 5555
 
@@ -64,6 +65,10 @@ void setup()
   {
     mesh.init(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
   }
+  else if (chipId == CHIP4)
+  {
+    mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
+  }
 
   if (chipId == CHIP2)
   {
@@ -72,6 +77,10 @@ void setup()
   else if (chipId == CHIP3)
   {
     mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
+  }
+  else if (chipId == CHIP4)
+  {
+    mesh.stationManual(MESH_PREFIX2, STATION_PASSWORD, STATION_PORT, station_ip);
   }
 
   if (chipId == CHIP1)
