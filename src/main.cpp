@@ -138,6 +138,7 @@ void changeParent()
   if (mesh.isConnected(CHIP1) && !parentIsChanged)
   {
     Serial.println("Changing parent...");
+    mesh.closeConnectionSTA();
     // mesh.stop();
     // mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
     mesh.stationManual(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, station_ip);
