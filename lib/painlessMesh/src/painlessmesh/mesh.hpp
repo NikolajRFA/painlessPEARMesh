@@ -366,6 +366,19 @@ class Mesh : public ntp::MeshTime, public plugin::PackageHandler<T> {
     return plugin::PackageHandler<T>::addTask((*this->mScheduler), aCallback);
   }
 
+  bool closeConnectionSTA() {
+    auto connection = this->subs.begin();
+    while (connection != this->subs.end()) {
+      if ((*connection)->station) {
+        // We found the STA connection, close it
+        (*connection)->close();
+        return true;
+      }
+      ++connection;
+    }
+    return false;
+  }
+
   ~Mesh() {
     this->stop();
     if (!isExternalScheduler) delete mScheduler;
@@ -392,19 +405,6 @@ class Mesh : public ntp::MeshTime, public plugin::PackageHandler<T> {
           conn->nodeId);
     }
     router::send<protocol::TimeSync, T>(timeSync, conn, true);
-  }
-
-  bool closeConnectionSTA() {
-    auto connection = this->subs.begin();
-    while (connection != this->subs.end()) {
-      if ((*connection)->station) {
-        // We found the STA connection, close it
-        (*connection)->close();
-        return true;
-      }
-      ++connection;
-    }
-    return false;
   }
 
   void eraseClosedConnections() {

@@ -11,6 +11,7 @@
 #define MESH_PREFIX1 "painless1"
 #define MESH_PREFIX2 "painless2"
 #define MESH_PREFIX3 "painless3"
+#define MESH_PREFIX4 "painless4"
 #define MESH_PASSWORD "somethingSneaky"
 #define MESH_PORT 5555
 
@@ -22,6 +23,7 @@ uint8_t station_ip[4] = {0, 0, 0, 0}; // IP of the server
 // prototypes
 void receivedCallback(uint32_t from, String &msg);
 void changedConnectionCallback();
+void newConnectionCallback(uint32_t nodeId);
 
 uint32_t chipId;
 
@@ -31,6 +33,9 @@ painlessMesh mesh;
 void sendMessage();
 Task taskSendMessage(TASK_SECOND * 1, TASK_FOREVER, &sendMessage);
 
+void changeParent();
+Task taskChangeParent(TASK_SECOND * 10, TASK_FOREVER, &changeParent);
+
 void setup()
 {
   WiFi.begin();
@@ -39,7 +44,7 @@ void setup()
   WiFi.disconnect();
 
   chipId = 0;
-  chipId |= MAC[2] << 24;  // Big endian (aka "network order"):
+  chipId |= MAC[2] << 24; // Big endian (aka "network order"):
   chipId |= MAC[3] << 16;
   chipId |= MAC[4] << 8;
   chipId |= MAC[5];
@@ -52,45 +57,33 @@ void setup()
   // Channel set to 6. Make sure to use the same channel for your mesh and for you other
   // network (STATION_SSID)
 
-  if (chipId == CHIP1)
+  switch (chipId)
   {
+  case CHIP1:
     mesh.init(MESH_PREFIX1, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-  }
-  else if (chipId == CHIP2)
-  {
-    mesh.init(MESH_PREFIX2, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-  }
-  else if (chipId == CHIP3)
-  {
-    mesh.init(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-  }
-
-  if (chipId == CHIP2)
-  {
-    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
-  }
-  else if (chipId == CHIP3)
-  {
-    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
-  }
-
-  if (chipId == CHIP1)
-  {
     mesh.setRoot(true);
+    break;
+  case CHIP2:
+    mesh.init(MESH_PREFIX2, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
+    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
+    break;
+  case CHIP3:
+    mesh.init(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
+    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
+    break;
+  case CHIP4:
+    mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
+    mesh.stationManual(MESH_PREFIX2, STATION_PASSWORD, STATION_PORT, station_ip);
+    userScheduler.addTask(taskChangeParent);
+    taskChangeParent.enable();
+    break;
   }
+
   //  This node and all other nodes should ideally know the mesh contains a root, so call this on all nodes
   mesh.setContainsRoot(true);
 
   mesh.onReceive(&receivedCallback);
   mesh.onChangedConnections(&changedConnectionCallback);
-
-  if (chipId == CHIP2)
-  {
-    Serial.println("Adding send message task");
-    userScheduler.addTask(taskSendMessage);
-    taskSendMessage.enable();
-  }
-
 }
 
 void loop()
@@ -109,6 +102,13 @@ void changedConnectionCallback()
   Serial.println(mesh.subConnectionJson());
 }
 
+void newConnectionCallback(uint32_t nodeId)
+{
+  Serial.print("New connection was made with node: ");
+  Serial.println(nodeId);
+  Serial.println(mesh.subConnectionJson());
+}
+
 void sendMessage()
 {
   Serial.println("Entered send message");
@@ -116,7 +116,8 @@ void sendMessage()
 
   Serial.println("Sending message");
   bool messageSent = mesh.sendSingle(CHIP3, msg);
-  if (messageSent) {
+  if (messageSent)
+  {
     Serial.println("Message send successfully");
   }
   else
@@ -124,5 +125,23 @@ void sendMessage()
     Serial.println("Something went wrong when sending message");
   }
 
-  taskSendMessage.setInterval( random(TASK_SECOND * 1, TASK_SECOND * 5));  
+  taskSendMessage.setInterval(random(TASK_SECOND * 1, TASK_SECOND * 5));
+}
+
+bool parentIsChanged = false;
+void changeParent()
+{
+  // Serial.print("Is Connected to CHIP1: ");
+  // Serial.print(mesh.isConnected(CHIP1));
+  // Serial.print(", parentIsChanged: ");
+  // Serial.println(parentIsChanged);
+  if (mesh.isConnected(CHIP1) && !parentIsChanged)
+  {
+    Serial.println("Changing parent...");
+    mesh.closeConnectionSTA();
+    // mesh.stop();
+    // mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
+    mesh.stationManual(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, station_ip);
+    parentIsChanged = true;
+  }
 }
