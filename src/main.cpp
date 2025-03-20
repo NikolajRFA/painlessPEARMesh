@@ -23,6 +23,7 @@ uint8_t station_ip[4] = {0, 0, 0, 0}; // IP of the server
 // prototypes
 void receivedCallback(uint32_t from, String &msg);
 void changedConnectionCallback();
+void newConnectionCallback(uint32_t nodeId);
 
 uint32_t chipId;
 
@@ -61,17 +62,21 @@ void setup()
   case CHIP1:
     mesh.init(MESH_PREFIX1, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
     mesh.setRoot(true);
+    break;
   case CHIP2:
     mesh.init(MESH_PREFIX2, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
     mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
+    break;
   case CHIP3:
     mesh.init(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
     mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
+    break;
   case CHIP4:
     mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
     mesh.stationManual(MESH_PREFIX2, STATION_PASSWORD, STATION_PORT, station_ip);
     userScheduler.addTask(taskChangeParent);
     taskChangeParent.enable();
+    break;
   }
 
   //  This node and all other nodes should ideally know the mesh contains a root, so call this on all nodes
@@ -97,6 +102,13 @@ void changedConnectionCallback()
   Serial.println(mesh.subConnectionJson());
 }
 
+void newConnectionCallback(uint32_t nodeId)
+{
+  Serial.print("New connection was made with node: ");
+  Serial.println(nodeId);
+  Serial.println(mesh.subConnectionJson());
+}
+
 void sendMessage()
 {
   Serial.println("Entered send message");
@@ -119,11 +131,15 @@ void sendMessage()
 bool parentIsChanged = false;
 void changeParent()
 {
+  // Serial.print("Is Connected to CHIP1: ");
+  // Serial.print(mesh.isConnected(CHIP1));
+  // Serial.print(", parentIsChanged: ");
+  // Serial.println(parentIsChanged);
   if (mesh.isConnected(CHIP1) && !parentIsChanged)
   {
     Serial.println("Changing parent...");
-    mesh.stop();
-    mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
+    // mesh.stop();
+    // mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
     mesh.stationManual(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, station_ip);
     parentIsChanged = true;
   }
