@@ -145,3 +145,15 @@ void changeParent()
     parentIsChanged = true;
   }
 }
+
+std::list<String> getAvailableNetworks()
+{
+  std::list<String> availableNetworks;
+  int n = WiFi.scanNetworks();
+  for (int i = 0; i < n; i++)
+  {
+    availableNetworks.push_back(WiFi.SSID(i));
+  }
+
+  return availableNetworks;
+}
