@@ -137,12 +137,14 @@ void changeParent()
   if (mesh.isConnected(CHIP1) && !parentIsChanged)
   {
     Serial.println("Changing parent...");
-    mesh.closeConnectionSTA();
-    // mesh.stop();
-    // mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-    mesh.stationManual(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT);
+    changeAP(MESH_PREFIX3);
     parentIsChanged = true;
   }
+}
+
+void changeAP(String ssid) {
+  mesh.closeConnectionSTA();
+  mesh.stationManual(ssid, MESH_PASSWORD, MESH_PORT);
 }
 
 std::list<String> getAvailableNetworks()
