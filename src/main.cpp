@@ -7,17 +7,8 @@
 #include "painlessMesh.h"
 #include "deviceIds.h"
 #include "../lib/painlessMesh/src/painlessmesh/tcp.hpp"
-
-#define MESH_PREFIX1 "painless1"
-#define MESH_PREFIX2 "painless2"
-#define MESH_PREFIX3 "painless3"
-#define MESH_PREFIX4 "painless4"
-#define MESH_PASSWORD "somethingSneaky"
-#define MESH_PORT 5555
-
-#define STATION_SSID "painless1"
-#define STATION_PASSWORD "somethingSneaky"
-#define STATION_PORT 5555
+#include "meshConstants.h"
+#include "meshHelpers.cpp"
 
 // prototypes
 void receivedCallback(uint32_t from, String &msg);
@@ -64,15 +55,15 @@ void setup()
     break;
   case CHIP2:
     mesh.init(MESH_PREFIX2, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT);
+    mesh.stationManual(MESH_PREFIX1, MESH_PASSWORD, MESH_PORT);
     break;
   case CHIP3:
     mesh.init(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT);
+    mesh.stationManual(MESH_PREFIX1, MESH_PASSWORD, MESH_PORT);
     break;
   case CHIP4:
     mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-    mesh.stationManual(MESH_PREFIX2, STATION_PASSWORD, STATION_PORT);
+    mesh.stationManual(MESH_PREFIX2, MESH_PASSWORD, MESH_PORT);
     userScheduler.addTask(taskChangeParent);
     taskChangeParent.enable();
     break;
@@ -137,14 +128,9 @@ void changeParent()
   if (mesh.isConnected(CHIP1) && !parentIsChanged)
   {
     Serial.println("Changing parent...");
-    changeAP(MESH_PREFIX3);
+    changeAP(mesh, MESH_PREFIX3);
     parentIsChanged = true;
   }
-}
-
-void changeAP(String ssid) {
-  mesh.closeConnectionSTA();
-  mesh.stationManual(ssid, MESH_PASSWORD, MESH_PORT);
 }
 
 std::list<String> getAvailableNetworks()
