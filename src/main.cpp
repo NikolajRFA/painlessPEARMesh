@@ -18,7 +18,6 @@
 #define STATION_SSID "painless1"
 #define STATION_PASSWORD "somethingSneaky"
 #define STATION_PORT 5555
-uint8_t station_ip[4] = {0, 0, 0, 0}; // IP of the server
 
 // prototypes
 void receivedCallback(uint32_t from, String &msg);
@@ -65,15 +64,15 @@ void setup()
     break;
   case CHIP2:
     mesh.init(MESH_PREFIX2, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
+    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT);
     break;
   case CHIP3:
     mesh.init(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT, station_ip);
+    mesh.stationManual(MESH_PREFIX1, STATION_PASSWORD, STATION_PORT);
     break;
   case CHIP4:
     mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-    mesh.stationManual(MESH_PREFIX2, STATION_PASSWORD, STATION_PORT, station_ip);
+    mesh.stationManual(MESH_PREFIX2, STATION_PASSWORD, STATION_PORT);
     userScheduler.addTask(taskChangeParent);
     taskChangeParent.enable();
     break;
@@ -141,7 +140,19 @@ void changeParent()
     mesh.closeConnectionSTA();
     // mesh.stop();
     // mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-    mesh.stationManual(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, station_ip);
+    mesh.stationManual(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT);
     parentIsChanged = true;
   }
+}
+
+std::list<String> getAvailableNetworks()
+{
+  std::list<String> availableNetworks;
+  int n = WiFi.scanNetworks();
+  for (int i = 0; i < n; i++)
+  {
+    if (WiFi.SSID(i).startsWith("painless")) availableNetworks.push_back(WiFi.SSID(i));
+  }
+
+  return availableNetworks;
 }
