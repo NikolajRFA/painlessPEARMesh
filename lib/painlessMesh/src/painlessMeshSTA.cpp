@@ -116,7 +116,11 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
 
     // Next task is to sort by strength
     task.yield([this] {
-      aps.sort([](WiFi_AP_Record_t a, WiFi_AP_Record_t b) {
+      aps.sort([this](WiFi_AP_Record_t a, WiFi_AP_Record_t b) {
+        if (useTargetBSSID) {
+          if (memcmp(a.bssid, targetBSSID, 6) == 0) return true;
+          if (memcmp(b.bssid, targetBSSID, 6) == 0) return false;
+        }
         return a.rssi > b.rssi;
       });
       // Next task is to connect to the top ap
