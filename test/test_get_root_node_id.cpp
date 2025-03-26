@@ -1,5 +1,6 @@
 #include "unity.h"
 #include "..\src\meshHelpers.cpp"
+painlessMesh mesh;
 
 void setUp(void)
 {
