@@ -229,4 +229,14 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
     }
   }
 }
+
+void StationScan::setTargetBSSID(const uint8_t* bssid) {
+  memcpy(targetBSSID, bssid, sizeof(targetBSSID));
+  useTargetBSSID = true;
+}
+
+void StationScan::clearTargetBSSID() {
+  useTargetBSSID = false;
+}
+
 #endif
