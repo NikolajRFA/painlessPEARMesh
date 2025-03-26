@@ -117,11 +117,7 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
     // Next task is to sort by strength
     task.yield([this] {
       aps.sort([this](WiFi_AP_Record_t a, WiFi_AP_Record_t b) {
-        if (useTargetBSSID) {
-          if (memcmp(a.bssid, targetBSSID, 6) == 0) return true;
-          if (memcmp(b.bssid, targetBSSID, 6) == 0) return false;
-        }
-        return a.rssi > b.rssi;
+        return compareWiFiAPRecords(a, b, useTargetBSSID, targetBSSID);
       });
       // Next task is to connect to the top ap
       task.yield([this]() { connectToAP(); });
@@ -140,6 +136,14 @@ void ICACHE_FLASH_ATTR StationScan::filterAPs() {
       ap++;
     }
   }
+}
+
+bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(WiFi_AP_Record_t a, WiFi_AP_Record_t b, bool useTargetBSSID, const uint8_t* targetBSSID) {
+    if (useTargetBSSID) {
+        if (memcmp(a.bssid, targetBSSID, 6) == 0) return true;
+        if (memcmp(b.bssid, targetBSSID, 6) == 0) return false;
+    }
+    return a.rssi > b.rssi;
 }
 
 void ICACHE_FLASH_ATTR StationScan::requestIP(WiFi_AP_Record_t &ap) {

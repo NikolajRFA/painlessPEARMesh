@@ -29,6 +29,7 @@ public:
   void stationScan();
   void scanComplete();
   void filterAPs();
+  bool StationScan::compareWiFiAPRecords(WiFi_AP_Record_t a, WiFi_AP_Record_t b, bool useTargetBSSID, const uint8_t* targetBSSID);
   void connectToAP();
 
   /// Valid APs found during the last scan
