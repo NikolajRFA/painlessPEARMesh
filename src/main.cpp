@@ -156,3 +156,33 @@ std::list<String> getAvailableNetworks()
 
   return availableNetworks;
 }
+
+int getRootNodeId(){
+  TSTRING connections = mesh.subConnectionJson();
+  std::string connectionsStr = connections.c_str();
+  // Find the position of "root"
+    size_t rootStringStartPosition = connectionsStr.find("root");
+    if (rootStringStartPosition == std::string::npos) {
+        Serial.println("Root not found in connections");
+        return -1; // Return an error value
+    }
+
+    // Extract the root node ID (assuming a fixed format)
+    size_t idStartPos = rootStringStartPosition - 12; 
+    if (idStartPos > connectionsStr.size()) {
+        Serial.println("Invalid root node ID position");
+        return -1;
+    }
+
+    std::string rootNodeIdStr = connectionsStr.substr(idStartPos, 10);
+    uint32_t rootNodeId = static_cast<uint32_t>(std::stoul(rootNodeIdStr));
+
+    Serial.print("Root node id: ");
+    Serial.println(rootNodeId);
+
+    return rootNodeId;
+}
+
+/*
+{"nodeId":3211386233,"subs":[{"nodeId":3211408993,"subs":[{"nodeId":3206773453,"root":true,"subs":[{"nodeId":3206793885}]}]}]}
+*/
