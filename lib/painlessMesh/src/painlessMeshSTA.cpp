@@ -140,8 +140,8 @@ void ICACHE_FLASH_ATTR StationScan::filterAPs() {
 
 bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(WiFi_AP_Record_t a, WiFi_AP_Record_t b, bool useTargetBSSID, const uint8_t* targetBSSID) {
   if (useTargetBSSID) {
-      if (memcmp(a.bssid, targetBSSID, 6) == 0) return true;
-      if (memcmp(b.bssid, targetBSSID, 6) == 0) return false;
+      if (memcmp(a.bssid, targetBSSID, sizeof(a.bssid)) == 0) return true;
+      if (memcmp(b.bssid, targetBSSID, sizeof(b.bssid)) == 0) return false;
   }
   return a.rssi > b.rssi;
 }
