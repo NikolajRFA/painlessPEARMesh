@@ -235,7 +235,7 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
       if (!mesh->shouldContainRoot)
         // Slower when part of bigger network
         prob /= 2 * (1 + layout::size(mesh->asNodeTree()));
-      if (!layout::isRooted(mesh->asNodeTree()) && random(0, 1000) < prob) {
+      if ((!layout::isRooted(mesh->asNodeTree()) && random(0, 1000) < prob) || useTargetBSSID) {
         Log(CONNECTION, "connectToAP(): Reconfigure network: %s\n",
             String(prob).c_str());
         // close STA connection, this will trigger station disconnect which
