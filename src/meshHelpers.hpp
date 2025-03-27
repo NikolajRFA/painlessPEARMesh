@@ -1,4 +1,3 @@
-#include <Arduino.h>
 #include "painlessMesh.h"
 #include "meshConstants.h"
 
