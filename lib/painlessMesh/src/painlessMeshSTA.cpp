@@ -142,10 +142,11 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
 
 bool StationScan::containsTargetBSSID(const std::list<WiFi_AP_Record_t> &aps, const uint8_t *targetBSSID)
 {
-  Serial.printf("Target BSSID: %i:%i:%i:%i:%i:%i\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
+  using namespace painlessmesh::logger;
+  Log(DEBUG, "Target BSSID: %i:%i:%i:%i:%i:%i\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
   for (const auto &ap : aps)
   {
-    Serial.printf("Current BSSID: %i:%i:%i:%i:%i:%i\n", ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5]);
+    Log(DEBUG, "Current BSSID: %i:%i:%i:%i:%i:%i\n", ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5]);
     if (memcmp(ap.bssid, targetBSSID, sizeof(ap.bssid)) == 0)
     {
       return true; // Found the target BSSID
@@ -268,9 +269,10 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
 }
 
 void StationScan::setTargetBSSID(const uint8_t* bssid) {
+  using namespace painlessmesh::logger;
   memcpy(targetBSSID, bssid, sizeof(targetBSSID));
   useTargetBSSID = true;
-  Serial.printf("TargetBSSID is set to %i:%i:%i:%i:%i:%i\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
+  Log(DEBUG, "TargetBSSID is set to %i:%i:%i:%i:%i:%i\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
 }
 
 void StationScan::clearTargetBSSID() {
