@@ -1,6 +1,7 @@
 #include "unity.h"
-#include "..\lib\painlessMesh\src\painlessmesh\mesh.hpp"
-#include "painlessmesh.h"
+#include "painlessMeshSTA.h"
+#include "sta_tests.hpp"
+#include "test_get_root_node_id.hpp"
 
 void setUp(void)
 {
@@ -12,15 +13,10 @@ void tearDown(void)
     // clean stuff up here
 }
 
-void test_getRootNodeId_should_return_3206773453(void)
-{
-    u_int32_t rootId = painlessMesh::Mesh::getRootNodeId("{\"nodeId\" : 3211386233, \"subs\" : [ {\"nodeId\" : 3211408993, \"subs\" : [ {\"nodeId\" : 3206773453, \"root\" : true, \"subs\" : [ {\"nodeId\" : 3206793885} ]} ]} ]}");
-    TEST_ASSERT_EQUAL_INT32(3206773453, rootId);
-}
-
 int runUnityTests(void)
 {
     UNITY_BEGIN();
+    RUN_TEST(test_compareWiFiAPRecords_should_return_true);
     RUN_TEST(test_getRootNodeId_should_return_3206773453);
     return UNITY_END();
 }

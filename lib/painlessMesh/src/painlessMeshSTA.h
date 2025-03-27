@@ -29,8 +29,8 @@ public:
   void stationScan();
   void scanComplete();
   void filterAPs();
-  bool StationScan::compareWiFiAPRecords(WiFi_AP_Record_t a, WiFi_AP_Record_t b, bool useTargetBSSID, const uint8_t* targetBSSID);
   void connectToAP();
+  static bool compareWiFiAPRecords(WiFi_AP_Record_t a, WiFi_AP_Record_t b, bool useTargetBSSID, const uint8_t* targetBSSID);
 
   /// Valid APs found during the last scan
   std::list<WiFi_AP_Record_t> lastAPs;
