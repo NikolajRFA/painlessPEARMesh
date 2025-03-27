@@ -7,15 +7,17 @@
 
 #include <list>
 
-typedef struct {
+typedef struct
+{
   uint8_t bssid[6];
   TSTRING ssid;
   int8_t rssi;
 } WiFi_AP_Record_t;
 
-class StationScan {
- public:
-  Task task;  // Station scanning for connections
+class StationScan
+{
+public:
+  Task task; // Station scanning for connections
 
 #ifdef ESP8266
   Task asyncTask;
@@ -28,16 +30,23 @@ class StationScan {
   void scanComplete();
   void filterAPs();
   void connectToAP();
-
+  static bool compareWiFiAPRecords(WiFi_AP_Record_t a, WiFi_AP_Record_t b, bool useTargetBSSID, const uint8_t* targetBSSID);
+  static bool containsTargetBSSID(const std::list<WiFi_AP_Record_t>& aps, const uint8_t* targetBSSID);
+  
   /// Valid APs found during the last scan
   std::list<WiFi_AP_Record_t> lastAPs;
 
- protected:
+  void setTargetBSSID(const uint8_t *bssid);
+  void clearTargetBSSID();
+
+protected:
   TSTRING ssid;
   TSTRING password;
   painlessMesh *mesh;
   uint16_t port;
   std::list<WiFi_AP_Record_t> aps;
+  uint8_t targetBSSID[6] = {0}; // Default to an invalid BSSID
+  bool useTargetBSSID = false;  // Flag to enable/disable targeting a specific BSSID
 
   void requestIP(WiFi_AP_Record_t &ap);
 

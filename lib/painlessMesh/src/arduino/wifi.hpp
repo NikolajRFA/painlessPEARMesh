@@ -137,6 +137,9 @@ class Mesh : public painlessmesh::Mesh<Connection> {
   }
 
   void initStation() {
+    // TODO: Remove comments
+    // uint8_t targetBssid[] = {0x88, 0x13, 0xBF, 0x23, 0x7A, 0xCD};
+    // stationScan.setTargetBSSID(targetBssid);
     stationScan.init(this, _meshSSID, _meshPassword, _meshPort);
     mScheduler->addTask(stationScan.task);
     stationScan.task.enable();

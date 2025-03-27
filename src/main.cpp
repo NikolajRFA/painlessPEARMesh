@@ -4,143 +4,62 @@
 // for more details
 // https://gitlab.com/painlessMesh/painlessMesh/wikis/bridge-between-mesh-and-another-network
 //************************************************************
-#include "painlessMesh.h"
+#include "../lib/painlessMesh/src/painlessMesh.h"
 #include "deviceIds.h"
 #include "../lib/painlessMesh/src/painlessmesh/tcp.hpp"
 #include "meshConstants.h"
 #include "meshHelpers.hpp"
 
-// prototypes
-void receivedCallback(uint32_t from, String &msg);
-void changedConnectionCallback();
-void newConnectionCallback(uint32_t nodeId);
+Scheduler userScheduler; // to control your personal task
+painlessMesh  mesh;
 
-uint32_t chipId;
+// User stub
+void sendMessage() ; // Prototype so PlatformIO doesn't complain
 
-Scheduler userScheduler;
+Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
 
-painlessMesh mesh;
-void sendMessage();
-Task taskSendMessage(TASK_SECOND * 1, TASK_FOREVER, &sendMessage);
+void sendMessage() {
+  String msg = "Hello from node ";
+  msg += mesh.getNodeId();
+  mesh.sendBroadcast( msg );
+  taskSendMessage.setInterval( random( TASK_SECOND * 1, TASK_SECOND * 5 ));
+}
 
-void changeParent();
-Task taskChangeParent(TASK_SECOND * 10, TASK_FOREVER, &changeParent);
+// Needed for painless library
+void receivedCallback( uint32_t from, String &msg ) {
+  Serial.printf("startHere: Received from %u msg=%s\n", from, msg.c_str());
+}
 
-void setup()
-{
-  WiFi.begin();
-  uint8_t MAC[] = {0, 0, 0, 0, 0, 0};
-  WiFi.softAPmacAddress(MAC);
-  WiFi.disconnect();
+void newConnectionCallback(uint32_t nodeId) {
+    Serial.printf("--> startHere: New Connection, nodeId = %u\n", nodeId);
+}
 
-  chipId = 0;
-  chipId |= MAC[2] << 24; // Big endian (aka "network order"):
-  chipId |= MAC[3] << 16;
-  chipId |= MAC[4] << 8;
-  chipId |= MAC[5];
+void changedConnectionCallback() {
+  Serial.printf("Changed connections\n");
+  Serial.println(mesh.subConnectionJson());
+}
 
+void nodeTimeAdjustedCallback(int32_t offset) {
+    Serial.printf("Adjusted time %u. Offset = %d\n", mesh.getNodeTime(),offset);
+}
+
+void setup() {
   Serial.begin(115200);
-  Serial.print("Device id: ");
-  Serial.println(chipId);
-  mesh.setDebugMsgTypes(ERROR | STARTUP | CONNECTION); // set before init() so that you can see startup messages
 
-  // Channel set to 6. Make sure to use the same channel for your mesh and for you other
-  // network (STATION_SSID)
+//mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
+  mesh.setDebugMsgTypes( CONNECTION | ERROR | STARTUP );  // set before init() so that you can see startup messages
 
-  switch (chipId)
-  {
-  case CHIP1:
-    mesh.init(MESH_PREFIX1, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-    mesh.setRoot(true);
-    break;
-  case CHIP2:
-    mesh.init(MESH_PREFIX2, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-    mesh.stationManual(MESH_PREFIX1, MESH_PASSWORD, MESH_PORT);
-    break;
-  case CHIP3:
-    mesh.init(MESH_PREFIX3, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-    mesh.stationManual(MESH_PREFIX1, MESH_PASSWORD, MESH_PORT);
-    break;
-  case CHIP4:
-    mesh.init(MESH_PREFIX4, MESH_PASSWORD, MESH_PORT, WIFI_AP_STA, 6);
-    mesh.stationManual(MESH_PREFIX2, MESH_PASSWORD, MESH_PORT);
-    userScheduler.addTask(taskChangeParent);
-    taskChangeParent.enable();
-    break;
-  }
-
-  //  This node and all other nodes should ideally know the mesh contains a root, so call this on all nodes
-  mesh.setContainsRoot(true);
-
+  mesh.init( MESH_PREFIX1, MESH_PASSWORD, &userScheduler, MESH_PORT );
   mesh.onReceive(&receivedCallback);
+  mesh.onNewConnection(&newConnectionCallback);
   mesh.onChangedConnections(&changedConnectionCallback);
+  mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
+
+  userScheduler.addTask( taskSendMessage );
+  taskSendMessage.enable();
 }
 
-void loop()
-{
+void loop() {
+  // it will run the user scheduler as well
   mesh.update();
-  userScheduler.execute();
-}
-
-void receivedCallback(uint32_t from, String &msg)
-{
-  Serial.printf("Received from %u msg=%s\n", from, msg.c_str());
-}
-
-void changedConnectionCallback()
-{
-  Serial.println(mesh.subConnectionJson());
-}
-
-void newConnectionCallback(uint32_t nodeId)
-{
-  Serial.print("New connection was made with node: ");
-  Serial.println(nodeId);
-  Serial.println(mesh.subConnectionJson());
-}
-
-void sendMessage()
-{
-  Serial.println("Entered send message");
-  String msg = "Hello from 2";
-
-  Serial.println("Sending message");
-  bool messageSent = mesh.sendSingle(CHIP3, msg);
-  if (messageSent)
-  {
-    Serial.println("Message send successfully");
-  }
-  else
-  {
-    Serial.println("Something went wrong when sending message");
-  }
-
-  taskSendMessage.setInterval(random(TASK_SECOND * 1, TASK_SECOND * 5));
-}
-
-bool parentIsChanged = false;
-void changeParent()
-{
-  // Serial.print("Is Connected to CHIP1: ");
-  // Serial.print(mesh.isConnected(CHIP1));
-  // Serial.print(", parentIsChanged: ");
-  // Serial.println(parentIsChanged);
-  if (mesh.isConnected(CHIP1) && !parentIsChanged)
-  {
-    Serial.println("Changing parent...");
-    changeAP(mesh, MESH_PREFIX3);
-    parentIsChanged = true;
-  }
-}
-
-std::list<String> getAvailableNetworks()
-{
-  std::list<String> availableNetworks;
-  int n = WiFi.scanNetworks();
-  for (int i = 0; i < n; i++)
-  {
-    if (WiFi.SSID(i).startsWith("painless")) availableNetworks.push_back(WiFi.SSID(i));
-  }
-
-  return availableNetworks;
 }

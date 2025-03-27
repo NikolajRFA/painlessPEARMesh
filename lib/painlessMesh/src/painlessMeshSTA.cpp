@@ -102,27 +102,56 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
 
     memcpy((void *)&record.bssid, (void *)WiFi.BSSID(i), sizeof(record.bssid));
     aps.push_back(record);
-    Log(CONNECTION, "\tfound : %s, %ddBm\n", record.ssid.c_str(),
-        (int16_t)record.rssi);
+    char macBuffer[17];
+    sprintf(macBuffer, "%02x:%02x:%02x:%02x:%02x:%02x", record.bssid[0], record.bssid[1], record.bssid[2], record.bssid[3], record.bssid[4], record.bssid[5]);
+    Log(CONNECTION, "\tfound : %s, %ddBm, bssid: %s\n", record.ssid.c_str(),
+        (int16_t)record.rssi, macBuffer);
   }
 
   Log(CONNECTION, "\tFound %d nodes\n", aps.size());
 
   task.yield([this]() {
+    bool targetBSSIDFound = false;
+    if (useTargetBSSID) 
+    {
+      targetBSSIDFound = containsTargetBSSID(aps, targetBSSID);
+      if (targetBSSIDFound) {
+        Log(CONNECTION, "Target BSSID was found\n");
+      }
+      else 
+      {
+        Log(CONNECTION, "Target BSSID was not found\n");
+      }
+    }
     // Task filter all unknown
-    filterAPs();
+    if(!targetBSSIDFound) filterAPs();
 
     lastAPs = aps;
 
     // Next task is to sort by strength
     task.yield([this] {
-      aps.sort([](WiFi_AP_Record_t a, WiFi_AP_Record_t b) {
-        return a.rssi > b.rssi;
+
+      aps.sort([this](WiFi_AP_Record_t a, WiFi_AP_Record_t b) {
+        return compareWiFiAPRecords(a, b, useTargetBSSID, targetBSSID);
       });
       // Next task is to connect to the top ap
       task.yield([this]() { connectToAP(); });
     });
   });
+}
+
+bool StationScan::containsTargetBSSID(const std::list<WiFi_AP_Record_t> &aps, const uint8_t *targetBSSID)
+{
+  Serial.printf("Target BSSID: %i:%i:%i:%i:%i:%i\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
+  for (const auto &ap : aps)
+  {
+    Serial.printf("Current BSSID: %i:%i:%i:%i:%i:%i\n", ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5]);
+    if (memcmp(ap.bssid, targetBSSID, sizeof(ap.bssid)) == 0)
+    {
+      return true; // Found the target BSSID
+    }
+  }
+  return false; // Target BSSID not found
 }
 
 void ICACHE_FLASH_ATTR StationScan::filterAPs() {
@@ -136,6 +165,14 @@ void ICACHE_FLASH_ATTR StationScan::filterAPs() {
       ap++;
     }
   }
+}
+
+bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(WiFi_AP_Record_t a, WiFi_AP_Record_t b, bool useTargetBSSID, const uint8_t* targetBSSID) {
+  if (useTargetBSSID) {
+      if (memcmp(a.bssid, targetBSSID, sizeof(a.bssid)) == 0) return true;
+      if (memcmp(b.bssid, targetBSSID, sizeof(b.bssid)) == 0) return false;
+  }
+  return a.rssi > b.rssi;
 }
 
 void ICACHE_FLASH_ATTR StationScan::requestIP(WiFi_AP_Record_t &ap) {
@@ -198,7 +235,7 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
       if (!mesh->shouldContainRoot)
         // Slower when part of bigger network
         prob /= 2 * (1 + layout::size(mesh->asNodeTree()));
-      if (!layout::isRooted(mesh->asNodeTree()) && random(0, 1000) < prob) {
+      if ((!layout::isRooted(mesh->asNodeTree()) && random(0, 1000) < prob) || useTargetBSSID) {
         Log(CONNECTION, "connectToAP(): Reconfigure network: %s\n",
             String(prob).c_str());
         // close STA connection, this will trigger station disconnect which
@@ -229,4 +266,15 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
     }
   }
 }
+
+void StationScan::setTargetBSSID(const uint8_t* bssid) {
+  memcpy(targetBSSID, bssid, sizeof(targetBSSID));
+  useTargetBSSID = true;
+  Serial.printf("TargetBSSID is set to %i:%i:%i:%i:%i:%i\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
+}
+
+void StationScan::clearTargetBSSID() {
+  useTargetBSSID = false;
+}
+
 #endif
