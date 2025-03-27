@@ -31,7 +31,8 @@ public:
   void filterAPs();
   void connectToAP();
   static bool compareWiFiAPRecords(WiFi_AP_Record_t a, WiFi_AP_Record_t b, bool useTargetBSSID, const uint8_t* targetBSSID);
-
+  static bool containsTargetBSSID(const std::list<WiFi_AP_Record_t>& aps, const uint8_t* targetBSSID);
+  
   /// Valid APs found during the last scan
   std::list<WiFi_AP_Record_t> lastAPs;
 
