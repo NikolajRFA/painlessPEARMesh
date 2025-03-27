@@ -8,7 +8,7 @@
 #include "deviceIds.h"
 #include "../lib/painlessMesh/src/painlessmesh/tcp.hpp"
 #include "meshConstants.h"
-#include "meshHelpers.cpp"
+#include "meshHelpers.hpp"
 
 // prototypes
 void receivedCallback(uint32_t from, String &msg);
