@@ -7,6 +7,7 @@
 #include "painlessmesh/ntp.hpp"
 #include "painlessmesh/plugin.hpp"
 #include "painlessmesh/tcp.hpp"
+#include "wifiWrapper.hpp"
 
 #ifdef PAINLESSMESH_ENABLE_OTA
 #include "painlessmesh/ota.hpp"
@@ -242,6 +243,19 @@ namespace painlessmesh
       uint32_t rootNodeId = static_cast<uint32_t>(std::stoul(rootNodeIdStr));
 
       return rootNodeId;
+    }
+
+    static std::list<String> getAvailableNetworks(WiFiWrapper& wifi)
+    {
+      std::list<String> availableNetworks;
+      int n = wifi.scanNetworks();
+      for (int i = 0; i < n; i++)
+      {
+        if (wifi.SSID(i).startsWith("painless"))
+          availableNetworks.push_back(wifi.SSID(i));
+      }
+
+      return availableNetworks;
     }
 
     /** Broadcast a message to every node on the mesh network.
