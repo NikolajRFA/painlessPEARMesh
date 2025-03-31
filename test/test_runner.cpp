@@ -3,7 +3,6 @@
 #include "compareWiFiAPRecords_tests.hpp"
 #include "test_get_root_node_id.hpp"
 #include "test_containsTargetBSSID.hpp"
-#include "test_jsonHelper.hpp"
 
 void setUp(void)
 {
@@ -23,10 +22,7 @@ int runUnityTests(void)
     RUN_TEST(test_compareWiFiAPRecords_where_2nd_has_better_rssi_should_return_false);
     RUN_TEST(test_compareWiFiAPRecords_through_ap_list_and_with_useTargetBSSID_then_target_BSSID_is_first);
     RUN_TEST(test_containsTargetBSSID_should_return_true);
-    RUN_TEST(test_build_new_parent_json_should_return_jsonString);
-    RUN_TEST(test_json_contains_new_parent_returns_true);
-    RUN_TEST(test_json_contains_new_parent_returns_false);
-    RUN_TEST(test_buildNewParentJson_and_jsonContainsNewParent_returns_true);
+    RUN_TEST(test_getRootNodeFromNodeTree_should_return_correctRoot);
     return UNITY_END();
 }
 
