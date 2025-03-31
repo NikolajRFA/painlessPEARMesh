@@ -1,3 +1,6 @@
+#ifndef WIFI_WRAPPER_HPP
+#define WIFI_WRAPPER_HPP
+
 #include <vector>
 #include <WiFi.h>
 
@@ -35,3 +38,5 @@ public:
 private:
     std::vector<String> mockSSIDs = {"painless123", "otherNetwork", "painless456"};
 };
+
+#endif // WIFI_WRAPPER_HPP
