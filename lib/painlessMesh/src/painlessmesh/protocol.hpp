@@ -93,6 +93,29 @@ class Single : public PackageInterface {
 };
 
 /**
+ * @brief PEAR package
+ * 
+ */
+class Pear : public Single {
+  public:
+  int type = PEAR;
+
+  using Single::Single;
+
+  JsonObject addTo(JsonObject&& jsonObj) const {
+    jsonObj = Single::addTo(std::move(jsonObj));
+    jsonObj["type"] = type;
+    return jsonObj;
+  }
+
+#if ARDUINOJSON_VERSION_MAJOR < 7
+  size_t jsonObjectSize() const {
+    return JSON_OBJECT_SIZE(4) + ceil(1.1 * msg.length());
+  }
+#endif
+};
+
+/**
  * Broadcast package
  */
 class Broadcast : public Single {
@@ -486,9 +509,16 @@ class Variant {
 #else
       : jsonBuffer(capacity) {
 #endif
+    Serial.println("Deserializing now...");
+    Serial.println(json);
     error = deserializeJson(jsonBuffer, json,
                             DeserializationOption::NestingLimit(255));
-    if (!error) jsonObj = jsonBuffer.as<JsonObject>();
+    Serial.println("Done deserializing!");
+    if (!error)
+    {
+      Serial.println("Converting to json object...");
+      jsonObj = jsonBuffer.as<JsonObject>();
+    } 
   }
 #endif
   /**
@@ -517,6 +547,21 @@ class Variant {
 #endif
     jsonObj = jsonBuffer.to<JsonObject>();
     jsonObj = single.addTo(std::move(jsonObj));
+  }
+
+  /**
+   * Create Variant object from a Single package
+   *
+   * @param pear The pear package
+   */
+  Variant(Pear pear)
+#if ARDUINOJSON_VERSION_MAJOR == 7
+      : jsonBuffer() {
+#else
+      : jsonBuffer(pear.jsonObjectSize()) {
+#endif
+    jsonObj = jsonBuffer.to<JsonObject>();
+    jsonObj = pear.addTo(std::move(jsonObj));
   }
 
   /**
@@ -643,6 +688,7 @@ class Variant {
 
     auto type = this->type();
     if (type == SINGLE || type == TIME_DELAY) return router::SINGLE;
+    if (type == PEAR) return router::PEAR;
     if (type == BROADCAST) return router::BROADCAST;
     if (type == NODE_SYNC_REQUEST || type == NODE_SYNC_REPLY ||
         type == TIME_SYNC)
@@ -704,6 +750,11 @@ class Variant {
 template <>
 inline bool Variant::is<Single>() {
   return jsonObj["type"].as<int>() == SINGLE;
+}
+
+template <>
+inline bool Variant::is<Pear>() {
+  return jsonObj["type"].as<int>() == PEAR;
 }
 
 template <>

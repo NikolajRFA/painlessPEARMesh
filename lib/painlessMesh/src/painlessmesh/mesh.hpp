@@ -203,9 +203,8 @@ namespace painlessmesh
     {
       Log(logger::COMMUNICATION, "sendPear(): dest=%u msg=%s\n", destId,
           msg.c_str());
-      auto single = painlessmesh::protocol::Single(this->nodeId, destId, msg);
-      single.type = protocol::PEAR;
-      return painlessmesh::router::send<T>(single, (*this));
+      auto pear = painlessmesh::protocol::Pear(this->nodeId, destId, msg);
+      return painlessmesh::router::send<T>(pear, (*this));
     }
 
     /** Send message to root node
@@ -350,7 +349,7 @@ namespace painlessmesh
           [this](protocol::Variant variant, std::shared_ptr<T>, uint32_t)
           {
             using namespace logger;
-            auto pkg = variant.to<protocol::Single>();
+            auto pkg = variant.to<protocol::Pear>();
             Log(CONNECTION, "Received PEAR message: %s, from %s", pkg.msg, pkg.from);
             onPearReceive(pkg.from, pkg.msg);
             return false;

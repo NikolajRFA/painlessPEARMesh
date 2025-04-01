@@ -80,7 +80,14 @@ class PackageCallbackList {
   /**
    * Execute all the callbacks associated with a certain package
    */
-  int execute(int id, Args... args) { return callbackMap[id].execute(args...); }
+  int execute(int id, Args... args) 
+  {
+    if (callbackMap.find(id) == callbackMap.end()) {
+      Serial.printf("execute(): No callback found for id %d\n", id);
+      return 0;
+    } 
+    return callbackMap[id].execute(args...); 
+  }
 
  protected:
   std::map<int, List<Args...>> callbackMap;
