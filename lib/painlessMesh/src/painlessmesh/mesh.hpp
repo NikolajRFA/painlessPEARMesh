@@ -521,7 +521,8 @@ namespace painlessmesh
 
   protected:
     void onPearReceive(uint32_t from, String &msg) {
-      Serial.println("I am onPearReceive()");
+      using namespace painlessmesh::logger;
+      Log(COMMUNICATION, "Received %s from node %u\n", msg.c_str(), from);
     }
 
     void setScheduler(Scheduler *baseScheduler)
