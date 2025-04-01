@@ -1,6 +1,9 @@
+#ifndef JSON_HELPER_HPP
+#define JSON_HELPER_HPP
+
 #include <ArduinoJson.h>
 
-String buildNewParentJson(const uint8_t *bssid)
+inline String buildNewParentJson(const uint8_t *bssid)
 {
     JsonDocument doc;
     // create an object
@@ -21,6 +24,7 @@ String buildNewParentJson(const uint8_t *bssid)
     return jsonString;
 }
 
-bool jsonContainsNewParent(JsonDocument json){
+inline bool jsonContainsNewParent(JsonDocument json){
     return json["newParent"].is<JsonArray>();
 }
+#endif
