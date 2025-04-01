@@ -192,6 +192,22 @@ namespace painlessmesh
       return painlessmesh::router::send<T>(single, (*this));
     }
 
+    /** Send pear message to a specific node
+     *
+     * @param destId The nodeId of the node to send it to.
+     * @param msg The message to send
+     *
+     * @return true if everything works, false if not.
+     */
+    bool sendPear(uint32_t destId, TSTRING msg)
+    {
+      Log(logger::COMMUNICATION, "sendPear(): dest=%u msg=%s\n", destId,
+          msg.c_str());
+      auto single = painlessmesh::protocol::Single(this->nodeId, destId, msg);
+      single.type = protocol::PEAR;
+      return painlessmesh::router::send<T>(single, (*this));
+    }
+
     /** Send message to root node
      *
      * @param msg The message to send
@@ -329,6 +345,16 @@ namespace painlessmesh
             onReceive(pkg.from, pkg.msg);
             return false;
           });
+      this->callbackList.onPackage(
+          protocol::PEAR,
+          [this](protocol::Variant variant, std::shared_ptr<T>, uint32_t)
+          {
+            using namespace logger;
+            auto pkg = variant.to<protocol::Single>();
+            Log(CONNECTION, "Received PEAR message: %s, from %s", pkg.msg, pkg.from);
+            onPearReceive(pkg.from, pkg.msg);
+            return false;
+          });    
       this->callbackList.onPackage(
           protocol::BROADCAST,
           [onReceive](protocol::Variant variant, std::shared_ptr<T>, uint32_t)
@@ -497,6 +523,10 @@ namespace painlessmesh
     }
 
   protected:
+    void onPearReceive(uint32_t from, String &msg) {
+      Serial.println("I am onPearReceive()");
+    }
+
     void setScheduler(Scheduler *baseScheduler)
     {
       this->mScheduler = baseScheduler;

@@ -21,7 +21,7 @@ namespace router {
  * will actually parse/handle this message (without sending it on). Finally,
  * BROADCAST message are send to every node and processed/handled by every node.
  * */
-enum Type { ROUTING_ERROR = -1, NEIGHBOUR, SINGLE, BROADCAST };
+enum Type { ROUTING_ERROR = -1, NEIGHBOUR, SINGLE, BROADCAST, PEAR };
 }  // namespace router
 
 namespace protocol {
@@ -33,7 +33,8 @@ enum Type {
   NODE_SYNC_REPLY = 6,
   CONTROL = 7,    // deprecated
   BROADCAST = 8,  // application data for everyone
-  SINGLE = 9      // application data for a single node
+  SINGLE = 9,     // application data for a single node
+  PEAR = 10
 };
 
 enum TimeType {
