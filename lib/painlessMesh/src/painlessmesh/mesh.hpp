@@ -528,7 +528,7 @@ namespace painlessmesh
       using namespace painlessmesh::logger;
       memcpy(targetBSSID, bssid, sizeof(targetBSSID));
       useTargetBSSID = true;
-      Log(DEBUG, "TargetBSSID is set to %i:%i:%i:%i:%i:%i\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
+      Log(DEBUG, "TargetBSSID is set to %x:%x:%x:%x:%x:%x\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
     }
     void clearTargetBSSID()
     {

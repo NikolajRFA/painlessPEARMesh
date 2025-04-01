@@ -143,10 +143,10 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
 bool StationScan::containsTargetBSSID(const std::list<WiFi_AP_Record_t> &aps, const uint8_t *targetBSSID)
 {
   using namespace painlessmesh::logger;
-  Log(DEBUG, "Target BSSID: %i:%i:%i:%i:%i:%i\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
+  Log(DEBUG, "Target BSSID: %x:%x:%x:%x:%x:%x\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
   for (const auto &ap : aps)
   {
-    Log(DEBUG, "Current BSSID: %i:%i:%i:%i:%i:%i\n", ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5]);
+    Log(DEBUG, "Current BSSID: %x:%x:%x:%x:%x:%x\n", ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5]);
     if (memcmp(ap.bssid, targetBSSID, sizeof(ap.bssid)) == 0)
     {
       return true; // Found the target BSSID
