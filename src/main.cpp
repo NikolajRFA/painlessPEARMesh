@@ -19,11 +19,9 @@ void sendMessage() ; // Prototype so PlatformIO doesn't complain
 Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
 
 void sendMessage() {
-  JsonDocument doc;
-  // create an object
-  JsonObject object = doc.to<JsonObject>();
-  object["hello"] = "world";
-  if (mesh.getNodeId() != CHIP1) mesh.sendPear(CHIP1, object);
+  uint8_t bssid[] = { 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa };
+  String jsonString = buildNewParentJson(bssid);
+  if (mesh.getNodeId() != CHIP1) mesh.sendPear(CHIP1, jsonString);
   taskSendMessage.setInterval( random( TASK_SECOND * 1, TASK_SECOND * 5 ));
 }
 

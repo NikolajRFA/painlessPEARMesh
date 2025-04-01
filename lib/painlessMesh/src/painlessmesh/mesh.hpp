@@ -7,6 +7,7 @@
 #include "painlessmesh/ntp.hpp"
 #include "painlessmesh/plugin.hpp"
 #include "painlessmesh/tcp.hpp"
+#include "painlessmesh/jsonHelper.hpp"
 
 #ifdef PAINLESSMESH_ENABLE_OTA
 #include "painlessmesh/ota.hpp"
@@ -199,10 +200,8 @@ namespace painlessmesh
      *
      * @return true if everything works, false if not.
      */
-    bool sendPear(uint32_t destId, JsonObject json)
+    bool sendPear(uint32_t destId, TSTRING msg)
     {
-      String msg;
-      serializeJson(json, msg);
       Log(logger::COMMUNICATION, "sendPear(): dest=%u msg=%s\n", destId,
           msg.c_str());
       auto pear = painlessmesh::protocol::Pear(this->nodeId, destId, msg);
@@ -353,7 +352,7 @@ namespace painlessmesh
             auto pkg = variant.to<protocol::Pear>();
             onPearReceive(pkg.from, pkg.msg);
             return false;
-          });    
+          });
       this->callbackList.onPackage(
           protocol::BROADCAST,
           [onReceive](protocol::Variant variant, std::shared_ptr<T>, uint32_t)
@@ -539,10 +538,27 @@ namespace painlessmesh
 
     void onPearReceive(uint32_t from, String &msg) {
       using namespace painlessmesh::logger;
-
       Log(COMMUNICATION, "Received %s from node %u\n", msg.c_str(), from);
-      uint8_t targetBssid[] = {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa};
-      setTargetBSSID(targetBSSID);
+
+      JsonDocument doc;
+      deserializeJson(doc, msg);
+      if (jsonContainsNewParent(doc))
+      {
+
+        uint8_t targetBssid[6] =
+        {
+          doc["newParent"][0],
+          doc["newParent"][1],
+          doc["newParent"][2],
+          doc["newParent"][3],
+          doc["newParent"][4],
+          doc["newParent"][5]
+        };
+        setTargetBSSID(targetBssid);
+      }
+
+
+
     }
 
     void setScheduler(Scheduler *baseScheduler)
