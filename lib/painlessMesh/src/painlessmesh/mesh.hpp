@@ -195,12 +195,14 @@ namespace painlessmesh
     /** Send pear message to a specific node
      *
      * @param destId The nodeId of the node to send it to.
-     * @param msg The message to send
+     * @param json The json to send
      *
      * @return true if everything works, false if not.
      */
-    bool sendPear(uint32_t destId, TSTRING msg)
+    bool sendPear(uint32_t destId, JsonObject json)
     {
+      String msg;
+      serializeJson(json, msg);
       Log(logger::COMMUNICATION, "sendPear(): dest=%u msg=%s\n", destId,
           msg.c_str());
       auto pear = painlessmesh::protocol::Pear(this->nodeId, destId, msg);
@@ -522,7 +524,16 @@ namespace painlessmesh
   protected:
     void onPearReceive(uint32_t from, String &msg) {
       using namespace painlessmesh::logger;
+
       Log(COMMUNICATION, "Received %s from node %u\n", msg.c_str(), from);
+
+      // If the message is received on the root node
+        // Extract information and store for later use in algorithm
+
+      // If the msg contains field newParent = someId
+        //  connect to new parent
+      // If the msg contains field report
+        // Report pear information to root
     }
 
     void setScheduler(Scheduler *baseScheduler)
