@@ -129,7 +129,7 @@ void routePackage(layout::Layout<T> layout, std::shared_ptr<T> connection,
     return;
   }
 
-  if ((variant->routing() == SINGLE || variant->routing() == PEAR) && variant->dest() != layout.getNodeId()) {
+  if ((variant->routing() == SINGLE) && variant->dest() != layout.getNodeId()) {
     // Send on without further processing
     send<T>((*variant), layout);
     return;

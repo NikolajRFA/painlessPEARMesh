@@ -21,7 +21,7 @@ namespace router {
  * will actually parse/handle this message (without sending it on). Finally,
  * BROADCAST message are send to every node and processed/handled by every node.
  * */
-enum Type { ROUTING_ERROR = -1, NEIGHBOUR, SINGLE, BROADCAST, PEAR };
+enum Type { ROUTING_ERROR = -1, NEIGHBOUR, SINGLE, BROADCAST };
 }  // namespace router
 
 namespace protocol {
@@ -695,8 +695,7 @@ class Variant {
       return (router::Type)jsonObj["routing"].as<int>();
 
     auto type = this->type();
-    if (type == SINGLE || type == TIME_DELAY) return router::SINGLE;
-    if (type == PEAR) return router::PEAR;
+    if (type == SINGLE || type == TIME_DELAY || type == PEAR) return router::SINGLE;
     if (type == BROADCAST) return router::BROADCAST;
     if (type == NODE_SYNC_REQUEST || type == NODE_SYNC_REPLY ||
         type == TIME_SYNC)
