@@ -244,6 +244,27 @@ namespace painlessmesh
       return rootNodeId;
     }
 
+    /** Scans for WiFi networks matching the mesh prefix and extracts matching networks bssids
+     * @return List of bssids from available networks in the mesh
+     */
+    std::list<String> getAvailableNetworks()
+    {
+      std::list<String> availableNetworks;
+      int n = WiFi.scanNetworks();
+      for (int i = 0; i < n; i++)
+      {
+        if (WiFi.SSID(i).startsWith("painless"))
+        {
+          char bssidBuffer[17];
+          uint8_t *bssid = WiFi.BSSID(i);
+          sprintf(bssidBuffer, "%02x:%02x:%02x:%02x:%02x:%02x", bssid[0], bssid[1], bssid[2], bssid[3], bssid[4], bssid[5]);
+          availableNetworks.push_back(bssidBuffer);
+        }
+      }
+
+      return availableNetworks;
+    }
+
     /** Broadcast a message to every node on the mesh network.
      *
      * @param includeSelf Send message to myself as well. Default is false.
