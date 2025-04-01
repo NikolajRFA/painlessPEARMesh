@@ -33,7 +33,8 @@ enum Type {
   NODE_SYNC_REPLY = 6,
   CONTROL = 7,    // deprecated
   BROADCAST = 8,  // application data for everyone
-  SINGLE = 9      // application data for a single node
+  SINGLE = 9,     // application data for a single node
+  PEAR = 10
 };
 
 enum TimeType {
@@ -81,6 +82,41 @@ class Single : public PackageInterface {
     jsonObj["dest"] = dest;
     jsonObj["from"] = from;
     jsonObj["msg"] = msg;
+    return jsonObj;
+  }
+
+#if ARDUINOJSON_VERSION_MAJOR < 7
+  size_t jsonObjectSize() const {
+    return JSON_OBJECT_SIZE(4) + ceil(1.1 * msg.length());
+  }
+#endif
+};
+
+/**
+ * @brief PEAR package
+ * 
+ */
+class Pear : public Single {
+  public:
+  int type = PEAR;
+
+  using Single::Single;
+
+  Pear() {
+    type = PEAR;
+  }
+
+  Pear(uint32_t fromID, uint32_t destID, TSTRING& message) : Single(fromID, destID, message) {
+    type = PEAR;
+  }
+
+  Pear(JsonObject jsonObj) : Single(jsonObj) {
+    type = PEAR;
+  }
+
+  JsonObject addTo(JsonObject&& jsonObj) const override {
+    jsonObj = Single::addTo(std::move(jsonObj));
+    jsonObj["type"] = type;
     return jsonObj;
   }
 
@@ -487,7 +523,10 @@ class Variant {
 #endif
     error = deserializeJson(jsonBuffer, json,
                             DeserializationOption::NestingLimit(255));
-    if (!error) jsonObj = jsonBuffer.as<JsonObject>();
+    if (!error)
+    {
+      jsonObj = jsonBuffer.as<JsonObject>();
+    } 
   }
 #endif
   /**
@@ -516,6 +555,21 @@ class Variant {
 #endif
     jsonObj = jsonBuffer.to<JsonObject>();
     jsonObj = single.addTo(std::move(jsonObj));
+  }
+
+  /**
+   * Create Variant object from a Pear package
+   *
+   * @param pear The pear package
+   */
+  Variant(Pear pear)
+#if ARDUINOJSON_VERSION_MAJOR == 7
+      : jsonBuffer() {
+#else
+      : jsonBuffer(pear.jsonObjectSize()) {
+#endif
+    jsonObj = jsonBuffer.to<JsonObject>();
+    jsonObj = pear.addTo(std::move(jsonObj));
   }
 
   /**
@@ -641,7 +695,7 @@ class Variant {
       return (router::Type)jsonObj["routing"].as<int>();
 
     auto type = this->type();
-    if (type == SINGLE || type == TIME_DELAY) return router::SINGLE;
+    if (type == SINGLE || type == TIME_DELAY || type == PEAR) return router::SINGLE;
     if (type == BROADCAST) return router::BROADCAST;
     if (type == NODE_SYNC_REQUEST || type == NODE_SYNC_REPLY ||
         type == TIME_SYNC)
@@ -703,6 +757,11 @@ class Variant {
 template <>
 inline bool Variant::is<Single>() {
   return jsonObj["type"].as<int>() == SINGLE;
+}
+
+template <>
+inline bool Variant::is<Pear>() {
+  return jsonObj["type"].as<int>() == PEAR;
 }
 
 template <>

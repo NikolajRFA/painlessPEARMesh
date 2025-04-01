@@ -36,17 +36,12 @@ public:
   /// Valid APs found during the last scan
   std::list<WiFi_AP_Record_t> lastAPs;
 
-  void setTargetBSSID(const uint8_t *bssid);
-  void clearTargetBSSID();
-
 protected:
   TSTRING ssid;
   TSTRING password;
   painlessMesh *mesh;
   uint16_t port;
   std::list<WiFi_AP_Record_t> aps;
-  uint8_t targetBSSID[6] = {0}; // Default to an invalid BSSID
-  bool useTargetBSSID = false;  // Flag to enable/disable targeting a specific BSSID
 
   void requestIP(WiFi_AP_Record_t &ap);
 

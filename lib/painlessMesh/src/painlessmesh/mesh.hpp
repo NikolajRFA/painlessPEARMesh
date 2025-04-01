@@ -7,6 +7,7 @@
 #include "painlessmesh/ntp.hpp"
 #include "painlessmesh/plugin.hpp"
 #include "painlessmesh/tcp.hpp"
+#include "painlessmesh/jsonHelper.hpp"
 
 #ifdef PAINLESSMESH_ENABLE_OTA
 #include "painlessmesh/ota.hpp"
@@ -192,6 +193,21 @@ namespace painlessmesh
       return painlessmesh::router::send<T>(single, (*this));
     }
 
+    /** Send pear message to a specific node
+     *
+     * @param destId The nodeId of the node to send it to.
+     * @param json The json to send
+     *
+     * @return true if everything works, false if not.
+     */
+    bool sendPear(uint32_t destId, TSTRING msg)
+    {
+      Log(logger::COMMUNICATION, "sendPear(): dest=%u msg=%s\n", destId,
+          msg.c_str());
+      auto pear = painlessmesh::protocol::Pear(this->nodeId, destId, msg);
+      return painlessmesh::router::send<T>(pear, (*this));
+    }
+
     /** Send message to root node
      *
      * @param msg The message to send
@@ -327,6 +343,14 @@ namespace painlessmesh
           {
             auto pkg = variant.to<protocol::Single>();
             onReceive(pkg.from, pkg.msg);
+            return false;
+          });
+      this->callbackList.onPackage(
+          protocol::PEAR,
+          [this](protocol::Variant variant, std::shared_ptr<T>, uint32_t)
+          {
+            auto pkg = variant.to<protocol::Pear>();
+            onPearReceive(pkg.from, pkg.msg);
             return false;
           });
       this->callbackList.onPackage(
@@ -497,6 +521,46 @@ namespace painlessmesh
     }
 
   protected:
+    uint8_t targetBSSID[6] = {0}; // Default to an invalid BSSID
+    bool useTargetBSSID = false;  // Flag to enable/disable targeting a specific BSSID
+
+    void setTargetBSSID(const uint8_t *bssid)
+    {
+      using namespace painlessmesh::logger;
+      memcpy(targetBSSID, bssid, sizeof(targetBSSID));
+      useTargetBSSID = true;
+      Log(DEBUG, "TargetBSSID is set to %x:%x:%x:%x:%x:%x\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
+    }
+    void clearTargetBSSID()
+    {
+      useTargetBSSID = false;
+    }
+
+    void onPearReceive(uint32_t from, String &msg) {
+      using namespace painlessmesh::logger;
+      Log(COMMUNICATION, "Received %s from node %u\n", msg.c_str(), from);
+
+      JsonDocument doc;
+      deserializeJson(doc, msg);
+      if (jsonContainsNewParent(doc))
+      {
+
+        uint8_t targetBssid[6] =
+        {
+          doc["newParent"][0],
+          doc["newParent"][1],
+          doc["newParent"][2],
+          doc["newParent"][3],
+          doc["newParent"][4],
+          doc["newParent"][5]
+        };
+        setTargetBSSID(targetBssid);
+      }
+
+
+
+    }
+
     void setScheduler(Scheduler *baseScheduler)
     {
       this->mScheduler = baseScheduler;

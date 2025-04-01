@@ -124,14 +124,19 @@ void routePackage(layout::Layout<T> layout, std::shared_ptr<T> connection,
         variant->error, pkg.length(), pkg.c_str());
     return;
   }
+  if (!variant) {
+    Log(ERROR, "routePackage(): Variant is null!");
+    return;
+  }
 
-  if (variant->routing() == SINGLE && variant->dest() != layout.getNodeId()) {
+  if ((variant->routing() == SINGLE) && variant->dest() != layout.getNodeId()) {
     // Send on without further processing
     send<T>((*variant), layout);
     return;
   } else if (variant->routing() == BROADCAST) {
     broadcast<T>((*variant), layout, connection->nodeId);
   }
+  
   auto calls = cbl.execute(variant->type(), (*variant), connection, receivedAt);
   if (calls == 0)
     Log(DEBUG, "routePackage(): No callbacks executed; %u, %s\n", variant->type(), pkg.c_str());
