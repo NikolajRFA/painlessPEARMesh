@@ -7,7 +7,6 @@
 #include "painlessmesh/ntp.hpp"
 #include "painlessmesh/plugin.hpp"
 #include "painlessmesh/tcp.hpp"
-#include "wifiWrapper.hpp"
 
 #ifdef PAINLESSMESH_ENABLE_OTA
 #include "painlessmesh/ota.hpp"
@@ -245,14 +244,14 @@ namespace painlessmesh
       return rootNodeId;
     }
 
-    static std::list<String> getAvailableNetworks(WiFiWrapper& wifi)
+    static std::list<String> getAvailableNetworks()
     {
       std::list<String> availableNetworks;
-      int n = wifi.scanNetworks();
+      int n = WiFi.scanNetworks();
       for (int i = 0; i < n; i++)
       {
-        if (wifi.SSID(i).startsWith("painless"))
-          availableNetworks.push_back(wifi.SSID(i));
+        if (WiFi.SSID(i).startsWith("painless"))
+          availableNetworks.push_back(WiFi.SSID(i));
       }
 
       return availableNetworks;
