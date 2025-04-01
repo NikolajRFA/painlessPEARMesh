@@ -522,18 +522,27 @@ namespace painlessmesh
     }
 
   protected:
+    uint8_t targetBSSID[6] = {0}; // Default to an invalid BSSID
+    bool useTargetBSSID = false;  // Flag to enable/disable targeting a specific BSSID
+
+    void setTargetBSSID(const uint8_t *bssid)
+    {
+      using namespace painlessmesh::logger;
+      memcpy(targetBSSID, bssid, sizeof(targetBSSID));
+      useTargetBSSID = true;
+      Log(DEBUG, "TargetBSSID is set to %x:%x:%x:%x:%x:%x\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
+    }
+    void clearTargetBSSID()
+    {
+      useTargetBSSID = false;
+    }
+
     void onPearReceive(uint32_t from, String &msg) {
       using namespace painlessmesh::logger;
 
       Log(COMMUNICATION, "Received %s from node %u\n", msg.c_str(), from);
-
-      // If the message is received on the root node
-        // Extract information and store for later use in algorithm
-
-      // If the msg contains field newParent = someId
-        //  connect to new parent
-      // If the msg contains field report
-        // Report pear information to root
+      uint8_t targetBssid[] = {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa};
+      setTargetBSSID(targetBSSID);
     }
 
     void setScheduler(Scheduler *baseScheduler)

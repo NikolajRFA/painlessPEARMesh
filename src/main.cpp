@@ -49,7 +49,7 @@ void setup() {
   Serial.begin(115200);
 
 //mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
-  mesh.setDebugMsgTypes( CONNECTION | ERROR | STARTUP );  // set before init() so that you can see startup messages
+  mesh.setDebugMsgTypes( CONNECTION | ERROR | STARTUP | DEBUG );  // set before init() so that you can see startup messages
 
   mesh.init( MESH_PREFIX1, MESH_PASSWORD, &userScheduler, MESH_PORT );
   uint32_t nodeId = mesh.getNodeId();
