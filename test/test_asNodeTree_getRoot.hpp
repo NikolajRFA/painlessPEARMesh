@@ -4,5 +4,6 @@
 
 void test_getRootNodeFromNodeTree_should_return_correctRoot(void)
 {
-    auto nt = protocol::NodeTree(123, false);
+    auto nt = painlessmesh::protocol::NodeTree(123, false);
+    
 }
