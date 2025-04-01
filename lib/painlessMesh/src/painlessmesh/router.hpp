@@ -124,13 +124,10 @@ void routePackage(layout::Layout<T> layout, std::shared_ptr<T> connection,
         variant->error, pkg.length(), pkg.c_str());
     return;
   }
-  Serial.println("Routing package...");
   if (!variant) {
     Log(ERROR, "routePackage(): Variant is null!");
     return;
   }
-  Serial.print("Variant type: ");
-  Serial.println(variant->type());
 
   if ((variant->routing() == SINGLE || variant->routing() == PEAR) && variant->dest() != layout.getNodeId()) {
     // Send on without further processing

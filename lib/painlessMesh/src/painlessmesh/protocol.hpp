@@ -102,7 +102,19 @@ class Pear : public Single {
 
   using Single::Single;
 
-  JsonObject addTo(JsonObject&& jsonObj) const {
+  Pear() {
+    type = PEAR;
+  }
+
+  Pear(uint32_t fromID, uint32_t destID, TSTRING& message) : Single(fromID, destID, message) {
+    type = PEAR;
+  }
+
+  Pear(JsonObject jsonObj) : Single(jsonObj) {
+    type = PEAR;
+  }
+
+  JsonObject addTo(JsonObject&& jsonObj) const override {
     jsonObj = Single::addTo(std::move(jsonObj));
     jsonObj["type"] = type;
     return jsonObj;
@@ -509,14 +521,10 @@ class Variant {
 #else
       : jsonBuffer(capacity) {
 #endif
-    Serial.println("Deserializing now...");
-    Serial.println(json);
     error = deserializeJson(jsonBuffer, json,
                             DeserializationOption::NestingLimit(255));
-    Serial.println("Done deserializing!");
     if (!error)
     {
-      Serial.println("Converting to json object...");
       jsonObj = jsonBuffer.as<JsonObject>();
     } 
   }
@@ -550,7 +558,7 @@ class Variant {
   }
 
   /**
-   * Create Variant object from a Single package
+   * Create Variant object from a Pear package
    *
    * @param pear The pear package
    */

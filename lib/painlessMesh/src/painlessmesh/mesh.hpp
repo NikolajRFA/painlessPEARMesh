@@ -348,9 +348,7 @@ namespace painlessmesh
           protocol::PEAR,
           [this](protocol::Variant variant, std::shared_ptr<T>, uint32_t)
           {
-            using namespace logger;
             auto pkg = variant.to<protocol::Pear>();
-            Log(CONNECTION, "Received PEAR message: %s, from %s", pkg.msg, pkg.from);
             onPearReceive(pkg.from, pkg.msg);
             return false;
           });    
