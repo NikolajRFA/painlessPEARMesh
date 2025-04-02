@@ -463,21 +463,16 @@ namespace painlessmesh {
             using namespace painlessmesh::logger;
             Log(COMMUNICATION, "Received %s from node %u\n", msg.c_str(), from);
 
-            JsonDocument doc;
-            deserializeJson(doc, msg);
-            if (jsonContainsNewParent(doc)) {
-                uint8_t targetBssid[6] =
-                {
-                    doc["newParent"][0],
-                    doc["newParent"][1],
-                    doc["newParent"][2],
-                    doc["newParent"][3],
-                    doc["newParent"][4],
-                    doc["newParent"][5]
-                };
-                setTargetBSSID(targetBssid);
-            }
-        }
+      JsonDocument doc;
+      deserializeJson(doc, msg);
+      if (jsonContainsNewParent(doc))
+      {
+
+        uint8_t targetBssid[6];
+        tcp::decodeNodeId(doc["newParent"], targetBssid);
+        setTargetBSSID(targetBssid);
+      }
+    }
 
         void setScheduler(Scheduler *baseScheduler) {
             this->mScheduler = baseScheduler;

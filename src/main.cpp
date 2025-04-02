@@ -19,9 +19,9 @@ void sendMessage() ; // Prototype so PlatformIO doesn't complain
 Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
 
 void sendMessage() {
-  uint8_t bssid[] = { 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa };
-  String jsonString = buildNewParentJson(bssid);
-  //if (mesh.getNodeId() != CHIP1) mesh.sendPear(CHIP1, jsonString);
+  uint32_t nodeId = 123456789;
+  String jsonString = buildNewParentJson(nodeId);
+  if (mesh.getNodeId() != CHIP1) mesh.sendPear(CHIP1, jsonString);
   taskSendMessage.setInterval( random( TASK_SECOND * 1, TASK_SECOND * 5 ));
 }
 
@@ -47,7 +47,7 @@ void setup() {
   Serial.begin(115200);
 
 //mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
-  mesh.setDebugMsgTypes( CONNECTION | ERROR | STARTUP | DEBUG );  // set before init() so that you can see startup messages
+  mesh.setDebugMsgTypes( COMMUNICATION | CONNECTION | ERROR | STARTUP | DEBUG );  // set before init() so that you can see startup messages
 
   mesh.init( MESH_PREFIX1, MESH_PASSWORD, &userScheduler, MESH_PORT );
   uint32_t nodeId = mesh.getNodeId();

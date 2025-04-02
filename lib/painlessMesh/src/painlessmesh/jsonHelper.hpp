@@ -3,19 +3,13 @@
 
 #include <ArduinoJson.h>
 
-inline String buildNewParentJson(const uint8_t *bssid) {
+inline String buildNewParentJson(const uint32_t nodeId)
+{
     JsonDocument doc;
     // create an object
 
     // Add an array of integers to the JSON object
-    JsonArray array = doc["newParent"].to<JsonArray>();
-
-    array.add(bssid[0]);
-    array.add(bssid[1]);
-    array.add(bssid[2]);
-    array.add(bssid[3]);
-    array.add(bssid[4]);
-    array.add(bssid[5]);
+    doc["newParent"] = nodeId;
 
     // Convert JSON object to string
     String jsonString;
@@ -23,8 +17,8 @@ inline String buildNewParentJson(const uint8_t *bssid) {
     return jsonString;
 }
 
-inline bool jsonContainsNewParent(JsonDocument json) {
-    return json["newParent"].is<JsonArray>();
+inline bool jsonContainsNewParent(JsonDocument json){
+    return json["newParent"].is<uint32_t>();
 }
 
 inline String buildPearReportJson(uint8_t transmissionRate, std::list<uint32_t> networks) {
