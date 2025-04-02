@@ -169,6 +169,24 @@ inline bool isRooted(protocol::NodeTree nodeTree) {
 }
 
 /**
+ * Get the id of root node of the mesh through the NodeTree
+ * @param nodeTree A NodeTree
+ * @return The nodeId of the root node or 0 if none.
+ */
+inline uint32_t getRootNodeId(const protocol::NodeTree &nodeTree) {
+  if (nodeTree.root) {
+    return nodeTree.nodeId;
+  }
+  for (const auto &subNode: nodeTree.subs) {
+    uint32_t result = getRootNodeId(subNode);
+    if (result != 0) {
+      return result;
+    }
+  }
+  return 0;
+}
+
+/**
  * Return all nodes in a list container
  */
 inline std::list<uint32_t> asList(protocol::NodeTree nodeTree,

@@ -216,48 +216,9 @@ namespace painlessmesh
      */
     bool sendToRoot(TSTRING msg)
     {
-      uint32_t rootId = getRootNodeId(subConnectionJson());
+
+      uint32_t rootId = layout::getRootNodeId(this->asNodeTree());
       return sendSingle(rootId, msg);
-    }
-
-    /**
-     * @brief Extracts the root node ID from a given connection string.
-     *
-     * This function searches for the occurrence of the keyword "root" within
-     * the provided connection string. Based on a predefined format, it extracts
-     * a fixed-length root node ID found at a specific offset before "root".
-     *
-     * @param connections The connection string containing node information - the output from subConnectionJson()
-     * @return The extracted root node ID as an integer.
-     *         Returns -1 if "root" is not found in the string.
-     *         Returns -2 if the calculated position is out of bounds.
-     *
-     * @note The function assumes the root node ID is always 10 characters long
-     *       and located 13 characters before the occurrence of "root".
-     */
-    static int getRootNodeId(TSTRING connections)
-    {
-      const size_t ROOT_NODE_ID_LENGTH = 10; // The length of the root node ID
-      const size_t ROOT_NODE_ID_OFFSET = 13; // Offset from "root" to the start of the ID
-      std::string connectionsStr = connections.c_str();
-      // Find the position of "root"
-      size_t rootStringStartPosition = connectionsStr.find("root");
-      if (rootStringStartPosition == std::string::npos)
-      {
-        return -1;
-      }
-
-      // Extract the root node ID (assuming a fixed format)
-      size_t idStartPos = rootStringStartPosition - ROOT_NODE_ID_OFFSET;
-      if (idStartPos > connectionsStr.size())
-      {
-        return -2;
-      }
-
-      std::string rootNodeIdStr = connectionsStr.substr(idStartPos, ROOT_NODE_ID_LENGTH);
-      uint32_t rootNodeId = static_cast<uint32_t>(std::stoul(rootNodeIdStr));
-
-      return rootNodeId;
     }
 
     /** Scans for WiFi networks matching the mesh prefix and extracts matching networks bssids
