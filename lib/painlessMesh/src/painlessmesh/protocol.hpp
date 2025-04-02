@@ -152,7 +152,6 @@ class Broadcast : public Single {
 class NodeTree : public PackageInterface {
  public:
   uint32_t nodeId = 0;
-  uint8_t bssid[6];
   bool root = false;
   std::list<NodeTree> subs;
 
