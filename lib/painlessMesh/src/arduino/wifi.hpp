@@ -75,6 +75,7 @@ class Mesh : public painlessmesh::Mesh<Connection> {
       Log(ERROR, "init(): WiFi.softAPmacAddress(MAC) failed.\n");
     }
 #endif
+    Log(DEBUG, "My MAC is %x:%x:%x:%x:%x:%x\n", MAC[0], MAC[1], MAC[2], MAC[3], MAC[4], MAC[5]);
     uint32_t nodeId = tcp::encodeNodeId(MAC);
     if (nodeId == 0) Log(ERROR, "NodeId set to 0\n");
 
