@@ -4,6 +4,7 @@
 #include "test_containsTargetBSSID.hpp"
 #include "test_jsonHelper.hpp"
 #include "getRootNodeIdTests.hpp"
+#include "decodeNodeIdTests.hpp"
 
 void setUp(void)
 {
@@ -28,6 +29,9 @@ int runUnityTests(void)
     RUN_TEST(test_buildNewParentJson_and_jsonContainsNewParent_returns_true);
     RUN_TEST(getRootNodeId_NodeTreeWithRootNode_1);
     RUN_TEST(getRootNodeId_NodeTreeWithoutRootNode_0);
+    RUN_TEST(decodeNodeId_3206773453_8813BF237ACD);
+    RUN_TEST(decodeNodeId_3206793885_8813BF23CA9D);
+    RUN_TEST(decodeNodeId_3211408993_8813BF6A3661);
     return UNITY_END();
 }
 

@@ -22,6 +22,19 @@ inline uint32_t encodeNodeId(const uint8_t *hwaddr) {
   return value;
 }
 
+inline void decodeNodeId(uint32_t encodedValue, uint8_t* hwaddr)
+{
+  using namespace painlessmesh::logger;
+  Log(GENERAL, "decodeNodeId():\n");
+
+  hwaddr[0] = 0x88; // Hardcoded as these are assigned to Espressif
+  hwaddr[1] = 0x13; // Hardcoded as these are assigned to Espressif
+  hwaddr[2] = (encodedValue >> 24) & 0xFF;
+  hwaddr[3] = (encodedValue >> 16) & 0xFF;
+  hwaddr[4] = (encodedValue >> 8) & 0xFF;
+  hwaddr[5] = encodedValue & 0xFF;
+}
+
 template <class T, class M>
 void initServer(AsyncServer &server, M &mesh) {
   using namespace logger;
