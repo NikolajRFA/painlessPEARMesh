@@ -647,6 +647,12 @@ namespace painlessmesh {
                 pearData["transmissionRate"] = mesh->transmissions + mesh->baseLineTransmissions;
                 mesh->transmissions = 0;
 
+                JsonArray availableNetworksArray = pearData["availableNetworks"].to<JsonArray>();
+                std::list<uint32_t> availableNetworks = mesh->getAvailableNetworks();
+                for (auto networkId: availableNetworks) {
+                    availableNetworksArray.add(networkId);
+                }
+
                 TSTRING pearDataString;
                 serializeJson(pearData, pearDataString);
 
