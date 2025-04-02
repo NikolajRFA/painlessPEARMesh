@@ -643,18 +643,9 @@ namespace painlessmesh {
 
             this->reportPearDataTask.set(2 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
                 Log(COMMUNICATION, "reportPearDataTask(): Sending pear data");
-                JsonDocument pearData;
-                pearData["transmissionRate"] = mesh->transmissions + mesh->baseLineTransmissions;
-                mesh->transmissions = 0;
 
-                JsonArray availableNetworksArray = pearData["availableNetworks"].to<JsonArray>();
-                std::list<uint32_t> availableNetworks = mesh->getAvailableNetworks();
-                for (auto networkId: availableNetworks) {
-                    availableNetworksArray.add(networkId);
-                }
-
-                TSTRING pearDataString;
-                serializeJson(pearData, pearDataString);
+                uint8_t summedTransmissions = mesh->transmissions + mesh->baseLineTransmissions;
+                String pearDataString = buildPearReportJson(summedTransmissions, mesh->getAvailableNetworks());
 
                 mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
             });

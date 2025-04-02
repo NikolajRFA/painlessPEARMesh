@@ -1,5 +1,6 @@
 #include "unity.h"
 #include "../lib/painlessMesh/src/painlessmesh/jsonHelper.hpp"
+#include "list"
 
 void test_build_new_parent_json_should_return_jsonString()
 {
@@ -55,4 +56,15 @@ void test_buildNewParentJson_and_jsonContainsNewParent_returns_true(){
     deserializeJson(doc, jsonString);
 
     TEST_ASSERT_TRUE(jsonContainsNewParent(doc));
+}
+
+void test_buildPearReportJson_returns_expected_jsonString(){
+  uint8_t transmissionRate = 69;
+  std::list<uint32_t> networks;
+
+  networks.push_back(123);
+  networks.push_back(456);
+  networks.push_back(789);
+
+  TEST_ASSERT_EQUAL_STRING("{\"transmissionRate\":69,\"availableNetworks\":[123,456,789]}\"", buildPearReportJson(transmissionRate, networks));
 }
