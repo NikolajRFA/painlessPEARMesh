@@ -66,5 +66,5 @@ void test_buildPearReportJson_returns_expected_jsonString(){
   networks.push_back(456);
   networks.push_back(789);
 
-  TEST_ASSERT_EQUAL_STRING("{\"transmissionRate\":69,\"availableNetworks\":[123,456,789]}\"", buildPearReportJson(transmissionRate, networks));
+  TEST_ASSERT_EQUAL_STRING("{\"transmissionRate\":69,\"availableNetworks\":[123,456,789]}\"", buildPearReportJson(transmissionRate, networks).c_str());
 }
