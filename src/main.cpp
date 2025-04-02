@@ -21,7 +21,7 @@ Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
 void sendMessage() {
   uint8_t bssid[] = { 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa };
   String jsonString = buildNewParentJson(bssid);
-  if (mesh.getNodeId() != CHIP1) mesh.sendPear(CHIP1, jsonString);
+  //if (mesh.getNodeId() != CHIP1) mesh.sendPear(CHIP1, jsonString);
   taskSendMessage.setInterval( random( TASK_SECOND * 1, TASK_SECOND * 5 ));
 }
 

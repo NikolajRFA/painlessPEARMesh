@@ -584,6 +584,7 @@ namespace painlessmesh {
         Task timeSyncTask;
         Task nodeSyncTask;
         Task timeOutTask;
+        Task reportPearDataTask;
 
         Connection(AsyncClient *client, Mesh<painlessmesh::Connection> *mesh,
                    bool station)
@@ -639,6 +640,20 @@ namespace painlessmesh {
                 this->nodeSyncTask.enable();
             else
                 this->nodeSyncTask.enableDelayed(10 * TASK_SECOND);
+
+            this->reportPearDataTask.set(2 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
+                Log(COMMUNICATION, "reportPearDataTask(): Sending pear data");
+                JsonDocument pearData;
+                pearData["transmissionRate"] = mesh->transmissions + mesh->baseLineTransmissions;
+                mesh->transmissions = 0;
+
+                TSTRING pearDataString;
+                serializeJson(pearData, pearDataString);
+
+                mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
+            });
+            mesh->mScheduler->addTask(reportPearDataTask);
+            this->reportPearDataTask.enable();
 
             Log(CONNECTION, "painlessmesh::Connection: New connection established.\n");
             this->initialize(mesh->mScheduler);
