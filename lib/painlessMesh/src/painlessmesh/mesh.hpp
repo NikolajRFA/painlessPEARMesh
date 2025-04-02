@@ -481,7 +481,10 @@ namespace painlessmesh
 
   protected:
     uint8_t targetBSSID[6] = {0}; // Default to an invalid BSSID
-    bool useTargetBSSID = false;  // Flag to enable/disable targeting a specific BSSID
+    bool useTargetBSSID = false; // Flag to enable/disable targeting a specific BSSID
+    uint8_t baseLineTransmissions = 30;
+    // Baseline set to 40 to simulate a homogenous network where each node sends 30 messages every 30 seconds.
+    uint8_t transmissions = 0;
 
     void setTargetBSSID(const uint8_t *bssid)
     {
@@ -689,6 +692,7 @@ namespace painlessmesh
 
     bool addMessage(const TSTRING &msg, bool priority = false)
     {
+      mesh->transmissions ++;
       return this->write(msg, priority);
     }
 
