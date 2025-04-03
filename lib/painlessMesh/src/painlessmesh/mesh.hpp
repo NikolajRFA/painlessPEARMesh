@@ -649,8 +649,8 @@ namespace painlessmesh {
             else
                 this->nodeSyncTask.enableDelayed(10 * TASK_SECOND);
 
-            this->reportPearDataTask.set(2 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
-                Log(PEAR, "reportPearDataTask(): Sending pear data\n");
+            this->reportPearDataTask.set(5 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
+                Log(PEAR, "reportPearDataTask(): Sending pear data");
 
                 uint8_t summedTransmissions = mesh->transmissions + mesh->baseLineTransmissions;
                 String pearDataString = buildPearReportJson(summedTransmissions, mesh->getAvailableNetworks(true));
