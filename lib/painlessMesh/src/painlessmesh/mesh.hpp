@@ -1,7 +1,7 @@
 #ifndef _PAINLESS_MESH_MESH_HPP_
 #define _PAINLESS_MESH_MESH_HPP_
 
-#include <meshConstants.h>
+#include "mockConstants.h"
 
 #include "painlessmesh/configuration.hpp"
 
