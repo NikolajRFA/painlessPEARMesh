@@ -213,22 +213,13 @@ namespace painlessmesh {
      * @return List of bssids from available networks in the mesh
      */
         std::list<uint32_t> getAvailableNetworks(bool mock = false) {
-            std::list<uint32_t> availableNetworks;
-            int n = WiFi.scanNetworks();
-            for (int i = 0; i < n; i++) {
-                if (WiFi.SSID(i).startsWith("painless")) {
-                    uint8_t *bssid = WiFi.BSSID(i);
-                    availableNetworks.push_back(tcp::encodeNodeId(bssid));
-                }
-            }
-
             if (mock) {
                 VISIBLE_NETWORKS
                 uint32_t nodeId = this->nodeId;
                 std::vector<uint32_t> myVisibleNetworks = visibleNetworks.at(nodeId);
-                for (auto network : availableNetworks) {
-                    if (std::find(myVisibleNetworks.begin(), myVisibleNetworks.end(), network) == myVisibleNetworks.end())
-                    {
+                for (auto network: availableNetworks) {
+                    if (std::find(myVisibleNetworks.begin(), myVisibleNetworks.end(), network) == myVisibleNetworks.
+                        end()) {
                         availableNetworks.remove(network);
                     }
                 }
@@ -459,6 +450,7 @@ namespace painlessmesh {
         uint8_t baseLineTransmissions = 30;
         // Baseline set to 40 to simulate a homogenous network where each node sends 30 messages every 30 seconds.
         uint8_t transmissions = 0;
+        std::list<uint32_t> availableNetworks;
 
         void setTargetBSSID(const uint8_t *bssid) {
             using namespace painlessmesh::logger;
