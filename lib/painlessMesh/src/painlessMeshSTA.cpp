@@ -65,6 +65,7 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
   Log(CONNECTION, "scanComplete(): Scan finished\n");
 
   aps.clear();
+  mesh->availableNetworks.clear();
   Log(CONNECTION, "scanComplete():-- > Cleared old APs.\n");
 
   auto num = WiFi.scanComplete();
