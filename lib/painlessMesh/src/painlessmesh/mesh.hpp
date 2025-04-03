@@ -649,8 +649,9 @@ namespace painlessmesh {
             else
                 this->nodeSyncTask.enableDelayed(10 * TASK_SECOND);
 
-            this->reportPearDataTask.set(5 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
-                if (nodeId != CHIP1)
+            if (nodeId != CHIP1)
+            {
+                this->reportPearDataTask.set(30 * TASK_SECOND, TASK_FOREVER, [this, mesh]()
                 {
                     Log(PEAR, "reportPearDataTask(): Sending pear data");
 
@@ -658,8 +659,8 @@ namespace painlessmesh {
                     String pearDataString = buildPearReportJson(summedTransmissions, mesh->getAvailableNetworks(true));
 
                     mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
-                }
-            });
+                });
+            }
             mesh->mScheduler->addTask(reportPearDataTask);
             this->reportPearDataTask.enable();
 
