@@ -226,11 +226,24 @@ namespace painlessmesh {
                 VISIBLE_NETWORKS
                 uint32_t nodeId = this->nodeId;
                 std::vector<uint32_t> myVisibleNetworks = visibleNetworks.at(nodeId);
+                Serial.print("\nAvailable networks: ");
+                for (auto network : availableNetworks)
+                {
+                    Serial.print(network);
+                    Serial.print(" ");
+                }
+                Serial.println();
+                Serial.print("Visible networks: ");
+                for (auto network : myVisibleNetworks)
+                {
+                    Serial.print(network);
+                    Serial.print(" ");
+                }
+                Serial.println();
                 for (auto network : availableNetworks) {
-                    for (auto myVisibleNetwork : myVisibleNetworks) {
-                        if (network != myVisibleNetwork) {
-                            availableNetworks.remove(network);
-                        }
+                    if (std::find(myVisibleNetworks.begin(), myVisibleNetworks.end(), network) == myVisibleNetworks.end())
+                    {
+                        availableNetworks.remove(network);
                     }
                 }
             }
