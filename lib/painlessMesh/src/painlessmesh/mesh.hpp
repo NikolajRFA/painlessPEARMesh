@@ -188,7 +188,7 @@ namespace painlessmesh {
          * @return true if everything works, false if not.
          */
         bool sendPear(uint32_t destId, TSTRING msg) {
-            Log(logger::COMMUNICATION, "sendPear(): dest=%u msg=%s\n", destId,
+            Log(logger::PEAR, "sendPear(): dest=%u msg=%s\n", destId,
                 msg.c_str());
             auto pear = painlessmesh::protocol::Pear(this->nodeId, destId, msg);
             return painlessmesh::router::send<T>(pear, (*this));
@@ -461,7 +461,7 @@ namespace painlessmesh {
 
         void onPearReceive(uint32_t from, String &msg) {
             using namespace painlessmesh::logger;
-            Log(COMMUNICATION, "Received %s from node %u\n", msg.c_str(), from);
+            Log(PEAR, "Received %s from node %u\n", msg.c_str(), from);
 
       JsonDocument doc;
       deserializeJson(doc, msg);
@@ -637,7 +637,7 @@ namespace painlessmesh {
                 this->nodeSyncTask.enableDelayed(10 * TASK_SECOND);
 
             this->reportPearDataTask.set(2 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
-                Log(COMMUNICATION, "reportPearDataTask(): Sending pear data");
+                Log(PEAR, "reportPearDataTask(): Sending pear data\n");
 
                 uint8_t summedTransmissions = mesh->transmissions + mesh->baseLineTransmissions;
                 String pearDataString = buildPearReportJson(summedTransmissions, mesh->getAvailableNetworks());
