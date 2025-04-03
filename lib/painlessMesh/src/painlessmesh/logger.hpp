@@ -18,7 +18,8 @@ typedef enum {
   MSG_TYPES = 1 << 8,
   REMOTE = 1 << 9,  // not yet implemented
   APPLICATION = 1 << 10,
-  DEBUG = 1 << 11
+  DEBUG = 1 << 11,
+  PEAR = 1 << 12
 } LogLevel;
 
 class LogClass {
@@ -62,6 +63,10 @@ class LogClass {
     }
     if (types & DEBUG) {
       Serial.print(F(" DEBUG |"));
+    }
+    if (types & PEAR)
+    {
+      Serial.print(F(" PEAR |"));
     }
     Serial.println();
     return;
@@ -110,6 +115,9 @@ class LogClass {
             break;
           case DEBUG:
             Serial.print(F("DEBUG: "));
+            break;
+          case PEAR:
+            Serial.print(F("PEAR: "));
             break;
         }
       }
