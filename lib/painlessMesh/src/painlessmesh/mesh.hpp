@@ -1,6 +1,8 @@
 #ifndef _PAINLESS_MESH_MESH_HPP_
 #define _PAINLESS_MESH_MESH_HPP_
 
+#include "mockConstants.h"
+
 #include "painlessmesh/configuration.hpp"
 
 #include "painlessmesh/connection.hpp"
@@ -8,6 +10,8 @@
 #include "painlessmesh/plugin.hpp"
 #include "painlessmesh/tcp.hpp"
 #include "painlessmesh/jsonHelper.hpp"
+#include <unordered_map>
+#include <vector>
 
 #ifdef PAINLESSMESH_ENABLE_OTA
 #include "painlessmesh/ota.hpp"
@@ -208,18 +212,18 @@ namespace painlessmesh {
     /** Scans for WiFi networks matching the mesh prefix and extracts matching networks bssids
      * @return List of bssids from available networks in the mesh
      */
-    std::list<uint32_t> getAvailableNetworks()
-    {
-      std::list<uint32_t> availableNetworks;
-      int n = WiFi.scanNetworks();
-      for (int i = 0; i < n; i++)
-      {
-        if (WiFi.SSID(i).startsWith("painless"))
-        {
-          uint8_t *bssid = WiFi.BSSID(i);
-          availableNetworks.push_back(tcp::encodeNodeId(bssid));
-        }
-      }
+        std::list<uint32_t> getAvailableNetworks(bool mock = false) {
+            if (mock) {
+                VISIBLE_NETWORKS
+                uint32_t nodeId = this->nodeId;
+                std::vector<uint32_t> myVisibleNetworks = visibleNetworks.at(nodeId);
+                for (auto network: availableNetworks) {
+                    if (std::find(myVisibleNetworks.begin(), myVisibleNetworks.end(), network) == myVisibleNetworks.
+                        end()) {
+                        availableNetworks.remove(network);
+                    }
+                }
+            }
 
             return availableNetworks;
         }
@@ -446,6 +450,7 @@ namespace painlessmesh {
         uint8_t baseLineTransmissions = 30;
         // Baseline set to 40 to simulate a homogenous network where each node sends 30 messages every 30 seconds.
         uint8_t transmissions = 0;
+        std::list<uint32_t> availableNetworks;
 
         void setTargetBSSID(const uint8_t *bssid) {
             using namespace painlessmesh::logger;
@@ -636,14 +641,18 @@ namespace painlessmesh {
             else
                 this->nodeSyncTask.enableDelayed(10 * TASK_SECOND);
 
-            this->reportPearDataTask.set(2 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
-                Log(PEAR, "reportPearDataTask(): Sending pear data\n");
+            if (nodeId != CHIP1)
+            {
+                this->reportPearDataTask.set(30 * TASK_SECOND, TASK_FOREVER, [this, mesh]()
+                {
+                    Log(PEAR, "reportPearDataTask(): Sending pear data");
 
-                uint8_t summedTransmissions = mesh->transmissions + mesh->baseLineTransmissions;
-                String pearDataString = buildPearReportJson(summedTransmissions, mesh->getAvailableNetworks());
+                    uint8_t summedTransmissions = mesh->transmissions + mesh->baseLineTransmissions;
+                    String pearDataString = buildPearReportJson(summedTransmissions, mesh->getAvailableNetworks(true));
 
-                mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
-            });
+                    mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
+                });
+            }
             mesh->mScheduler->addTask(reportPearDataTask);
             this->reportPearDataTask.enable();
 

@@ -65,6 +65,7 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
   Log(CONNECTION, "scanComplete(): Scan finished\n");
 
   aps.clear();
+  mesh->availableNetworks.clear();
   Log(CONNECTION, "scanComplete():-- > Cleared old APs.\n");
 
   auto num = WiFi.scanComplete();
@@ -107,6 +108,10 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
     Log(CONNECTION, "\tfound : %s, %ddBm, bssid: %s\n", record.ssid.c_str(),
         (int16_t)record.rssi, macBuffer);
   }
+  for (auto ap: aps) {
+    mesh->availableNetworks.push_back(painlessmesh::tcp::encodeNodeId(ap.bssid));
+  }
+
 
   Log(CONNECTION, "\tFound %d nodes\n", aps.size());
 

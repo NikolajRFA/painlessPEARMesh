@@ -1,3 +1,4 @@
+#include "deviceIds.h"
 #define MESH_PREFIX1 "painless1"
 #define MESH_PREFIX2 "painless2"
 #define MESH_PREFIX3 "painless3"
