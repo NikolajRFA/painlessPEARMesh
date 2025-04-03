@@ -1,6 +1,8 @@
 #ifndef _PAINLESS_MESH_MESH_HPP_
 #define _PAINLESS_MESH_MESH_HPP_
 
+#include <meshConstants.h>
+
 #include "painlessmesh/configuration.hpp"
 
 #include "painlessmesh/connection.hpp"
@@ -8,6 +10,8 @@
 #include "painlessmesh/plugin.hpp"
 #include "painlessmesh/tcp.hpp"
 #include "painlessmesh/jsonHelper.hpp"
+#include <unordered_map>
+#include <vector>
 
 #ifdef PAINLESSMESH_ENABLE_OTA
 #include "painlessmesh/ota.hpp"
@@ -208,13 +212,26 @@ namespace painlessmesh {
     /** Scans for WiFi networks matching the mesh prefix and extracts matching networks bssids
      * @return List of bssids from available networks in the mesh
      */
-        std::list<uint32_t> getAvailableNetworks() {
+        std::list<uint32_t> getAvailableNetworks(bool mock = false) {
             std::list<uint32_t> availableNetworks;
             int n = WiFi.scanNetworks();
             for (int i = 0; i < n; i++) {
                 if (WiFi.SSID(i).startsWith("painless")) {
                     uint8_t *bssid = WiFi.BSSID(i);
                     availableNetworks.push_back(tcp::encodeNodeId(bssid));
+                }
+            }
+
+            if (mock) {
+                VISIBLE_NETWORKS
+                uint32_t nodeId = this->nodeId;
+                std::vector<uint32_t> myVisibleNetworks = visibleNetworks.at(nodeId);
+                for (auto network : availableNetworks) {
+                    for (auto myVisibleNetwork : myVisibleNetworks) {
+                        if (network != myVisibleNetwork) {
+                            availableNetworks.remove(network);
+                        }
+                    }
                 }
             }
 
@@ -637,7 +654,7 @@ namespace painlessmesh {
                 Log(PEAR, "reportPearDataTask(): Sending pear data\n");
 
                 uint8_t summedTransmissions = mesh->transmissions + mesh->baseLineTransmissions;
-                String pearDataString = buildPearReportJson(summedTransmissions, mesh->getAvailableNetworks());
+                String pearDataString = buildPearReportJson(summedTransmissions, mesh->getAvailableNetworks(true));
 
                 mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
             });
