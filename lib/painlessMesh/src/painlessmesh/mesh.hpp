@@ -445,8 +445,8 @@ namespace painlessmesh {
         }
 
     protected:
-        uint8_t targetBSSID[6] = {0}; // Default to an invalid BSSID
-        bool useTargetBSSID = false; // Flag to enable/disable targeting a specific BSSID
+        uint32_t targetNodeId = 0; // Default to an invalid nodeId
+        bool useTargetNodeId = false; // Flag to enable/disable targeting a specific nodeId
         uint8_t baseLineTransmissions = 30;
         // Baseline set to 40 to simulate a homogenous network where each node sends 30 messages every 30 seconds.
         uint8_t transmissions = 0;
@@ -454,14 +454,14 @@ namespace painlessmesh {
 
         void setTargetBSSID(const uint8_t *bssid) {
             using namespace painlessmesh::logger;
-            memcpy(targetBSSID, bssid, sizeof(targetBSSID));
-            useTargetBSSID = true;
-            Log(DEBUG, "TargetBSSID is set to %x:%x:%x:%x:%x:%x\n", targetBSSID[0], targetBSSID[1], targetBSSID[2],
-                targetBSSID[3], targetBSSID[4], targetBSSID[5]);
+            memcpy(targetNodeId, bssid, sizeof(targetNodeId));
+            useTargetNodeId = true;
+            Log(DEBUG, "TargetBSSID is set to %x:%x:%x:%x:%x:%x\n", targetNodeId[0], targetNodeId[1], targetNodeId[2],
+                targetNodeId[3], targetNodeId[4], targetNodeId[5]);
         }
 
         void clearTargetBSSID() {
-            useTargetBSSID = false;
+            useTargetNodeId = false;
         }
 
         void onPearReceive(uint32_t from, String &msg) {

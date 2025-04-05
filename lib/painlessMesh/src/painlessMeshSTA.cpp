@@ -117,9 +117,9 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
 
   task.yield([this]() {
     bool targetBSSIDFound = false;
-    if (mesh->useTargetBSSID) 
+    if (mesh->useTargetNodeId)
     {
-      targetBSSIDFound = containsTargetBSSID(aps, mesh->targetBSSID);
+      targetBSSIDFound = containsTargetBSSID(aps, mesh->targetNodeId);
       if (targetBSSIDFound) {
         Log(CONNECTION, "Target BSSID was found\n");
       }
@@ -137,7 +137,7 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
     task.yield([this] {
 
       aps.sort([this](WiFi_AP_Record_t a, WiFi_AP_Record_t b) {
-        return compareWiFiAPRecords(a, b, mesh->useTargetBSSID, mesh->targetBSSID);
+        return compareWiFiAPRecords(a, b, mesh->useTargetNodeId, mesh->targetNodeId);
       });
       // Next task is to connect to the top ap
       task.yield([this]() { connectToAP(); });
@@ -241,7 +241,7 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
       if (!mesh->shouldContainRoot)
         // Slower when part of bigger network
         prob /= 2 * (1 + layout::size(mesh->asNodeTree()));
-      if ((!layout::isRooted(mesh->asNodeTree()) && random(0, 1000) < prob) || mesh->useTargetBSSID) {
+      if ((!layout::isRooted(mesh->asNodeTree()) && random(0, 1000) < prob) || mesh->useTargetNodeId) {
         Log(CONNECTION, "connectToAP(): Reconfigure network: %s\n",
             String(prob).c_str());
         // close STA connection, this will trigger station disconnect which
