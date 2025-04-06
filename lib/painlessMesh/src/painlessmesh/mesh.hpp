@@ -452,12 +452,11 @@ namespace painlessmesh {
         uint8_t transmissions = 0;
         std::list<uint32_t> availableNetworks;
 
-        void setTargetBSSID(const uint8_t *bssid) {
+        void setTargetNodeId(const uint32_t nodeId) {
             using namespace painlessmesh::logger;
-            memcpy(targetNodeId, bssid, sizeof(targetNodeId));
+            targetNodeId = nodeId;
             useTargetNodeId = true;
-            Log(DEBUG, "TargetBSSID is set to %x:%x:%x:%x:%x:%x\n", targetNodeId[0], targetNodeId[1], targetNodeId[2],
-                targetNodeId[3], targetNodeId[4], targetNodeId[5]);
+            Log(PEAR, "TargetNodeId is set to %i\n", targetNodeId);
         }
 
         void clearTargetBSSID() {
@@ -475,7 +474,7 @@ namespace painlessmesh {
 
         uint8_t targetBssid[6];
         tcp::decodeNodeId(doc["newParent"], targetBssid);
-        setTargetBSSID(targetBssid);
+        setTargetNodeId(targetBssid);
       }
     }
 
