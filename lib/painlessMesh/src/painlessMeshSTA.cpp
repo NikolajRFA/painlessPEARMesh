@@ -116,20 +116,20 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
   Log(CONNECTION, "\tFound %d nodes\n", aps.size());
 
   task.yield([this]() {
-    bool targetBSSIDFound = false;
+    bool targetNodeIdFound = false;
     if (mesh->useTargetNodeId)
     {
-      targetBSSIDFound = containsTargetBSSID(aps, mesh->targetNodeId);
-      if (targetBSSIDFound) {
+      targetNodeIdFound = containsTargetNodeId(aps, mesh->targetNodeId);
+      if (targetNodeIdFound) {
         Log(CONNECTION, "Target BSSID was found\n");
       }
-      else 
+      else
       {
         Log(CONNECTION, "Target BSSID was not found\n");
       }
     }
     // Task filter all unknown
-    if(!targetBSSIDFound) filterAPs();
+    if(!targetNodeIdFound) filterAPs();
 
     lastAPs = aps;
 
@@ -145,14 +145,16 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
   });
 }
 
-bool StationScan::containsTargetBSSID(const std::list<WiFi_AP_Record_t> &aps, const uint8_t *targetBSSID)
+bool StationScan::containsTargetNodeId(const std::list<WiFi_AP_Record_t> &aps, const uint32_t nodeId)
 {
   using namespace painlessmesh::logger;
-  Log(DEBUG, "Target BSSID: %x:%x:%x:%x:%x:%x\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
+  Log(PEAR, "Target nodeId: %i\n", nodeId);
   for (const auto &ap : aps)
   {
-    Log(DEBUG, "Current BSSID: %x:%x:%x:%x:%x:%x\n", ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5]);
-    if (memcmp(ap.bssid, targetBSSID, sizeof(ap.bssid)) == 0)
+    Log(PEAR, "Current nodeId: %i\n", nodeId);
+    uint8_t targetBSSID[6] = {0};
+    painlessmesh::tcp::decodeNodeId(nodeId, targetBSSID);
+    if (memcmp(ap.bssid + 2, targetBSSID + 2, sizeof(ap.bssid) - 2) == 0)
     {
       return true; // Found the target BSSID
     }

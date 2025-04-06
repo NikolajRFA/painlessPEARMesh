@@ -1,9 +1,10 @@
 #include "unity.h"
 #include "painlessMeshSTA.h"
 
-void test_containsTargetBSSID_should_return_true(void)
+void test_containsTargetNodeId_should_return_true(void)
 {
     uint8_t target[] = {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa};
+    uint32_t targetNodeId = painlessmesh::tcp::encodeNodeId(target);
     uint8_t bssid1[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     uint8_t bssid2[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
     uint8_t bssid3[] = {0xbb, 0xbb, 0xbb, 0xbb, 0xbb, 0xbb};
@@ -22,7 +23,7 @@ void test_containsTargetBSSID_should_return_true(void)
     aps.push_back(record3);
     aps.push_back(record4);
 
-    bool result = StationScan::containsTargetBSSID(aps, target);
+    bool result = StationScan::containsTargetNodeId(aps, targetNodeId);
 
     TEST_ASSERT_TRUE(result);
 }

@@ -22,7 +22,7 @@ int runUnityTests(void)
     RUN_TEST(test_compareWiFiAPRecords_with_useTargetBSSID_should_return_true);
     RUN_TEST(test_compareWiFiAPRecords_where_2nd_has_better_rssi_should_return_false);
     RUN_TEST(test_compareWiFiAPRecords_through_ap_list_and_with_useTargetBSSID_then_target_BSSID_is_first);
-    RUN_TEST(test_containsTargetBSSID_should_return_true);
+    RUN_TEST(test_containsTargetNodeId_should_return_true);
     RUN_TEST(test_build_new_parent_json_should_return_jsonString);
     RUN_TEST(test_json_contains_new_parent_returns_true);
     RUN_TEST(test_json_contains_new_parent_returns_false);
