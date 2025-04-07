@@ -175,10 +175,13 @@ void ICACHE_FLASH_ATTR StationScan::filterAPs() {
   }
 }
 
-bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(WiFi_AP_Record_t a, WiFi_AP_Record_t b, bool useTargetBSSID, const uint8_t* targetBSSID) {
-  if (useTargetBSSID) {
-      if (memcmp(a.bssid, targetBSSID, sizeof(a.bssid)) == 0) return true;
-      if (memcmp(b.bssid, targetBSSID, sizeof(b.bssid)) == 0) return false;
+bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(const WiFi_AP_Record_t &a, const WiFi_AP_Record_t &b,
+                                                         const bool useTargetNodeId, const uint32_t targetNodeId) {
+  if (useTargetNodeId) {
+    uint32_t aNodeId = painlessmesh::tcp::encodeNodeId(a.bssid);
+    uint32_t bNodeId = painlessmesh::tcp::encodeNodeId(b.bssid);
+    if (aNodeId == targetNodeId) return true;
+    if (bNodeId == targetNodeId) return false;
   }
   return a.rssi > b.rssi;
 }
