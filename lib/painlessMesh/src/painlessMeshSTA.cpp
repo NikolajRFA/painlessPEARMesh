@@ -152,7 +152,7 @@ bool StationScan::containsTargetNodeId(const std::list<WiFi_AP_Record_t> &aps, c
   for (const auto &ap : aps)
   {
     Log(PEAR, "Current nodeId: %i\n", nodeId);
-    uint8_t targetBSSID[6] = {0};
+    uint8_t targetBSSID[6] = {};
     painlessmesh::tcp::decodeNodeId(nodeId, targetBSSID);
     if (memcmp(ap.bssid + 2, targetBSSID + 2, sizeof(ap.bssid) - 2) == 0)
     {
