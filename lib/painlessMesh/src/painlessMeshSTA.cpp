@@ -105,8 +105,8 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
     aps.push_back(record);
     char macBuffer[17];
     sprintf(macBuffer, "%02x:%02x:%02x:%02x:%02x:%02x", record.bssid[0], record.bssid[1], record.bssid[2], record.bssid[3], record.bssid[4], record.bssid[5]);
-    Log(CONNECTION, "\tfound : %s, %ddBm, bssid: %s\n", record.ssid.c_str(),
-        (int16_t)record.rssi, macBuffer);
+    Log(CONNECTION, "\tfound : %s, %ddBm, bssid: %s, nodeId: %i\n", record.ssid.c_str(),
+        (int16_t)record.rssi, macBuffer, painlessmesh::tcp::encodeNodeId(record.bssid));
   }
   for (auto ap: aps) {
     mesh->availableNetworks.push_back(painlessmesh::tcp::encodeNodeId(ap.bssid));
@@ -121,11 +121,11 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
     {
       targetNodeIdFound = containsTargetNodeId(aps, mesh->targetNodeId);
       if (targetNodeIdFound) {
-        Log(CONNECTION, "Target BSSID was found\n");
+        Log(PEAR, "Target nodeId was found\n");
       }
       else
       {
-        Log(CONNECTION, "Target BSSID was not found\n");
+        Log(PEAR, "Target nodeId was not found\n");
       }
     }
     // Task filter all unknown
@@ -136,7 +136,7 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
     // Next task is to sort by strength
     task.yield([this] {
 
-      aps.sort([this](WiFi_AP_Record_t a, WiFi_AP_Record_t b) {
+      aps.sort([this](const WiFi_AP_Record_t& a, const WiFi_AP_Record_t& b) {
         return compareWiFiAPRecords(a, b, mesh->useTargetNodeId, mesh->targetNodeId);
       });
       // Next task is to connect to the top ap
