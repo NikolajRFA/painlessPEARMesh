@@ -15,17 +15,23 @@ painlessMesh mesh;
 
 // User stub
 void sendMessage(); // Prototype so PlatformIO doesn't complain
+void logConnections();
 
-/*
 Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
+Task taskLogConnections(TASK_SECOND * 10, TASK_FOREVER, &logConnections );
 
 void sendMessage() {
-  uint32_t nodeId = 123456789;
+  uint32_t nodeId = 1616231985;
   String jsonString = buildNewParentJson(nodeId);
-  if (mesh.getNodeId() != CHIP1) mesh.sendPear(CHIP1, jsonString);
-  taskSendMessage.setInterval( random( TASK_SECOND * 1, TASK_SECOND * 5 ));
+  if (mesh.getNodeId() == CHIP1) mesh.sendPear(3211321933, jsonString);
+  taskSendMessage.setInterval( TASK_SECOND * 20 );
 }
-*/
+
+void logConnections()
+{
+    Serial.print("TOPOLOGY: ");
+    Serial.println( mesh.subConnectionJson() );
+}
 
 // Needed for painless library
 void receivedCallback(uint32_t from, String &msg) {
@@ -49,7 +55,7 @@ void setup() {
     Serial.begin(115200);
 
     //mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
-    mesh.setDebugMsgTypes(COMMUNICATION | CONNECTION | ERROR | STARTUP | DEBUG);
+    mesh.setDebugMsgTypes(GENERAL | PEAR | CONNECTION | ERROR | STARTUP | DEBUG);
     // set before init() so that you can see startup messages
 
     mesh.init(MESH_PREFIX1, MESH_PASSWORD, &userScheduler, MESH_PORT);
@@ -66,8 +72,10 @@ void setup() {
     mesh.onChangedConnections(&changedConnectionCallback);
     mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
 
-    //userScheduler.addTask( taskSendMessage );
-    //taskSendMessage.enable();
+    userScheduler.addTask( taskSendMessage );
+    userScheduler.addTask(taskLogConnections);
+    taskLogConnections.enable();
+    taskSendMessage.enable();
 }
 
 void loop() {

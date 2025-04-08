@@ -151,7 +151,7 @@ bool StationScan::containsTargetNodeId(const std::list<WiFi_AP_Record_t> &aps, c
   Log(PEAR, "Target nodeId: %i\n", nodeId);
   for (const auto &ap : aps)
   {
-    Log(PEAR, "Current nodeId: %i\n", nodeId);
+    Log(PEAR, "Current nodeId: %i\n", painlessmesh::tcp::encodeNodeId(ap.bssid));
     uint8_t targetBSSID[6] = {};
     painlessmesh::tcp::decodeNodeId(nodeId, targetBSSID);
     if (memcmp(ap.bssid + 2, targetBSSID + 2, sizeof(ap.bssid) - 2) == 0)
@@ -186,7 +186,8 @@ bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(const WiFi_AP_Record_t 
   return a.rssi > b.rssi;
 }
 
-void ICACHE_FLASH_ATTR StationScan::requestIP(WiFi_AP_Record_t &ap) {
+void ICACHE_FLASH_ATTR StationScan::requestIP(WiFi_AP_Record_t& ap)
+{
   using namespace painlessmesh::logger;
   Log(CONNECTION, "connectToAP(): Best AP is %u<---\n",
       painlessmesh::tcp::encodeNodeId(ap.bssid));

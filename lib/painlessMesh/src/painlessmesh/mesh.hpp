@@ -471,8 +471,8 @@ namespace painlessmesh {
       deserializeJson(doc, msg);
       if (jsonContainsNewParent(doc))
       {
-        uint32_t targetNodeId = doc["newParent"];
-        setTargetNodeId(targetNodeId);
+        uint32_t newTargetNodeId = doc["newParent"];
+        setTargetNodeId(newTargetNodeId);
       }
     }
 
@@ -651,7 +651,7 @@ namespace painlessmesh {
                 });
             }
             mesh->mScheduler->addTask(reportPearDataTask);
-            this->reportPearDataTask.enable();
+            this->reportPearDataTask.enableDelayed(15 * TASK_SECOND);
 
             Log(CONNECTION, "painlessmesh::Connection: New connection established.\n");
             this->initialize(mesh->mScheduler);
