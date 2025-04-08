@@ -105,8 +105,8 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
     aps.push_back(record);
     char macBuffer[17];
     sprintf(macBuffer, "%02x:%02x:%02x:%02x:%02x:%02x", record.bssid[0], record.bssid[1], record.bssid[2], record.bssid[3], record.bssid[4], record.bssid[5]);
-    Log(CONNECTION, "\tfound : %s, %ddBm, bssid: %s\n", record.ssid.c_str(),
-        (int16_t)record.rssi, macBuffer);
+    Log(CONNECTION, "\tfound : %s, %ddBm, bssid: %s, nodeId: %lu\n", record.ssid.c_str(),
+        (int16_t)record.rssi, macBuffer, painlessmesh::tcp::encodeNodeId(record.bssid));
   }
   for (auto ap: aps) {
     mesh->availableNetworks.push_back(painlessmesh::tcp::encodeNodeId(ap.bssid));
@@ -116,28 +116,28 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
   Log(CONNECTION, "\tFound %d nodes\n", aps.size());
 
   task.yield([this]() {
-    bool targetBSSIDFound = false;
-    if (mesh->useTargetBSSID) 
+    bool targetNodeIdFound = false;
+    if (mesh->useTargetNodeId)
     {
-      targetBSSIDFound = containsTargetBSSID(aps, mesh->targetBSSID);
-      if (targetBSSIDFound) {
-        Log(CONNECTION, "Target BSSID was found\n");
+      targetNodeIdFound = containsTargetNodeId(aps, mesh->targetNodeId);
+      if (targetNodeIdFound) {
+        Log(PEAR, "Target nodeId was found\n");
       }
-      else 
+      else
       {
-        Log(CONNECTION, "Target BSSID was not found\n");
+        Log(PEAR, "Target nodeId was not found\n");
       }
     }
     // Task filter all unknown
-    if(!targetBSSIDFound) filterAPs();
+    if(!targetNodeIdFound) filterAPs();
 
     lastAPs = aps;
 
     // Next task is to sort by strength
     task.yield([this] {
 
-      aps.sort([this](WiFi_AP_Record_t a, WiFi_AP_Record_t b) {
-        return compareWiFiAPRecords(a, b, mesh->useTargetBSSID, mesh->targetBSSID);
+      aps.sort([this](const WiFi_AP_Record_t& a, const WiFi_AP_Record_t& b) {
+        return compareWiFiAPRecords(a, b, mesh->useTargetNodeId, mesh->targetNodeId);
       });
       // Next task is to connect to the top ap
       task.yield([this]() { connectToAP(); });
@@ -145,14 +145,16 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
   });
 }
 
-bool StationScan::containsTargetBSSID(const std::list<WiFi_AP_Record_t> &aps, const uint8_t *targetBSSID)
+bool StationScan::containsTargetNodeId(const std::list<WiFi_AP_Record_t> &aps, const uint32_t nodeId)
 {
   using namespace painlessmesh::logger;
-  Log(DEBUG, "Target BSSID: %x:%x:%x:%x:%x:%x\n", targetBSSID[0], targetBSSID[1], targetBSSID[2], targetBSSID[3], targetBSSID[4], targetBSSID[5]);
+  Log(PEAR, "Target nodeId: %i\n", nodeId);
   for (const auto &ap : aps)
   {
-    Log(DEBUG, "Current BSSID: %x:%x:%x:%x:%x:%x\n", ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5]);
-    if (memcmp(ap.bssid, targetBSSID, sizeof(ap.bssid)) == 0)
+    Log(PEAR, "Current nodeId: %i\n", painlessmesh::tcp::encodeNodeId(ap.bssid));
+    uint8_t targetBSSID[6] = {};
+    painlessmesh::tcp::decodeNodeId(nodeId, targetBSSID);
+    if (memcmp(ap.bssid + 2, targetBSSID + 2, sizeof(ap.bssid) - 2) == 0)
     {
       return true; // Found the target BSSID
     }
@@ -173,15 +175,19 @@ void ICACHE_FLASH_ATTR StationScan::filterAPs() {
   }
 }
 
-bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(WiFi_AP_Record_t a, WiFi_AP_Record_t b, bool useTargetBSSID, const uint8_t* targetBSSID) {
-  if (useTargetBSSID) {
-      if (memcmp(a.bssid, targetBSSID, sizeof(a.bssid)) == 0) return true;
-      if (memcmp(b.bssid, targetBSSID, sizeof(b.bssid)) == 0) return false;
+bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(const WiFi_AP_Record_t &a, const WiFi_AP_Record_t &b,
+                                                         const bool useTargetNodeId, const uint32_t targetNodeId) {
+  if (useTargetNodeId) {
+    uint32_t aNodeId = painlessmesh::tcp::encodeNodeId(a.bssid);
+    uint32_t bNodeId = painlessmesh::tcp::encodeNodeId(b.bssid);
+    if (aNodeId == targetNodeId) return true;
+    if (bNodeId == targetNodeId) return false;
   }
   return a.rssi > b.rssi;
 }
 
-void ICACHE_FLASH_ATTR StationScan::requestIP(WiFi_AP_Record_t &ap) {
+void ICACHE_FLASH_ATTR StationScan::requestIP(WiFi_AP_Record_t& ap)
+{
   using namespace painlessmesh::logger;
   Log(CONNECTION, "connectToAP(): Best AP is %u<---\n",
       painlessmesh::tcp::encodeNodeId(ap.bssid));
@@ -241,7 +247,7 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
       if (!mesh->shouldContainRoot)
         // Slower when part of bigger network
         prob /= 2 * (1 + layout::size(mesh->asNodeTree()));
-      if ((!layout::isRooted(mesh->asNodeTree()) && random(0, 1000) < prob) || mesh->useTargetBSSID) {
+      if ((!layout::isRooted(mesh->asNodeTree()) && random(0, 1000) < prob) || mesh->useTargetNodeId) {
         Log(CONNECTION, "connectToAP(): Reconfigure network: %s\n",
             String(prob).c_str());
         // close STA connection, this will trigger station disconnect which
@@ -250,7 +256,8 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
         mesh->stability = 0;  // Discourage switching again
         // wifiEventCB should be triggered before this delay runs out
         // and reset the connecting
-        task.delay(3 * SCAN_INTERVAL);
+        int delay = mesh->useTargetNodeId ? 5 : SCAN_INTERVAL;
+        task.delay(3 * delay);
       } else {
         if (mesh->shouldContainRoot)
           // Increase scanning rate, because we want to find root

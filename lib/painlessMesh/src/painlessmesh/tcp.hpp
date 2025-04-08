@@ -27,8 +27,8 @@ inline void decodeNodeId(uint32_t encodedValue, uint8_t* hwaddr)
   using namespace painlessmesh::logger;
   Log(GENERAL, "decodeNodeId():\n");
 
-  hwaddr[0] = 0x88; // Hardcoded as these are assigned to Espressif
-  hwaddr[1] = 0x13; // Hardcoded as these are assigned to Espressif
+  hwaddr[0] = 0x00; // First two address bytes are not taken into account in nodeIds.
+  hwaddr[1] = 0x00;
   hwaddr[2] = (encodedValue >> 24) & 0xFF;
   hwaddr[3] = (encodedValue >> 16) & 0xFF;
   hwaddr[4] = (encodedValue >> 8) & 0xFF;

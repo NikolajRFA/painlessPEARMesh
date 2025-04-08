@@ -9,8 +9,8 @@ void decodeNodeId_3206773453_8813BF237ACD(void)
 
   decodeNodeId(encodedValue, bssid);
 
-  TEST_ASSERT_EQUAL_INT(0x88, bssid[0]);
-  TEST_ASSERT_EQUAL_INT(0x13, bssid[1]);
+  TEST_ASSERT_EQUAL_INT(0x00, bssid[0]);
+  TEST_ASSERT_EQUAL_INT(0x00, bssid[1]);
   TEST_ASSERT_EQUAL_INT(0xBF, bssid[2]);
   TEST_ASSERT_EQUAL_INT(0x23, bssid[3]);
   TEST_ASSERT_EQUAL_INT(0x7A, bssid[4]);
@@ -25,8 +25,8 @@ void decodeNodeId_3206793885_8813BF23CA9D(void)
 
   decodeNodeId(encodedValue, bssid);
 
-  TEST_ASSERT_EQUAL_INT(0x88, bssid[0]);
-  TEST_ASSERT_EQUAL_INT(0x13, bssid[1]);
+  TEST_ASSERT_EQUAL_INT(0x00, bssid[0]);
+  TEST_ASSERT_EQUAL_INT(0x00, bssid[1]);
   TEST_ASSERT_EQUAL_INT(0xBF, bssid[2]);
   TEST_ASSERT_EQUAL_INT(0x23, bssid[3]);
   TEST_ASSERT_EQUAL_INT(0xCA, bssid[4]);
@@ -41,8 +41,8 @@ void decodeNodeId_3211408993_8813BF6A3661(void)
 
   decodeNodeId(encodedValue, bssid);
 
-  TEST_ASSERT_EQUAL_INT(0x88, bssid[0]);
-  TEST_ASSERT_EQUAL_INT(0x13, bssid[1]);
+  TEST_ASSERT_EQUAL_INT(0x00, bssid[0]);
+  TEST_ASSERT_EQUAL_INT(0x00, bssid[1]);
   TEST_ASSERT_EQUAL_INT(0xBF, bssid[2]);
   TEST_ASSERT_EQUAL_INT(0x6A, bssid[3]);
   TEST_ASSERT_EQUAL_INT(0x36, bssid[4]);

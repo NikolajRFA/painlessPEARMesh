@@ -1,6 +1,6 @@
 #include "unity.h"
 #include "painlessMeshSTA.h"
-#include "compareWiFiAPRecords_tests.hpp"
+#include "compareWiFiAPRecordsTests.hpp"
 #include "test_containsTargetBSSID.hpp"
 #include "test_jsonHelper.hpp"
 #include "getRootNodeIdTests.hpp"
@@ -19,10 +19,11 @@ void tearDown(void)
 int runUnityTests(void)
 {
     UNITY_BEGIN();
-    RUN_TEST(test_compareWiFiAPRecords_with_useTargetBSSID_should_return_true);
-    RUN_TEST(test_compareWiFiAPRecords_where_2nd_has_better_rssi_should_return_false);
-    RUN_TEST(test_compareWiFiAPRecords_through_ap_list_and_with_useTargetBSSID_then_target_BSSID_is_first);
-    RUN_TEST(test_containsTargetBSSID_should_return_true);
+    RUN_TEST(compareWiFiAPRecords_useTargetNodeIdTrueAndTargetNodeId_true);
+    RUN_TEST(compareWiFiAPRecords_1stHasBetterRssi_true);
+    RUN_TEST(compareWiFiAPRecords_2ndHasBetterRssi_false);
+    RUN_TEST(compareWiFiAPRecords_apListAndUseTargetNodeID_targetNodeIdIsFirst);
+    RUN_TEST(test_containsTargetNodeId_should_return_true);
     RUN_TEST(test_build_new_parent_json_should_return_jsonString);
     RUN_TEST(test_json_contains_new_parent_returns_true);
     RUN_TEST(test_json_contains_new_parent_returns_false);

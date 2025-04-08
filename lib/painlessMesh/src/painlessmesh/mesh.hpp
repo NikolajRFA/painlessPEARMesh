@@ -445,23 +445,22 @@ namespace painlessmesh {
         }
 
     protected:
-        uint8_t targetBSSID[6] = {0}; // Default to an invalid BSSID
-        bool useTargetBSSID = false; // Flag to enable/disable targeting a specific BSSID
+        uint32_t targetNodeId = 0; // Default to an invalid nodeId
+        bool useTargetNodeId = false; // Flag to enable/disable targeting a specific nodeId
         uint8_t baseLineTransmissions = 30;
         // Baseline set to 40 to simulate a homogenous network where each node sends 30 messages every 30 seconds.
         uint8_t transmissions = 0;
         std::list<uint32_t> availableNetworks;
 
-        void setTargetBSSID(const uint8_t *bssid) {
+        void setTargetNodeId(const uint32_t nodeId) {
             using namespace painlessmesh::logger;
-            memcpy(targetBSSID, bssid, sizeof(targetBSSID));
-            useTargetBSSID = true;
-            Log(DEBUG, "TargetBSSID is set to %x:%x:%x:%x:%x:%x\n", targetBSSID[0], targetBSSID[1], targetBSSID[2],
-                targetBSSID[3], targetBSSID[4], targetBSSID[5]);
+            targetNodeId = nodeId;
+            useTargetNodeId = true;
+            Log(PEAR, "TargetNodeId is set to %lu\n", targetNodeId);
         }
 
         void clearTargetBSSID() {
-            useTargetBSSID = false;
+            useTargetNodeId = false;
         }
 
         void onPearReceive(uint32_t from, String &msg) {
@@ -472,10 +471,8 @@ namespace painlessmesh {
       deserializeJson(doc, msg);
       if (jsonContainsNewParent(doc))
       {
-
-        uint8_t targetBssid[6];
-        tcp::decodeNodeId(doc["newParent"], targetBssid);
-        setTargetBSSID(targetBssid);
+        uint32_t newTargetNodeId = doc["newParent"];
+        setTargetNodeId(newTargetNodeId);
       }
     }
 
@@ -610,6 +607,8 @@ namespace painlessmesh {
                 self->nodeSyncTask.disable();
                 self->timeOutTask.setCallback(NULL);
                 self->timeOutTask.disable();
+                self->reportPearDataTask.setCallback(NULL);
+                self->reportPearDataTask.disable();
                 auto nodeId = self->nodeId;
                 auto station = self->station;
                 mesh->addTask([mesh, nodeId, station]() {
@@ -653,8 +652,8 @@ namespace painlessmesh {
                     mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
                 });
             }
-            mesh->mScheduler->addTask(reportPearDataTask);
-            this->reportPearDataTask.enable();
+            mesh->mScheduler->addTask(this->reportPearDataTask);
+            this->reportPearDataTask.enableDelayed();
 
             Log(CONNECTION, "painlessmesh::Connection: New connection established.\n");
             this->initialize(mesh->mScheduler);
