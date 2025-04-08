@@ -471,10 +471,8 @@ namespace painlessmesh {
       deserializeJson(doc, msg);
       if (jsonContainsNewParent(doc))
       {
-
-        uint8_t targetBssid[6];
-        tcp::decodeNodeId(doc["newParent"], targetBssid);
-        setTargetNodeId(targetBssid);
+        uint32_t targetNodeId = doc["newParent"];
+        setTargetNodeId(targetNodeId);
       }
     }
 
