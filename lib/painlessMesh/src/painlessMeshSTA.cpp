@@ -105,7 +105,7 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
     aps.push_back(record);
     char macBuffer[17];
     sprintf(macBuffer, "%02x:%02x:%02x:%02x:%02x:%02x", record.bssid[0], record.bssid[1], record.bssid[2], record.bssid[3], record.bssid[4], record.bssid[5]);
-    Log(CONNECTION, "\tfound : %s, %ddBm, bssid: %s, nodeId: %i\n", record.ssid.c_str(),
+    Log(CONNECTION, "\tfound : %s, %ddBm, bssid: %s, nodeId: %lu\n", record.ssid.c_str(),
         (int16_t)record.rssi, macBuffer, painlessmesh::tcp::encodeNodeId(record.bssid));
   }
   for (auto ap: aps) {
