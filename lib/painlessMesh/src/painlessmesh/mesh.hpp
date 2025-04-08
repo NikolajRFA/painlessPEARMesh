@@ -456,7 +456,7 @@ namespace painlessmesh {
             using namespace painlessmesh::logger;
             targetNodeId = nodeId;
             useTargetNodeId = true;
-            Log(PEAR, "TargetNodeId is set to %i\n", targetNodeId);
+            Log(PEAR, "TargetNodeId is set to %lu\n", targetNodeId);
         }
 
         void clearTargetBSSID() {
@@ -607,6 +607,8 @@ namespace painlessmesh {
                 self->nodeSyncTask.disable();
                 self->timeOutTask.setCallback(NULL);
                 self->timeOutTask.disable();
+                self->reportPearDataTask.setCallback(NULL);
+                self->reportPearDataTask.disable();
                 auto nodeId = self->nodeId;
                 auto station = self->station;
                 mesh->addTask([mesh, nodeId, station]() {
@@ -650,8 +652,8 @@ namespace painlessmesh {
                     mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
                 });
             }
-            mesh->mScheduler->addTask(reportPearDataTask);
-            this->reportPearDataTask.enableDelayed(15 * TASK_SECOND);
+            mesh->mScheduler->addTask(this->reportPearDataTask);
+            this->reportPearDataTask.enableDelayed();
 
             Log(CONNECTION, "painlessmesh::Connection: New connection established.\n");
             this->initialize(mesh->mScheduler);

@@ -21,9 +21,9 @@ Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
 Task taskLogConnections(TASK_SECOND * 10, TASK_FOREVER, &logConnections );
 
 void sendMessage() {
-  uint32_t nodeId = 1616231985;
+  uint32_t nodeId = 3206793885;
   String jsonString = buildNewParentJson(nodeId);
-  if (mesh.getNodeId() == CHIP1) mesh.sendPear(3211321933, jsonString);
+  if (mesh.getNodeId() == CHIP1) mesh.sendPear(3211408993, jsonString);
   taskSendMessage.setInterval( TASK_SECOND * 20 );
 }
 

@@ -256,7 +256,8 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
         mesh->stability = 0;  // Discourage switching again
         // wifiEventCB should be triggered before this delay runs out
         // and reset the connecting
-        task.delay(3 * SCAN_INTERVAL);
+        int delay = mesh->useTargetNodeId ? 5 : SCAN_INTERVAL;
+        task.delay(3 * delay);
       } else {
         if (mesh->shouldContainRoot)
           // Increase scanning rate, because we want to find root
