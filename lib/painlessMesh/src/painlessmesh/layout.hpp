@@ -198,6 +198,15 @@ namespace painlessmesh {
             }
             return lst;
         }
+
+        inline std::list<protocol::NodeTree> asNodeTreeList(protocol::NodeTree nodeTree, bool includeSelf = false) {
+            std::list<protocol::NodeTree> lst;
+            if (includeSelf) lst.push_back(nodeTree);
+            for (auto &&s: nodeTree.subs) {
+                lst.splice(lst.end(), asNodeTreeList(s));
+            }
+            return lst;
+        }
     } // namespace layout
 } // namespace painlessmesh
 

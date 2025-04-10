@@ -408,6 +408,10 @@ namespace painlessmesh {
             return painlessmesh::layout::asList(this->asNodeTree(), includeSelf);
         }
 
+        std::list<protocol::NodeTree> getNodeTreeList(bool includeSelf = false) {
+            return painlessmesh::layout::asNodeTreeList(this->asNodeTree(), includeSelf);
+        }
+
         /**
          * Return a json representation of the current mesh layout
          */
