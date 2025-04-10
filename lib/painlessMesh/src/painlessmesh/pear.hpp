@@ -4,11 +4,13 @@
 #include <Arduino.h>
 
 namespace painlessmesh {
+  class PearNodeTree;
 
-class Pear {
+  class Pear {
   public:
   uint8_t noOfVerifiedDevices = 0;
-  uint8_t energyProfile = 200; // Why 200 you might ask...
+  //uint8_t energyProfile = 200; // Why 200 you might ask...
+  std::vector<PearNodeTree> pearData;
 
   void run(){
     // Create a list of all devices - devices

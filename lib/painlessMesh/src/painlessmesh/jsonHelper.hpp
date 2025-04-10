@@ -2,7 +2,10 @@
 #define JSON_HELPER_HPP
 
 #include <ArduinoJson.h>
+#include <vector>
+#include "pear.hpp"
 
+using namespace painlessmesh;
 inline String buildNewParentJson(const uint32_t nodeId)
 {
     JsonDocument doc;
@@ -35,4 +38,9 @@ inline String buildPearReportJson(uint8_t transmissionRate, std::list<uint32_t> 
 
     return pearDataString;
 }
+
+inline void processReceivedPearData(JsonDocument pearData, std::vector<PearNodeTree>) {
+    
+}
+
 #endif

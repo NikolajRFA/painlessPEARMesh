@@ -472,14 +472,17 @@ namespace painlessmesh {
             using namespace painlessmesh::logger;
             Log(PEAR, "Received %s from node %u\n", msg.c_str(), from);
 
-      JsonDocument doc;
-      deserializeJson(doc, msg);
-      if (jsonContainsNewParent(doc))
-      {
-        uint32_t newTargetNodeId = doc["newParent"];
-        setTargetNodeId(newTargetNodeId);
-      }
-    }
+            JsonDocument doc;
+            deserializeJson(doc, msg);
+
+            if (this->root) {
+
+            } else if (jsonContainsNewParent(doc)) {
+                uint32_t newTargetNodeId = doc["newParent"];
+                setTargetNodeId(newTargetNodeId);
+            }
+        }
+
 
         void setScheduler(Scheduler *baseScheduler) {
             this->mScheduler = baseScheduler;
