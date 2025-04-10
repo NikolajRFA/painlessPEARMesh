@@ -129,7 +129,10 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
       }
     }
     // Task filter all unknown
-    if(!targetNodeIdFound) filterAPs();
+    filterAPs();
+
+    // Add target if we are not connected to it.
+    if (targetNodeIdFound) checkStation();
 
     lastAPs = aps;
 
@@ -162,17 +165,45 @@ bool StationScan::containsTargetNodeId(const std::list<WiFi_AP_Record_t> &aps, c
   return false; // Target BSSID not found
 }
 
-void ICACHE_FLASH_ATTR StationScan::filterAPs() {
+void ICACHE_FLASH_ATTR StationScan::filterAPs()
+{
   auto ap = aps.begin();
-  while (ap != aps.end()) {
+  while (ap != aps.end())
+  {
     auto apNodeId = painlessmesh::tcp::encodeNodeId(ap->bssid);
     if (painlessmesh::router::findRoute<painlessmesh::Connection>(
-            (*mesh), apNodeId) != NULL) {
+      (*mesh), apNodeId) != NULL)
+    {
       ap = aps.erase(ap);
-    } else {
+    }
+    else
+    {
       ap++;
     }
   }
+}
+
+void ICACHE_FLASH_ATTR StationScan::checkStation()
+{
+  if (!mesh->subs.empty())
+  {
+    auto connection = mesh->subs.begin();
+    while (connection != mesh->subs.end())
+    {
+      if ((*connection)->station && (*connection)->nodeId == mesh->targetNodeId)
+      {
+        return;
+      }
+      connection++;
+    }
+  }
+  WiFi_AP_Record_t record;
+  record.ssid = mesh->_meshSSID;
+  uint8_t bssid[6];
+  painlessmesh::tcp::decodeNodeId(mesh->targetNodeId, bssid);
+  memcpy(record.bssid, bssid, sizeof(record.bssid));
+
+  aps.push_front(record);
 }
 
 bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(const WiFi_AP_Record_t &a, const WiFi_AP_Record_t &b,
