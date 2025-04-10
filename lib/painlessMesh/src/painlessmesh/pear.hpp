@@ -26,11 +26,11 @@ class Pear {
   }
 
   void updateParent(uint32_t deviceId){
-    // get the dvice using the id
+    // get the device using the id
     // create a descending list of subs sorted by transmission - nodesToReroute
     // for each nodeToReroute:
-    // for each sub in nodeToReroute.subs:
-    // if sub is within limits set nodeToReroute.newParent = sub
+    // for each visibleNode in nodeToReroute's visible nodes (getAvailableNetworks):
+    // if visibleNode is within limits set nodeToReroute.newParent = visibleNode
   }
 };
 
