@@ -6,8 +6,8 @@
 #include "pear.hpp"
 
 using namespace painlessmesh;
-inline String buildNewParentJson(const uint32_t nodeId)
-{
+
+inline String buildNewParentJson(const uint32_t nodeId) {
     JsonDocument doc;
     // create an object
 
@@ -20,7 +20,7 @@ inline String buildNewParentJson(const uint32_t nodeId)
     return jsonString;
 }
 
-inline bool jsonContainsNewParent(JsonDocument json){
+inline bool jsonContainsNewParent(JsonDocument json) {
     return json["newParent"].is<uint32_t>();
 }
 
@@ -40,7 +40,6 @@ inline String buildPearReportJson(uint8_t transmissionRate, std::list<uint32_t> 
 }
 
 inline void processReceivedPearData(JsonDocument pearData, std::vector<PearNodeTree>) {
-    
 }
 
 #endif

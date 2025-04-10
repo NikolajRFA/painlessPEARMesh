@@ -210,9 +210,9 @@ namespace painlessmesh {
             return sendSingle(rootId, msg);
         }
 
-    /** Scans for WiFi networks matching the mesh prefix and extracts matching networks bssids
-     * @return List of bssids from available networks in the mesh
-     */
+        /** Scans for WiFi networks matching the mesh prefix and extracts matching networks bssids
+         * @return List of bssids from available networks in the mesh
+         */
         std::list<uint32_t> getAvailableNetworks(bool mock = false) {
             if (mock) {
                 VISIBLE_NETWORKS
@@ -476,7 +476,6 @@ namespace painlessmesh {
             deserializeJson(doc, msg);
 
             if (this->root) {
-
             } else if (jsonContainsNewParent(doc)) {
                 uint32_t newTargetNodeId = doc["newParent"];
                 setTargetNodeId(newTargetNodeId);
@@ -648,10 +647,8 @@ namespace painlessmesh {
             else
                 this->nodeSyncTask.enableDelayed(10 * TASK_SECOND);
 
-            if (nodeId != CHIP1)
-            {
-                this->reportPearDataTask.set(30 * TASK_SECOND, TASK_FOREVER, [this, mesh]()
-                {
+            if (nodeId != CHIP1) {
+                this->reportPearDataTask.set(30 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
                     Log(PEAR, "reportPearDataTask(): Sending pear data");
 
                     uint8_t summedTransmissions = mesh->transmissions + mesh->baseLineTransmissions;
