@@ -5,7 +5,6 @@
 #include "jsonHelperTests.hpp"
 #include "getRootNodeIdTests.hpp"
 #include "decodeNodeIdTests.hpp"
-#include "pearTests.hpp"
 
 void setUp(void)
 {
@@ -34,7 +33,6 @@ int runUnityTests(void)
     RUN_TEST(decodeNodeId_3206773453_8813BF237ACD);
     RUN_TEST(decodeNodeId_3206793885_8813BF23CA9D);
     RUN_TEST(decodeNodeId_3211408993_8813BF6A3661);
-    RUN_TEST(subsDescendingTx_listOfSubs_orderedSetOfSubs);
     return UNITY_END();
 }
 

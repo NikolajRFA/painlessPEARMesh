@@ -14,7 +14,6 @@ namespace painlessmesh {
         int periodRx = 0;
         std::list<uint32_t> parentCandidates;
         int energyProfile = 200;
-        std::set<PearNodeTree> subsDescendingTx;
 
         // Define the < operator for comparison
         bool operator<(const PearNodeTree &other) const {
@@ -38,9 +37,6 @@ namespace painlessmesh {
             this->periodRx = periodRx;
             this->periodTx = periodTx;
             this->parentCandidates = parentCandidates;
-            for (const auto &sub: nodeTree.subs) {
-                subsDescendingTx.insert(PearNodeTree(sub));
-            }
         }
 
     private:
@@ -50,7 +46,7 @@ namespace painlessmesh {
     public:
         uint8_t noOfVerifiedDevices = 0;
         //uint8_t energyProfile = 200; // Why 200 you might ask...
-        std::vector<PearNodeTree> pearNodeTrees;
+        std::vector<PearNodeTree> pearNodeTrees; // TODO: Can this be a map
 
         Pear() {
         }
@@ -70,9 +66,27 @@ namespace painlessmesh {
             return false;
         }
 
-        void updateParent(uint32_t deviceId) {
+        PearNodeTree findPearNodeTreeById(uint32_t targetNodeId) {
+            auto it = std::find_if(pearNodeTrees.begin(), pearNodeTrees.end(),
+                                   [targetNodeId](const PearNodeTree& node) {
+                                       return node.nodeId == targetNodeId;
+                                   });
+
+            if (it != pearNodeTrees.end()) {
+                return *it; // Return a copy
+            } else {
+                throw std::runtime_error("PearNodeTree with nodeId " + std::to_string(targetNodeId) + " not found.");
+            }
+        }
+
+
+        void updateParent(PearNodeTree& pearNodeTree) {
             // get the device using the id
             // create a descending list of subs sorted by transmission - nodesToReroute
+            std::set<PearNodeTree> descendingTxList;
+            for (auto sub: pearNodeTree.subs) {
+                descendingTxList.insert(findPearNodeTreeById(sub.nodeId));
+            }
             // for each nodeToReroute:
             // for each visibleNode in nodeToReroute's visible nodes (getAvailableNetworks):
             // if visibleNode is within limits set nodeToReroute.newParent = visibleNode
