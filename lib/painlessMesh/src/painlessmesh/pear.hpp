@@ -5,6 +5,8 @@
 #include <set>
 #include <vector>
 #include <list>
+#include <queue>
+
 #include "protocol.hpp"
 
 namespace painlessmesh {
@@ -13,7 +15,9 @@ namespace painlessmesh {
         int periodTx = 0;
         int periodRx = 0;
         std::list<uint32_t> parentCandidates;
-        int energyProfile = 200;
+        int txThreshold = 200;
+        int rxThreshold = 150;
+        int energyProfile = (txThreshold + rxThreshold) / 2;
 
         // Define the < operator for comparison
         bool operator<(const PearNodeTree &other) const {
@@ -23,7 +27,7 @@ namespace painlessmesh {
         PearNodeTree() {
         }
 
-        PearNodeTree(const NodeTree& nodeTree) {
+        PearNodeTree(const NodeTree &nodeTree) {
             this->nodeId = nodeTree.nodeId;
             this->root = nodeTree.root;
             this->subs = nodeTree.subs;
@@ -38,8 +42,6 @@ namespace painlessmesh {
             this->periodTx = periodTx;
             this->parentCandidates = parentCandidates;
         }
-
-    private:
     };
 
     class Pear {
@@ -51,32 +53,38 @@ namespace painlessmesh {
         Pear() {
         }
 
-        void run() {
+        void run(protocol::NodeTree& rootNodeTree) {
+            auto listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
             // Create a list of all devices - devices
             // for each device in devices:
-            if (noOfVerifiedDevices < 10) {
-                // if(deviceExceedsLimit(device)) updateParent(device);
+            for (auto pearNodeTree: listOfAllDevices) {
+                if (noOfVerifiedDevices < 10) {
+                    if (deviceExceedsLimit(pearNodeTree.nodeId)) updateParent(pearNodeTree);
+                }
+                return;
             }
+
         }
 
         bool deviceExceedsLimit(uint32_t deviceId) {
-            // get the device using the id
-            // if(device.transmissions > device.threshold) return true;
+            auto pearNodeTree = findPearNodeTreeById(deviceId);
+            if (pearNodeTree.periodRx > pearNodeTree.rxThreshold && pearNodeTree.periodTx > pearNodeTree.txThreshold) {
+                return false;
+            }
             noOfVerifiedDevices++;
-            return false;
+            return true;
         }
 
         PearNodeTree findPearNodeTreeById(uint32_t targetNodeId) {
             auto it = std::find_if(pearNodeTrees.begin(), pearNodeTrees.end(),
-                                   [targetNodeId](const PearNodeTree& node) {
+                                   [targetNodeId](const PearNodeTree &node) {
                                        return node.nodeId == targetNodeId;
                                    });
 
             if (it != pearNodeTrees.end()) {
                 return *it; // Return a copy
-            } else {
-                throw std::runtime_error("PearNodeTree with nodeId " + std::to_string(targetNodeId) + " not found.");
             }
+            throw std::runtime_error("PearNodeTree with nodeId " + std::to_string(targetNodeId) + " not found.");
         }
 
 
@@ -92,7 +100,7 @@ namespace painlessmesh {
             // if visibleNode is within limits set nodeToReroute.newParent = visibleNode
         }
 
-        void processReceivedData(JsonDocument &pearData, const protocol::NodeTree &nodeTree) {
+        void processReceivedData(JsonDocument& pearData, const protocol::NodeTree& nodeTree) {
             const auto it = std::find(pearNodeTrees.begin(), pearNodeTrees.end(), nodeTree);
             int periodTx = pearData["periodTx"];
             int periodRx = pearData["periodRx"];
@@ -112,6 +120,26 @@ namespace painlessmesh {
                 // pearNodeTree not found - add
                 pearNodeTrees.push_back(PearNodeTree(nodeTree, periodTx, periodRx, parentCandidates));
             }
+        }
+
+        std::list<PearNodeTree> getAllDevicesBreadthFirst(const protocol::NodeTree& rootNodeTree) {
+            std::list<PearNodeTree> result;
+            std::queue<PearNodeTree> queue;
+
+            queue.push(rootNodeTree);
+
+            while (!queue.empty()) {
+                PearNodeTree current = queue.front();
+                queue.pop();
+
+                result.push_back(current);
+
+                for (const auto& child : current.subs) {
+                    queue.push(PearNodeTree(child)); // Convert NodeTree to PearNodeTree if needed
+                }
+            }
+
+            return result;
         }
     };
 }
