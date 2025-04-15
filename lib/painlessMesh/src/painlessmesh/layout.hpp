@@ -187,6 +187,25 @@ namespace painlessmesh {
         }
 
         /**
+         *
+         * @param nodeTree the NodeTree
+         * @param nodeId the nodeId for which the NodeTree should be found
+         * @return the NodeTree with the corresponding nodeId
+         */
+        inline protocol::NodeTree& getNodeById(protocol::NodeTree& nodeTree, const uint32_t nodeId) {
+            if (nodeTree.nodeId == nodeId) {
+                return nodeTree;
+            }
+
+            for (auto& subNode : nodeTree.subs) {
+                return getNodeById(subNode, nodeId);
+            }
+
+            throw std::runtime_error("Node not found");
+        }
+
+
+        /**
          * Return all nodes in a list container
          */
         inline std::list<uint32_t> asList(protocol::NodeTree nodeTree,

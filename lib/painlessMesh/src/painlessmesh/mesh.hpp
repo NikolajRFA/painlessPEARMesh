@@ -405,11 +405,7 @@ namespace painlessmesh {
          * current node.
          */
         std::list<uint32_t> getNodeList(bool includeSelf = false) {
-            return painlessmesh::layout::asList(this->asNodeTree(), includeSelf);
-        }
-
-        std::list<protocol::NodeTree> getNodeTreeList(bool includeSelf = false) {
-            return painlessmesh::layout::asNodeTreeList(this->asNodeTree(), includeSelf);
+            return layout::asList(this->asNodeTree(), includeSelf);
         }
 
         /**
@@ -465,6 +461,7 @@ namespace painlessmesh {
         // Baseline set to 40 to simulate a homogenous network where each node sends 30 messages every 30 seconds.
         uint8_t transmissions = 0;
         std::list<uint32_t> availableNetworks;
+        Pear pear;
 
 
 

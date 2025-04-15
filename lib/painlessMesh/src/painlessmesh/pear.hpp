@@ -3,7 +3,8 @@
 
 #include <Arduino.h>
 #include <set>
-#include "mesh.hpp"
+#include <vector>
+#include <list>
 #include "protocol.hpp"
 
 namespace painlessmesh {
@@ -49,7 +50,10 @@ namespace painlessmesh {
     public:
         uint8_t noOfVerifiedDevices = 0;
         //uint8_t energyProfile = 200; // Why 200 you might ask...
-        std::vector<PearNodeTree> pearData;
+        std::vector<PearNodeTree> pearNodeTrees;
+
+        Pear() {
+        }
 
         void run() {
             // Create a list of all devices - devices
