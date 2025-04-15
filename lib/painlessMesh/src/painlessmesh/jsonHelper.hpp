@@ -2,9 +2,9 @@
 #define JSON_HELPER_HPP
 
 #include <ArduinoJson.h>
-#include <vector>
 
 #include "pear.hpp"
+
 
 using namespace painlessmesh;
 
@@ -38,11 +38,6 @@ inline String buildPearReportJson(uint8_t transmissionRate, std::list<uint32_t> 
     serializeJson(pearData, pearDataString);
 
     return pearDataString;
-}
-
-inline void processReceivedPearData(wifi::Mesh *pMesh, JsonDocument pearData, std::vector<PearNodeTree>) {
-    protocol::NodeTree nodeTree = pMesh->getNodeTreeList(); //find node tree
-    //auto pearNodeTree = PearNodeTree(nodeTree);
 }
 
 #endif

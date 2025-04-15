@@ -480,6 +480,9 @@ namespace painlessmesh {
             deserializeJson(doc, msg);
 
             if (this->root) {
+                auto tree = this->asNodeTree();
+                auto nodeTree = layout::getNodeById(tree, from);
+                pear.processReceivedData(doc, nodeTree);
             } else if (jsonContainsNewParent(doc)) {
                 uint32_t newTargetNodeId = doc["newParent"];
                 setTargetNodeId(newTargetNodeId);
