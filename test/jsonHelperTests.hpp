@@ -2,7 +2,7 @@
 #include "../lib/painlessMesh/src/painlessmesh/jsonHelper.hpp"
 #include "list"
 
-void test_build_new_parent_json_should_return_jsonString()
+void buildNewParentJson_nodeId_expectedJsonWithNewParentKey()
 {
     uint32_t nodeId = 3206773453;
 
@@ -12,7 +12,7 @@ void test_build_new_parent_json_should_return_jsonString()
     TEST_ASSERT_EQUAL_STRING("{\"newParent\":3206773453}", jsonString.c_str());
 }
 
-void test_json_contains_new_parent_returns_true()
+void jsonContainsNewParent_jsonWithNewParent_true()
 {
     uint32_t nodeId = 3206773453;
     JsonDocument doc;
@@ -23,7 +23,7 @@ void test_json_contains_new_parent_returns_true()
     TEST_ASSERT_TRUE(jsonContainsNewParent(doc));
 }
 
-void test_json_contains_new_parent_returns_false()
+void jsonContainsNewParent_jsonWithoutNewParent_false()
 {
     uint32_t nodeId = 3206773453;
     JsonDocument doc;
@@ -34,7 +34,7 @@ void test_json_contains_new_parent_returns_false()
     TEST_ASSERT_FALSE(jsonContainsNewParent(doc));
 }
 
-void test_buildNewParentJson_and_jsonContainsNewParent_returns_true(){
+void buildNewParentJsonAndjsonContainsNewParent_nodeId_true(){
     uint32_t nodeId = 3206773453;
     String jsonString = buildNewParentJson(nodeId);
 
@@ -44,7 +44,7 @@ void test_buildNewParentJson_and_jsonContainsNewParent_returns_true(){
     TEST_ASSERT_TRUE(jsonContainsNewParent(doc));
 }
 
-void test_buildPearReportJson_returns_expected_jsonString(){
+void buildPearReportJson_transmissionRateAndNetworksList_buildsExpectedJson(){
   uint8_t transmissionRate = 69;
   std::list<uint32_t> networks;
 
