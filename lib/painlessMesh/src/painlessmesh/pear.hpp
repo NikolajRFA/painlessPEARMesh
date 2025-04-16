@@ -48,7 +48,7 @@ namespace painlessmesh {
     public:
         uint8_t noOfVerifiedDevices = 0;
         //uint8_t energyProfile = 200; // Why 200 you might ask...
-        std::vector<PearNodeTree> pearNodeTrees; // TODO: Can this be a map
+        //std::vector<PearNodeTree> pearNodeTrees; // TODO: Can this be a map
         std::map<uint32_t, PearNodeTree> pearNodeTreeMap;
 
         Pear() {
@@ -67,7 +67,10 @@ namespace painlessmesh {
         }
 
         bool deviceExceedsLimit(uint32_t deviceId) {
-            auto pearNodeTree = findPearNodeTreeById(deviceId);
+            //auto pearNodeTree = findPearNodeTreeById(deviceId);
+            const auto it = pearNodeTreeMap.find(deviceId);
+            if (it == pearNodeTreeMap.end()) return false;
+            const auto pearNodeTree = it->second;
             if (pearNodeTree.periodRx > pearNodeTree.rxThreshold && pearNodeTree.periodTx > pearNodeTree.txThreshold) {
                 return false;
             }
@@ -75,6 +78,7 @@ namespace painlessmesh {
             return true;
         }
 
+        /*
         PearNodeTree findPearNodeTreeById(uint32_t targetNodeId) {
             auto it = std::find_if(pearNodeTrees.begin(), pearNodeTrees.end(),
                                    [targetNodeId](const PearNodeTree &node) {
@@ -86,14 +90,18 @@ namespace painlessmesh {
             }
             throw std::runtime_error("PearNodeTree with nodeId " + std::to_string(targetNodeId) + " not found.");
         }
-
+*/
 
         void updateParent(PearNodeTree &pearNodeTree) {
             // get the device using the id
             // create a descending list of subs sorted by transmission - nodesToReroute
             std::set<PearNodeTree> descendingTxList;
             for (auto sub: pearNodeTree.subs) {
-                descendingTxList.insert(findPearNodeTreeById(sub.nodeId));
+                const auto it = pearNodeTreeMap.find(sub.nodeId);
+                if (it == pearNodeTreeMap.end()) break;
+                const auto pearNodeTree = it->second;
+                descendingTxList.insert(pearNodeTree);
+                //descendingTxList.insert(findPearNodeTreeById(sub.nodeId));
             }
             // for each nodeToReroute:
             // for each visibleNode in nodeToReroute's visible nodes (getAvailableNetworks):
@@ -101,7 +109,7 @@ namespace painlessmesh {
         }
 
         void processReceivedData(JsonDocument &pearData, const protocol::NodeTree &nodeTree) {
-            const auto it = std::find(pearNodeTrees.begin(), pearNodeTrees.end(), nodeTree);
+            //const auto it = std::find(pearNodeTrees.begin(), pearNodeTrees.end(), nodeTree);
             int periodTx = pearData["periodTx"];
             int periodRx = pearData["periodRx"];
             auto parentCandidatesJsonArray = pearData["parentCandidates"].as<JsonArray>();
@@ -110,7 +118,7 @@ namespace painlessmesh {
                 parentCandidates.push_back(id);
             }
 
-            if (it != pearNodeTrees.end()) {
+            /*if (it != pearNodeTrees.end()) {
                 // pearNodeTree found - update
                 PearNodeTree &foundNode = *it;
                 foundNode.periodTx = periodTx;
@@ -119,7 +127,7 @@ namespace painlessmesh {
             } else {
                 // pearNodeTree not found - add
                 pearNodeTrees.push_back(PearNodeTree(nodeTree, periodTx, periodRx, parentCandidates));
-            }
+            }*/
 
             if (pearNodeTreeMap.count(nodeTree.nodeId)) {
                 auto foundPearNodeTree = pearNodeTreeMap[nodeTree.nodeId];
