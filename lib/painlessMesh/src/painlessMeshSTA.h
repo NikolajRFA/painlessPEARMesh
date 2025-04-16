@@ -43,6 +43,7 @@ protected:
   painlessMesh *mesh;
   uint16_t port;
   std::list<WiFi_AP_Record_t> aps;
+  static const WiFi_AP_Record_t* targetRecord;
 
   void requestIP(WiFi_AP_Record_t &ap);
 

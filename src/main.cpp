@@ -23,7 +23,7 @@ Task taskLogConnections(TASK_SECOND * 10, TASK_FOREVER, &logConnections );
 void sendMessage() {
   uint32_t nodeId = 3206793885;
   String jsonString = buildNewParentJson(nodeId);
-  if (mesh.getNodeId() == CHIP1) mesh.sendPear(3211408993, jsonString);
+  //if (mesh.getNodeId() == CHIP1) mesh.sendPear(3211408993, jsonString);
   taskSendMessage.setInterval( TASK_SECOND * 20 );
 }
 
@@ -43,8 +43,8 @@ void newConnectionCallback(uint32_t nodeId) {
 }
 
 void changedConnectionCallback() {
-    Serial.printf("Changed connections\n");
-    Serial.println(mesh.subConnectionJson());
+    Serial.printf("!!!CONNECTIONS CHANGED!\n");
+    logConnections();
 }
 
 void nodeTimeAdjustedCallback(int32_t offset) {
@@ -55,7 +55,7 @@ void setup() {
     Serial.begin(115200);
 
     //mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
-    mesh.setDebugMsgTypes(GENERAL | PEAR | CONNECTION | ERROR | STARTUP | DEBUG);
+    mesh.setDebugMsgTypes(CONNECTION | ERROR | STARTUP | DEBUG);
     // set before init() so that you can see startup messages
 
     mesh.init(MESH_PREFIX1, MESH_PASSWORD, &userScheduler, MESH_PORT);

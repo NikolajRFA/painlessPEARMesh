@@ -65,6 +65,7 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
   Log(CONNECTION, "scanComplete(): Scan finished\n");
 
   aps.clear();
+  targetRecord = nullptr;
   mesh->availableNetworks.clear();
   Log(CONNECTION, "scanComplete():-- > Cleared old APs.\n");
 
@@ -148,6 +149,8 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
   });
 }
 
+const WiFi_AP_Record_t* StationScan::targetRecord = nullptr;
+
 bool StationScan::containsTargetNodeId(const std::list<WiFi_AP_Record_t> &aps, const uint32_t nodeId)
 {
   using namespace painlessmesh::logger;
@@ -159,6 +162,7 @@ bool StationScan::containsTargetNodeId(const std::list<WiFi_AP_Record_t> &aps, c
     painlessmesh::tcp::decodeNodeId(nodeId, targetBSSID);
     if (memcmp(ap.bssid + 2, targetBSSID + 2, sizeof(ap.bssid) - 2) == 0)
     {
+      targetRecord = &ap;
       return true; // Found the target BSSID
     }
   }
@@ -197,13 +201,15 @@ void ICACHE_FLASH_ATTR StationScan::checkStation()
       connection++;
     }
   }
-  WiFi_AP_Record_t record;
-  record.ssid = mesh->_meshSSID;
-  uint8_t bssid[6];
-  painlessmesh::tcp::decodeNodeId(mesh->targetNodeId, bssid);
-  memcpy(record.bssid, bssid, sizeof(record.bssid));
 
-  aps.push_front(record);
+  if (targetRecord != nullptr)
+  {
+    WiFi_AP_Record_t record;
+    record.rssi = targetRecord->rssi;
+    record.ssid = targetRecord->ssid;
+    memcpy(record.bssid, targetRecord->bssid, sizeof(record.bssid));
+    aps.push_front(record);
+  }
 }
 
 bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(const WiFi_AP_Record_t &a, const WiFi_AP_Record_t &b,
@@ -220,8 +226,8 @@ bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(const WiFi_AP_Record_t 
 void ICACHE_FLASH_ATTR StationScan::requestIP(WiFi_AP_Record_t& ap)
 {
   using namespace painlessmesh::logger;
-  Log(CONNECTION, "connectToAP(): Best AP is %u<---\n",
-      painlessmesh::tcp::encodeNodeId(ap.bssid));
+  Log(CONNECTION, "connectToAP(): Best AP is %u<---\nMAC: %x:%x:%x:%x:%x:%x",
+      painlessmesh::tcp::encodeNodeId(ap.bssid), ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5]);
   WiFi.begin(ap.ssid.c_str(), password.c_str(), mesh->_meshChannel, ap.bssid);
   return;
 }
