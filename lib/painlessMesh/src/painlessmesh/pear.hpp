@@ -6,6 +6,7 @@
 #include <vector>
 #include <list>
 #include <queue>
+#include <unordered_map>
 
 #include "protocol.hpp"
 
@@ -14,7 +15,7 @@ namespace painlessmesh {
     public:
         int periodTx = 0;
         int periodRx = 0;
-        std::list<uint32_t> parentCandidates;
+        std::list<PearNodeTree> parentCandidates;
         int txThreshold = 200;
         int rxThreshold = 150;
         int energyProfile = (txThreshold + rxThreshold) / 2;
@@ -34,7 +35,7 @@ namespace painlessmesh {
         }
 
         PearNodeTree(const NodeTree &nodeTree, const int periodTx, const int periodRx,
-                     const std::list<uint32_t> parentCandidates) {
+                     const std::list<PearNodeTree> parentCandidates) {
             this->nodeId = nodeTree.nodeId;
             this->root = nodeTree.root;
             this->subs = nodeTree.subs;
@@ -50,6 +51,7 @@ namespace painlessmesh {
         //uint8_t energyProfile = 200; // Why 200 you might ask...
         //std::vector<PearNodeTree> pearNodeTrees;
         std::map<uint32_t, PearNodeTree> pearNodeTreeMap;
+        std::unordered_map<uint32_t, uint32_t> reroutes;
 
         Pear() {
         }
@@ -66,16 +68,20 @@ namespace painlessmesh {
             }
         }
 
+        bool deviceExceedsThreshold(const PearNodeTree pearNodeTree) {
+            return pearNodeTree.periodRx > pearNodeTree.rxThreshold && pearNodeTree.periodTx > pearNodeTree.txThreshold;
+        }
+
         bool deviceExceedsLimit(uint32_t deviceId) {
             //auto pearNodeTree = findPearNodeTreeById(deviceId);
             const auto it = pearNodeTreeMap.find(deviceId);
             if (it == pearNodeTreeMap.end()) return false;
             const auto pearNodeTree = it->second;
-            if (pearNodeTree.periodRx > pearNodeTree.rxThreshold && pearNodeTree.periodTx > pearNodeTree.txThreshold) {
-                return false;
+            if (deviceExceedsThreshold(pearNodeTree)) {
+                return true;
             }
             noOfVerifiedDevices++;
-            return true;
+            return false;
         }
 
         /*
@@ -103,19 +109,34 @@ namespace painlessmesh {
                 descendingTxList.insert(pearNodeTree);
                 //descendingTxList.insert(findPearNodeTreeById(sub.nodeId));
             }
-            // for each nodeToReroute:
+            for (auto nodeToReroute: descendingTxList) {
+                if (nodeToReroute.parentCandidates.size() > 0) {
+                    for (auto candidate: nodeToReroute.parentCandidates) {
+                        if (deviceExceedsThreshold(candidate)) break;
+                        reroutes.insert({nodeToReroute.nodeId, candidate.nodeId});
+                    }
+                }
+            }
             // for each visibleNode in nodeToReroute's visible nodes (getAvailableNetworks):
             // if visibleNode is within limits set nodeToReroute.newParent = visibleNode
         }
 
-        void processReceivedData(JsonDocument &pearData, const protocol::NodeTree &nodeTree) {
+        void processReceivedData(JsonDocument &pearData, protocol::NodeTree &nodeTree) {
             //const auto it = std::find(pearNodeTrees.begin(), pearNodeTrees.end(), nodeTree);
             int periodTx = pearData["periodTx"];
             int periodRx = pearData["periodRx"];
             auto parentCandidatesJsonArray = pearData["parentCandidates"].as<JsonArray>();
-            std::list<uint32_t> parentCandidates;
+            std::list<PearNodeTree> parentCandidates;
             for (uint32_t id: parentCandidatesJsonArray) {
-                parentCandidates.push_back(id);
+                const auto it = pearNodeTreeMap.find(id);
+                if (it == pearNodeTreeMap.end()) {
+                    const auto nodeTree123 = layout::getNodeById(nodeTree, id);
+                    pearNodeTreeMap.insert({id, nodeTree123});
+                    parentCandidates.push_back(PearNodeTree(nodeTree123));
+                } else {
+                    const auto pearNodeTree = it->second;
+                    parentCandidates.push_back(pearNodeTree);
+                }
             }
 
             /*if (it != pearNodeTrees.end()) {

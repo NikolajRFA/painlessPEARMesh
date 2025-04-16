@@ -5,16 +5,14 @@ void processReceivedData_unseenPearNodeTree_mapWithPearNodeTree(void){
       painlessmesh::Pear pear;
       auto node1 = painlessmesh::protocol::NodeTree(1, false);
       auto node2 = painlessmesh::protocol::NodeTree(2, false);
-      auto node3 = painlessmesh::protocol::NodeTree(3, false);
 
       node1.subs.push_back(node2);
-      node2.subs.push_back(node3);
 
       JsonDocument doc;
       doc["periodTx"] = 123;
       doc["periodRx"] = 50;
       JsonArray array = doc["parentCandidates"].to<JsonArray>();
-      array.add(node3.nodeId);
+      array.add(node2.nodeId);
 
       TEST_ASSERT_EQUAL(0, pear.pearNodeTreeMap.count(node1.nodeId));
 

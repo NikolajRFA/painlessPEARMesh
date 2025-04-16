@@ -200,7 +200,7 @@ namespace painlessmesh {
             for (auto& subNode : nodeTree.subs) {
                 return getNodeById(subNode, nodeId);
             }
-
+            Log(logger::ERROR, "Node %ul not found\n", nodeId);
             throw std::runtime_error("Node not found");
         }
 
