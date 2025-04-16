@@ -49,11 +49,12 @@ namespace painlessmesh {
         uint8_t noOfVerifiedDevices = 0;
         //uint8_t energyProfile = 200; // Why 200 you might ask...
         std::vector<PearNodeTree> pearNodeTrees; // TODO: Can this be a map
+        std::map<uint32_t, PearNodeTree> pearNodeTreeMap;
 
         Pear() {
         }
 
-        void run(protocol::NodeTree& rootNodeTree) {
+        void run(protocol::NodeTree &rootNodeTree) {
             auto listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
             // Create a list of all devices - devices
             // for each device in devices:
@@ -63,7 +64,6 @@ namespace painlessmesh {
                 }
                 return;
             }
-
         }
 
         bool deviceExceedsLimit(uint32_t deviceId) {
@@ -88,7 +88,7 @@ namespace painlessmesh {
         }
 
 
-        void updateParent(PearNodeTree& pearNodeTree) {
+        void updateParent(PearNodeTree &pearNodeTree) {
             // get the device using the id
             // create a descending list of subs sorted by transmission - nodesToReroute
             std::set<PearNodeTree> descendingTxList;
@@ -100,7 +100,7 @@ namespace painlessmesh {
             // if visibleNode is within limits set nodeToReroute.newParent = visibleNode
         }
 
-        void processReceivedData(JsonDocument& pearData, const protocol::NodeTree& nodeTree) {
+        void processReceivedData(JsonDocument &pearData, const protocol::NodeTree &nodeTree) {
             const auto it = std::find(pearNodeTrees.begin(), pearNodeTrees.end(), nodeTree);
             int periodTx = pearData["periodTx"];
             int periodRx = pearData["periodRx"];
@@ -120,9 +120,18 @@ namespace painlessmesh {
                 // pearNodeTree not found - add
                 pearNodeTrees.push_back(PearNodeTree(nodeTree, periodTx, periodRx, parentCandidates));
             }
+
+            if (pearNodeTreeMap.count(nodeTree.nodeId)) {
+                auto foundPearNodeTree = pearNodeTreeMap[nodeTree.nodeId];
+                foundPearNodeTree.periodTx = periodTx;
+                foundPearNodeTree.periodRx = periodRx;
+                foundPearNodeTree.parentCandidates = parentCandidates;
+            } else {
+                pearNodeTreeMap.insert({nodeTree.nodeId, PearNodeTree(nodeTree, periodTx, periodRx, parentCandidates)});
+            }
         }
 
-        std::list<PearNodeTree> getAllDevicesBreadthFirst(const protocol::NodeTree& rootNodeTree) {
+        std::list<PearNodeTree> getAllDevicesBreadthFirst(const protocol::NodeTree &rootNodeTree) {
             std::list<PearNodeTree> result;
             std::queue<PearNodeTree> queue;
 
@@ -134,7 +143,7 @@ namespace painlessmesh {
 
                 result.push_back(current);
 
-                for (const auto& child : current.subs) {
+                for (const auto &child: current.subs) {
                     queue.push(PearNodeTree(child)); // Convert NodeTree to PearNodeTree if needed
                 }
             }
