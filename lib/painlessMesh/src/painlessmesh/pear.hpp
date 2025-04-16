@@ -48,7 +48,7 @@ namespace painlessmesh {
     public:
         uint8_t noOfVerifiedDevices = 0;
         //uint8_t energyProfile = 200; // Why 200 you might ask...
-        //std::vector<PearNodeTree> pearNodeTrees; // TODO: Can this be a map
+        //std::vector<PearNodeTree> pearNodeTrees;
         std::map<uint32_t, PearNodeTree> pearNodeTreeMap;
 
         Pear() {
