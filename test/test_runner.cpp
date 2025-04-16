@@ -1,8 +1,8 @@
 #include "unity.h"
 #include "painlessMeshSTA.h"
 #include "compareWiFiAPRecordsTests.hpp"
-#include "test_containsTargetBSSID.hpp"
-#include "test_jsonHelper.hpp"
+#include "containsTargetNodeIdTests.hpp"
+#include "jsonHelperTests.hpp"
 #include "getRootNodeIdTests.hpp"
 #include "decodeNodeIdTests.hpp"
 
@@ -23,11 +23,11 @@ int runUnityTests(void)
     RUN_TEST(compareWiFiAPRecords_1stHasBetterRssi_true);
     RUN_TEST(compareWiFiAPRecords_2ndHasBetterRssi_false);
     RUN_TEST(compareWiFiAPRecords_apListAndUseTargetNodeID_targetNodeIdIsFirst);
-    RUN_TEST(test_containsTargetNodeId_should_return_true);
-    RUN_TEST(test_build_new_parent_json_should_return_jsonString);
-    RUN_TEST(test_json_contains_new_parent_returns_true);
-    RUN_TEST(test_json_contains_new_parent_returns_false);
-    RUN_TEST(test_buildNewParentJson_and_jsonContainsNewParent_returns_true);
+    RUN_TEST(containsTargetNodeId_listOfAps_true);
+    RUN_TEST(buildNewParentJson_nodeId_expectedJsonWithNewParentKey);
+    RUN_TEST(jsonContainsNewParent_jsonWithNewParent_true);
+    RUN_TEST(jsonContainsNewParent_jsonWithoutNewParent_false);
+    RUN_TEST(buildNewParentJsonAndjsonContainsNewParent_nodeId_true);
     RUN_TEST(getRootNodeId_NodeTreeWithRootNode_1);
     RUN_TEST(getRootNodeId_NodeTreeWithoutRootNode_0);
     RUN_TEST(decodeNodeId_3206773453_8813BF237ACD);

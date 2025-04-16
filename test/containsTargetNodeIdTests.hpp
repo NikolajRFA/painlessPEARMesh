@@ -1,7 +1,7 @@
 #include "unity.h"
 #include "painlessMeshSTA.h"
 
-void test_containsTargetNodeId_should_return_true(void)
+void containsTargetNodeId_listOfAps_true(void)
 {
     uint8_t target[] = {0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa};
     uint32_t targetNodeId = painlessmesh::tcp::encodeNodeId(target);
