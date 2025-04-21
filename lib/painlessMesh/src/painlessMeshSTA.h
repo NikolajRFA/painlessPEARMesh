@@ -32,7 +32,7 @@ public:
   void checkStation();
   void connectToAP();
   static bool compareWiFiAPRecords(const WiFi_AP_Record_t& a, const WiFi_AP_Record_t& b, bool useTargetNodeId, uint32_t targetNodeId);
-  static bool containsTargetNodeId(const std::list<WiFi_AP_Record_t>& aps, uint32_t nodeId);
+  static bool containsTargetNodeId(const std::list<WiFi_AP_Record_t>& aps, uint32_t targetNodeId);
   
   /// Valid APs found during the last scan
   std::list<WiFi_AP_Record_t> lastAPs;
@@ -43,10 +43,11 @@ protected:
   painlessMesh *mesh;
   uint16_t port;
   std::list<WiFi_AP_Record_t> aps;
-  static const WiFi_AP_Record_t* targetRecord;
+  static std::shared_ptr<WiFi_AP_Record_t> targetRecord;
 
   void requestIP(WiFi_AP_Record_t &ap);
 
+  bool dontConnect = false;
   // Manually configure network and ip
   bool manual = false;
   IPAddress manualIP = IPAddress(0, 0, 0, 0);

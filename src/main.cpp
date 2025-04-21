@@ -30,7 +30,7 @@ void sendMessage() {
 void logConnections()
 {
     Serial.print("TOPOLOGY: ");
-    Serial.println( mesh.subConnectionJson() );
+    Serial.println( mesh.subConnectionJson(true) );
 }
 
 // Needed for painless library
@@ -55,7 +55,7 @@ void setup() {
     Serial.begin(115200);
 
     //mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
-    mesh.setDebugMsgTypes(CONNECTION | ERROR | STARTUP | DEBUG);
+    mesh.setDebugMsgTypes(PEAR | CONNECTION | ERROR | STARTUP | DEBUG);
     // set before init() so that you can see startup messages
 
     mesh.init(MESH_PREFIX1, MESH_PASSWORD, &userScheduler, MESH_PORT);
@@ -63,6 +63,7 @@ void setup() {
     Serial.print("Node id: ");
     Serial.println(nodeId);
     if (nodeId == CHIP1) {
+        mesh.setDontConnect(true);
         mesh.setRoot();
     }
     mesh.setContainsRoot();

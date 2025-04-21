@@ -137,6 +137,8 @@ class Mesh : public painlessmesh::Mesh<Connection> {
     stationScan.manual = true;
   }
 
+  void setDontConnect(bool dontConnect) { stationScan.dontConnect = dontConnect; }
+
   void initStation() {
     stationScan.init(this, _meshSSID, _meshPassword, _meshPort);
     mScheduler->addTask(stationScan.task);

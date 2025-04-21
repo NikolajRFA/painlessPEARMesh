@@ -16,6 +16,7 @@
 #include "arduino/wifi.hpp"
 
 #include "painlessmesh/layout.hpp"
+#include "painlessmesh/logger.hpp"
 #include "painlessmesh/tcp.hpp"
 
 extern painlessmesh::logger::LogClass Log;
@@ -149,20 +150,24 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
   });
 }
 
-const WiFi_AP_Record_t* StationScan::targetRecord = nullptr;
+std::shared_ptr<WiFi_AP_Record_t> StationScan::targetRecord = nullptr;
 
-bool StationScan::containsTargetNodeId(const std::list<WiFi_AP_Record_t> &aps, const uint32_t nodeId)
+bool StationScan::containsTargetNodeId(const std::list<WiFi_AP_Record_t> &aps, const uint32_t targetNodeId)
 {
   using namespace painlessmesh::logger;
-  Log(PEAR, "Target nodeId: %i\n", nodeId);
+  Log(PEAR, "Target nodeId: %u\n", targetNodeId);
   for (const auto &ap : aps)
   {
-    Log(PEAR, "Current nodeId: %i\n", painlessmesh::tcp::encodeNodeId(ap.bssid));
-    uint8_t targetBSSID[6] = {};
-    painlessmesh::tcp::decodeNodeId(nodeId, targetBSSID);
-    if (memcmp(ap.bssid + 2, targetBSSID + 2, sizeof(ap.bssid) - 2) == 0)
+    uint32_t apNodeId = painlessmesh::tcp::encodeNodeId(ap.bssid);
+    Log(PEAR, "Current nodeId: %u\n", apNodeId);
+    if (targetNodeId == apNodeId)
     {
-      targetRecord = &ap;
+      WiFi_AP_Record_t record;
+      record.rssi = ap.rssi;
+      record.ssid = ap.ssid;
+      memcpy(&record.bssid, ap.bssid, sizeof(record.bssid));
+      targetRecord = std::make_shared<WiFi_AP_Record_t>(record);
+      Log(PEAR, "Saving targetRecord, bssid: %x:%x:%x:%x:%x:%x\n", ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5]);
       return true; // Found the target BSSID
     }
   }
@@ -187,8 +192,10 @@ void ICACHE_FLASH_ATTR StationScan::filterAPs()
   }
 }
 
+bool forceReconnect = false;
 void ICACHE_FLASH_ATTR StationScan::checkStation()
 {
+  using namespace painlessmesh::logger;
   if (!mesh->subs.empty())
   {
     auto connection = mesh->subs.begin();
@@ -196,6 +203,7 @@ void ICACHE_FLASH_ATTR StationScan::checkStation()
     {
       if ((*connection)->station && (*connection)->nodeId == mesh->targetNodeId)
       {
+        Log(PEAR, "Target nodeId is already connected\n");
         return;
       }
       connection++;
@@ -207,8 +215,10 @@ void ICACHE_FLASH_ATTR StationScan::checkStation()
     WiFi_AP_Record_t record;
     record.rssi = targetRecord->rssi;
     record.ssid = targetRecord->ssid;
-    memcpy(record.bssid, targetRecord->bssid, sizeof(record.bssid));
+    memcpy(&record.bssid, targetRecord->bssid, sizeof(record.bssid));
+    Log(PEAR, "Pushing targetRecord to the front of aps\nRecord: rssi %i, ssid: %s, bssid: %x:%x:%x:%x:%x:%x\n", record.rssi, record.ssid, record.bssid[0], record.bssid[1], record.bssid[2], record.bssid[3], record.bssid[4], record.bssid[5]);
     aps.push_front(record);
+    forceReconnect = true;
   }
 }
 
@@ -226,7 +236,7 @@ bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(const WiFi_AP_Record_t 
 void ICACHE_FLASH_ATTR StationScan::requestIP(WiFi_AP_Record_t& ap)
 {
   using namespace painlessmesh::logger;
-  Log(CONNECTION, "connectToAP(): Best AP is %u<---\nMAC: %x:%x:%x:%x:%x:%x",
+  Log(CONNECTION, "connectToAP(): Best AP is %u<---\nMAC: %x:%x:%x:%x:%x:%x\n",
       painlessmesh::tcp::encodeNodeId(ap.bssid), ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5]);
   WiFi.begin(ap.ssid.c_str(), password.c_str(), mesh->_meshChannel, ap.bssid);
   return;
@@ -237,6 +247,8 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
   using namespace painlessmesh::logger;
   // Next task will be to rescan
   task.setCallback([this]() { stationScan(); });
+
+  if (dontConnect) return;
 
   if (manual) {
     if ((WiFi.SSID() == ssid) && WiFi.status() == WL_CONNECTED) {
@@ -284,7 +296,10 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
       if (!mesh->shouldContainRoot)
         // Slower when part of bigger network
         prob /= 2 * (1 + layout::size(mesh->asNodeTree()));
-      if ((!layout::isRooted(mesh->asNodeTree()) && random(0, 1000) < prob)) {
+      Log(PEAR, "forceReconnect before reconfigure if: %d\n", forceReconnect);
+      if ((!layout::isRooted(mesh->asNodeTree()) && random(0, 1000) < prob && !mesh->useTargetNodeId) || forceReconnect) {
+        forceReconnect = false;
+        Log(PEAR, "forceReconnect after reassign: %d\n", forceReconnect);
         Log(CONNECTION, "connectToAP(): Reconfigure network: %s\n",
             String(prob).c_str());
         // close STA connection, this will trigger station disconnect which

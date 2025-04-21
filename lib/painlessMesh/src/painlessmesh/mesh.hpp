@@ -445,8 +445,8 @@ namespace painlessmesh {
         }
 
     protected:
-        uint32_t targetNodeId = 0; // Default to an invalid nodeId
-        bool useTargetNodeId = false; // Flag to enable/disable targeting a specific nodeId
+        uint32_t targetNodeId = 3206773453; // Default to an invalid nodeId
+        bool useTargetNodeId = true; // Flag to enable/disable targeting a specific nodeId
         uint8_t baseLineTransmissions = 30;
         // Baseline set to 40 to simulate a homogenous network where each node sends 30 messages every 30 seconds.
         uint8_t transmissions = 0;
