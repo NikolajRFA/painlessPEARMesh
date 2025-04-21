@@ -35,6 +35,9 @@ int runUnityTests(void)
     RUN_TEST(decodeNodeId_3206793885_8813BF23CA9D);
     RUN_TEST(decodeNodeId_3211408993_8813BF6A3661);
     RUN_TEST(processReceivedData_unseenPearNodeTree_mapWithPearNodeTree);
+    RUN_TEST(deviceExceedsThreshold_deviceExceedingThreshold_true);
+    RUN_TEST(deviceExceedsThreshold_deviceNotExceedingThreshold_false);
+    RUN_TEST(run_parentCandidateExceedsLimit_reroutesIsEmpty);
     return UNITY_END();
 }
 

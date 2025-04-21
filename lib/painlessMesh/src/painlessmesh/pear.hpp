@@ -6,6 +6,7 @@
 #include <list>
 #include <queue>
 #include <unordered_map>
+#include <map>
 
 #include "protocol.hpp"
 
@@ -15,8 +16,8 @@ namespace painlessmesh {
         int periodTx = 0;
         int periodRx = 0;
         std::list<PearNodeTree> parentCandidates;
-        int txThreshold = 200;
-        int rxThreshold = 150;
+        int txThreshold = 150;
+        int rxThreshold = 100;
         int energyProfile = (txThreshold + rxThreshold) / 2;
 
         // Define the < operator for comparison
@@ -48,7 +49,7 @@ namespace painlessmesh {
     public:
         uint8_t noOfVerifiedDevices = 0;
         std::map<uint32_t, PearNodeTree> pearNodeTreeMap;
-        std::unordered_map<uint32_t, uint32_t> reroutes;
+        std::unordered_map<uint32_t, uint32_t> reroutes; // Create logic to send the reroute information
 
         Pear() {
         }
@@ -170,7 +171,7 @@ namespace painlessmesh {
          * @param nodeTree A reference to the `protocol::NodeTree` that corresponds to the current device being processed.
          *
          * @note This method assumes that `layout::getNodeById()` can retrieve nodes from the `nodeTree` structure and that
-         *       `PearNodeTree` has a constructor accepting a `NodeTree`, or a `NodeTree` with additional metadata like period and candidates.
+         *       `PearNodeTree` has a constructor accepting a `NodeTree`, or a `NodeTree` with additional metadata like tx/rx and candidates.
          */
         void processReceivedData(JsonDocument &pearData, protocol::NodeTree &nodeTree) {
             int periodTx = pearData["periodTx"];
@@ -180,9 +181,9 @@ namespace painlessmesh {
             for (uint32_t id: parentCandidatesJsonArray) {
                 const auto it = pearNodeTreeMap.find(id);
                 if (it == pearNodeTreeMap.end()) {
-                    const auto nodeTree123 = layout::getNodeById(nodeTree, id);
-                    pearNodeTreeMap.insert({id, nodeTree123});
-                    parentCandidates.push_back(PearNodeTree(nodeTree123));
+                    const auto missingNode = layout::getNodeById(nodeTree, id);
+                    pearNodeTreeMap.insert({id, missingNode});
+                    parentCandidates.push_back(PearNodeTree(missingNode));
                 } else {
                     const auto pearNodeTree = it->second;
                     parentCandidates.push_back(pearNodeTree);
