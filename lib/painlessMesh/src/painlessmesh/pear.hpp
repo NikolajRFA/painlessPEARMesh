@@ -154,7 +154,7 @@ namespace painlessmesh {
                 descendingTxList.insert(pearNodeTree);
             }
             for (auto nodeToReroute: descendingTxList) {
-                if (nodeToReroute.parentCandidates.size() > 0) {
+                if (!nodeToReroute.parentCandidates.empty()) {
                     for (auto candidate: nodeToReroute.parentCandidates) {
                         if (deviceExceedsThreshold(candidate)) break;
                         reroutes.insert({nodeToReroute.nodeId, candidate.nodeId});
