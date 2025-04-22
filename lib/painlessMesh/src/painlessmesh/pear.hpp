@@ -25,6 +25,14 @@ namespace painlessmesh {
             return periodRx > other.periodRx;
         }
 
+        bool operator==(const PearNodeTree &other) const {
+            return periodRx == other.periodRx
+            && periodTx == other.periodTx
+            && energyProfile == other.energyProfile
+            && parentCandidates == other.parentCandidates;
+        }
+
+
         PearNodeTree() {
         }
 
