@@ -41,6 +41,7 @@ int runUnityTests(void)
     RUN_TEST(updateParent_nodeWithValidParentCandidates_reroutesContainsReroute);
     RUN_TEST(updateParent_nodeWithInvalidParentCandidates_reroutesContainsNoRoutes);
     RUN_TEST(getAllDevicesBreadthFirst_rootNodeTree_listOfPearNodesBreadthFirst);
+    RUN_TEST(test_run_should_process_multiple_nodes_until_threshold);
     return UNITY_END();
 }
 
@@ -49,10 +50,11 @@ int runUnityTests(void)
  */
 void setup()
 {
+    Serial.begin(115200);
     // Wait ~2 seconds before the Unity test runner
     // establishes connection with a board Serial interface
     delay(2000);
-
+    Serial.println("Test starting...");
     runUnityTests();
 }
 void loop() {}

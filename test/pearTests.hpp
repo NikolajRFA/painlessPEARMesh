@@ -19,10 +19,12 @@ void processReceivedData_unseenPearNodeTree_mapWithPearNodeTree(void){
 
       pear.processReceivedData(doc, node1);
 
+      auto pearNode = pear.pearNodeTreeMap[node1.nodeId];
+
       TEST_ASSERT_EQUAL(1, pear.pearNodeTreeMap.count(node1.nodeId));
-      TEST_ASSERT_EQUAL_INT(123, pear.pearNodeTreeMap[node1.nodeId].periodTx);
-      TEST_ASSERT_EQUAL_INT(50, pear.pearNodeTreeMap[node1.nodeId].periodRx);
-      TEST_ASSERT_EQUAL_INT(1, pear.pearNodeTreeMap[node1.nodeId].parentCandidates.size());
+      TEST_ASSERT_EQUAL_INT(123, pearNode.periodTx);
+      TEST_ASSERT_EQUAL_INT(50, pearNode.periodRx);
+      TEST_ASSERT_EQUAL_INT(1, pearNode.parentCandidates.size());
 }
 
 void deviceExceedsThreshold_deviceExceedingThreshold_true(void){
@@ -96,15 +98,18 @@ void run_parentCandidateExceedsLimit_reroutesIsEmpty(void){
 
     pear.run(node1);
 
+    TEST_ASSERT_EQUAL_INT(0, pear.noOfVerifiedDevices);
+
     TEST_ASSERT_EQUAL_INT(0, pear.reroutes.count(node4.nodeId));
 }
 
 void updateParent_nodeWithValidParentCandidates_reroutesContainsReroute(void){
   painlessmesh::Pear pear;
-  auto node1 = painlessmesh::protocol::NodeTree(1, true);
-  auto sub1 = painlessmesh::protocol::NodeTree(2, false);
-  auto sub2 = painlessmesh::protocol::NodeTree(3, false);
-  auto sub3 = painlessmesh::protocol::NodeTree(4, false);
+  using NodeTree = painlessmesh::protocol::NodeTree;
+  auto node1 = NodeTree(1, true);
+  auto sub1 = NodeTree(2, false);
+  auto sub2 = NodeTree(3, false);
+  auto sub3 = NodeTree(4, false);
   node1.subs.push_back(sub1);
   node1.subs.push_back(sub2);
   node1.subs.push_back(sub3);
@@ -168,7 +173,6 @@ void getAllDevicesBreadthFirst_rootNodeTree_listOfPearNodesBreadthFirst(void){
   auto list = pear.getAllDevicesBreadthFirst(rootNode);
 
   std::list<painlessmesh::PearNodeTree> expectedList;
-  expectedList.push_back(painlessmesh::PearNodeTree(rootNode));
   expectedList.push_back(painlessmesh::PearNodeTree(rootSub1));
   expectedList.push_back(painlessmesh::PearNodeTree(rootSub2));
   expectedList.push_back(painlessmesh::PearNodeTree(subSub1));
@@ -185,4 +189,67 @@ void getAllDevicesBreadthFirst_rootNodeTree_listOfPearNodesBreadthFirst(void){
     ++it1;
     ++it2;
   }
+}
+
+void test_run_should_process_multiple_nodes_until_threshold(void) {
+  using namespace painlessmesh;
+
+  Pear pear;
+
+  // Step 1: Build deepest child first
+  protocol::NodeTree child2(3, false);
+
+  // Step 2: Then build its parent and attach child2
+  protocol::NodeTree child1(2, false);
+  child1.subs.push_back(child2);
+
+  // Step 3: Create another node that doesn't exceed the limit
+  protocol::NodeTree child4(4, false);
+
+  // Step 4: Now build the root and attach both child1 and child4
+  protocol::NodeTree rootNode(1, true);
+  rootNode.subs.push_back(child1);
+  rootNode.subs.push_back(child4);
+
+  // Create PearNodes and assign periods
+  PearNodeTree rootPear(rootNode);
+
+  PearNodeTree child1Pear(child1);
+  child1Pear.periodTx = 999; // exceeds
+  child1Pear.periodRx = 999; // exceeds
+
+  PearNodeTree child2Pear(child2);
+  child2Pear.periodTx = 100; // does not exceed
+  child2Pear.periodRx = 50;  // does not exceed
+
+  PearNodeTree child4Pear(child4);
+  child4Pear.periodTx = 10;  // does not exceed
+  child4Pear.periodRx = 10;  // does not exceed
+
+  // Connect PearNodeTree structure (manually mirror NodeTree)
+  child1Pear.subs.push_back(child2Pear);
+
+  // Add parent candidates
+  child1Pear.parentCandidates.push_back(rootPear);
+  child2Pear.parentCandidates.push_back(child4Pear);  // Now has a valid alternate parent
+  child4Pear.parentCandidates.push_back(rootPear);
+
+  // Load the map
+  pear.pearNodeTreeMap[1] = rootPear;
+  pear.pearNodeTreeMap[2] = child1Pear;
+  pear.pearNodeTreeMap[3] = child2Pear;
+  pear.pearNodeTreeMap[4] = child4Pear;
+
+  // Call run
+  pear.run(rootNode);
+
+  // Expectations:
+  // - child 1 exceeds threshold → reroute subs
+  // - child 2 is sub to child 1 - we want to reroute this node
+  // - Child 2 should be rerouted to child 4
+  // - Child 3 and 4 are checked using deviceExceedsLimit() - they are within the limit
+  // - this means noOfVerifiedDevices is incremented twice
+  TEST_ASSERT_EQUAL_UINT32(2, pear.noOfVerifiedDevices);
+  TEST_ASSERT_EQUAL_UINT32(1, pear.reroutes.size());
+  TEST_ASSERT_TRUE(pear.reroutes.count(3)); // node 3 rerouted to node 4
 }

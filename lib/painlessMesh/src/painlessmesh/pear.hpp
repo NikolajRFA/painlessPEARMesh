@@ -82,8 +82,9 @@ namespace painlessmesh {
             for (auto pearNodeTree: listOfAllDevices) {
                 if (noOfVerifiedDevices < 10) {
                     if (deviceExceedsLimit(pearNodeTree.nodeId)) updateParent(pearNodeTree);
+                } else {
+                    return;
                 }
-                return;
             }
         }
 
@@ -114,13 +115,16 @@ namespace painlessmesh {
          * @return `true` if the device exceeds the operational threshold, `false` otherwise or if the device is not found.
          */
         bool deviceExceedsLimit(uint32_t deviceId) {
+            Serial.printf("deviceExceedsLimit(): Checking if node: %u exceeds limit\n", deviceId);
             //auto pearNodeTree = findPearNodeTreeById(deviceId);
             const auto it = pearNodeTreeMap.find(deviceId);
             if (it == pearNodeTreeMap.end()) return false;
             const auto pearNodeTree = it->second;
             if (deviceExceedsThreshold(pearNodeTree)) {
+                Serial.printf("deviceExceedsLimit(): Node: %u exceeds the threshold: rx: %i, tx: %i\n", deviceId, pearNodeTree.rxThreshold, pearNodeTree.txThreshold);
                 return true;
             }
+            Serial.printf("deviceExceedsLimit(): Incrementing verified devices as node: %u does not exceed the threshold\n", deviceId);
             noOfVerifiedDevices++;
             return false;
         }
@@ -146,22 +150,34 @@ namespace painlessmesh {
          * - `reroutes` is a globally accessible map used to track rerouted parent relationships.
          */
         void updateParent(PearNodeTree &pearNodeTree) {
+            Serial.printf("updateParent(): Attempting to reroute the most consuming sub of node: %u\n", pearNodeTree.nodeId);
             std::set<PearNodeTree> descendingTxList;
             for (auto sub: pearNodeTree.subs) {
                 const auto it = pearNodeTreeMap.find(sub.nodeId);
-                if (it == pearNodeTreeMap.end()) break;
+                if (it == pearNodeTreeMap.end()) {
+                    Serial.println("updateParent(): Sub not found in map");
+                    continue;
+                }
                 const auto pearNodeTree = it->second;
                 descendingTxList.insert(pearNodeTree);
             }
+
             for (auto nodeToReroute: descendingTxList) {
+                Serial.printf("updateParent(): Checking if node: %u is able to be rerouted to a valid candidate\n", nodeToReroute.nodeId);
                 if (!nodeToReroute.parentCandidates.empty()) {
                     for (auto candidate: nodeToReroute.parentCandidates) {
-                        if (deviceExceedsThreshold(candidate)) break;
+                        Serial.printf("updateParent(): Checking candidate %u: rx %d, tx %d\n", candidate.nodeId, candidate.periodRx, candidate.periodTx);
+                        if (deviceExceedsThreshold(candidate)) {
+                            Serial.println("updateParent(): Candidate exceeds threshold, skipping");
+                            break;
+                        }
                         reroutes.insert({nodeToReroute.nodeId, candidate.nodeId});
+                        Serial.printf("updateParent(): Rerouted %u to %u\n", nodeToReroute.nodeId, candidate.nodeId);
                     }
                 }
             }
         }
+
 
         /**
          * @brief Processes received JSON data and updates the internal pear node tree map.
@@ -227,16 +243,27 @@ namespace painlessmesh {
             std::list<PearNodeTree> result;
             std::queue<PearNodeTree> queue;
 
-            queue.push(rootNodeTree);
+            // Start with the children of the root, not the root itself
+            for (const auto &child : rootNodeTree.subs) {
+                Serial.printf("getAllDevicesBreadthFirst(): Adding node: %u (%i subs) to queue\n", child.nodeId, child.subs.size());
+                queue.push(PearNodeTree(child));
+            }
 
             while (!queue.empty()) {
                 PearNodeTree current = queue.front();
                 queue.pop();
 
+                Serial.printf("getAllDevicesBreadthFirst(): Adding node: %u to listOfAllDevices\n", current.nodeId);
                 result.push_back(current);
 
-                for (const auto &child: current.subs) {
-                    queue.push(PearNodeTree(child)); // Convert NodeTree to PearNodeTree if needed
+                for (const auto &child : current.subs) {
+                    const auto it = pearNodeTreeMap.find(child.nodeId);
+                    if (it != pearNodeTreeMap.end()) {
+                        queue.push(it->second);
+                    } else {
+                        Serial.printf("getAllDevicesBreadthFirst(): Warning: child %u not found in map, using default-constructed PearNodeTree\n", child.nodeId);
+                        queue.push(PearNodeTree(child));
+                    }
                 }
             }
 
