@@ -109,6 +109,80 @@ void updateParent_nodeWithValidParentCandidates_reroutesContainsReroute(void){
   node1.subs.push_back(sub2);
   node1.subs.push_back(sub3);
   auto pearNodeTree = painlessmesh::PearNodeTree(node1);
+  auto pCandidate = painlessmesh::PearNodeTree(node1);
+  std::list<painlessmesh::PearNodeTree> parentCandidates;
+  parentCandidates.push_back(pCandidate);
 
+  auto subPear1 = painlessmesh::PearNodeTree(sub1, 50, 100, parentCandidates);
+  pear.pearNodeTreeMap.insert({subPear1.nodeId, subPear1});
 
+  pear.updateParent(pearNodeTree);
+
+  TEST_ASSERT_EQUAL_INT(1, pear.reroutes.count(subPear1.nodeId));
+}
+
+void updateParent_nodeWithInvalidParentCandidates_reroutesContainsNoRoutes(void){
+  painlessmesh::Pear pear;
+  auto node1 = painlessmesh::protocol::NodeTree(1, true);
+  auto sub1 = painlessmesh::protocol::NodeTree(2, false);
+  auto sub2 = painlessmesh::protocol::NodeTree(3, false);
+  auto sub3 = painlessmesh::protocol::NodeTree(4, false);
+  node1.subs.push_back(sub1);
+  node1.subs.push_back(sub2);
+  node1.subs.push_back(sub3);
+  auto pearNodeTree = painlessmesh::PearNodeTree(node1);
+  auto pCandidate = painlessmesh::PearNodeTree(node1);
+  pCandidate.periodTx = 1000;
+  pCandidate.periodRx = 1000;
+  std::list<painlessmesh::PearNodeTree> parentCandidates;
+  parentCandidates.push_back(pCandidate);
+
+  auto subPear1 = painlessmesh::PearNodeTree(sub1, 2000, 1000, parentCandidates);
+  pear.pearNodeTreeMap.insert({subPear1.nodeId, subPear1});
+
+  pear.updateParent(pearNodeTree);
+
+  TEST_ASSERT_EQUAL_INT(0, pear.reroutes.count(subPear1.nodeId));
+}
+
+void getAllDevicesBreadthFirst_rootNodeTree_listOfPearNodesBreadthFirst(void){
+  painlessmesh::Pear pear;
+  using NodeTree = painlessmesh::protocol::NodeTree;
+
+  // Create sub-sub-nodes
+  auto subSub1 = NodeTree(4, false);
+  auto subSub2 = NodeTree(5, false);
+
+  // Attach sub-sub-nodes to sub-nodes
+  auto rootSub1 = NodeTree(2, false);
+  rootSub1.subs.push_back(subSub1);
+
+  auto rootSub2 = NodeTree(3, false);
+  rootSub2.subs.push_back(subSub2);
+
+  // Create the root and attach sub-nodes
+  auto rootNode = NodeTree(1, true);
+  rootNode.subs.push_back(rootSub1);
+  rootNode.subs.push_back(rootSub2);
+
+  auto list = pear.getAllDevicesBreadthFirst(rootNode);
+
+  std::list<painlessmesh::PearNodeTree> expectedList;
+  expectedList.push_back(painlessmesh::PearNodeTree(rootNode));
+  expectedList.push_back(painlessmesh::PearNodeTree(rootSub1));
+  expectedList.push_back(painlessmesh::PearNodeTree(rootSub2));
+  expectedList.push_back(painlessmesh::PearNodeTree(subSub1));
+  expectedList.push_back(painlessmesh::PearNodeTree(subSub2));
+
+  // Check sizes
+  TEST_ASSERT_EQUAL_UINT32(expectedList.size(), list.size());
+
+  // Check contents
+  auto it1 = expectedList.begin();
+  auto it2 = list.begin();
+  while (it1 != expectedList.end() && it2 != list.end()) {
+    TEST_ASSERT_TRUE(*it1 == *it2); // Assumes operator== is defined for PearNodeTree
+    ++it1;
+    ++it2;
+  }
 }
