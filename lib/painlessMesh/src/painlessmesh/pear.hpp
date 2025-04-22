@@ -203,6 +203,7 @@ namespace painlessmesh {
                 foundPearNodeTree.periodTx = periodTx;
                 foundPearNodeTree.periodRx = periodRx;
                 foundPearNodeTree.parentCandidates = parentCandidates;
+                foundPearNodeTree.subs = nodeTree.subs;
             } else {
                 pearNodeTreeMap.insert({nodeTree.nodeId, PearNodeTree(nodeTree, periodTx, periodRx, parentCandidates)});
             }
