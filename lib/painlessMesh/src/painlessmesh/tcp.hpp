@@ -43,11 +43,13 @@ void initServer(AsyncServer &server, M &mesh) {
   server.onClient(
       [&mesh](void *arg, AsyncClient *client) {
         if (mesh.semaphoreTake()) {
+          Log(DEBUG, "Semaphore taken by AP connection\n");
           Log(CONNECTION, "New AP connection incoming\n");
           auto conn = std::make_shared<T>(client, &mesh, false);
           conn->initTasks();
           mesh.subs.push_back(conn);
           mesh.semaphoreGive();
+          Log(DEBUG, "Semaphore given by AP connection\n");
         }
       },
       NULL);
@@ -59,8 +61,10 @@ void connect(AsyncClient &client, IPAddress ip, uint16_t port, M &mesh) {
   using namespace logger;
   client.onError([&mesh](void *, AsyncClient *client, int8_t err) {
     if (mesh.semaphoreTake()) {
+      Log(DEBUG, "Semaphore taken by tcp_err()\n");
       Log(CONNECTION, "tcp_err(): error trying to connect %d\n", err);
       mesh.droppedConnectionCallbacks.execute(0, true);
+      Log(DEBUG, "Semaphore given by tcp_err()\n");
       mesh.semaphoreGive();
     }
   });
@@ -68,15 +72,18 @@ void connect(AsyncClient &client, IPAddress ip, uint16_t port, M &mesh) {
   client.onConnect(
       [&mesh](void *, AsyncClient *client) {
         if (mesh.semaphoreTake()) {
+          Log(DEBUG, "Semaphore taken by tcp_connect()\n");
           Log(CONNECTION, "New STA connection incoming\n");
           auto conn = std::make_shared<T>(client, &mesh, true);
           conn->initTasks();
           mesh.subs.push_back(conn);
+          Log(DEBUG, "Semaphore given by tcp_connect()\n");
           mesh.semaphoreGive();
         }
       },
       NULL);
 
+  Log(CONNECTION, "Connecting to %s:%d\n", ip.toString().c_str(), port);
   client.connect(ip, port);
 }
 }  // namespace tcp

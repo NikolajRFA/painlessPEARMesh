@@ -41,6 +41,7 @@ namespace painlessmesh {
             this->nodeId = id;
 
 #ifdef ESP32
+            Log(DEBUG, "Creating semaphore\n");
             xSemaphore = xSemaphoreCreateMutex();
 #endif
 
@@ -426,6 +427,8 @@ namespace painlessmesh {
         }
 
         bool closeConnectionSTA() {
+            using namespace logger;
+            Log(DEBUG, "Closing STA connection\n");
             auto connection = this->subs.begin();
             while (connection != this->subs.end()) {
                 if ((*connection)->station) {
@@ -444,20 +447,22 @@ namespace painlessmesh {
                 delete mScheduler;
         }
 
-    protected:
-        uint32_t targetNodeId = 3206773453; // Default to an invalid nodeId
-        bool useTargetNodeId = true; // Flag to enable/disable targeting a specific nodeId
-        uint8_t baseLineTransmissions = 30;
-        // Baseline set to 40 to simulate a homogenous network where each node sends 30 messages every 30 seconds.
-        uint8_t transmissions = 0;
-        std::list<uint32_t> availableNetworks;
-
         void setTargetNodeId(const uint32_t nodeId) {
             using namespace painlessmesh::logger;
             targetNodeId = nodeId;
             useTargetNodeId = true;
             Log(PEAR, "TargetNodeId is set to %lu\n", targetNodeId);
         }
+
+    protected:
+        uint32_t targetNodeId = 0; // Default to an invalid nodeId
+        bool useTargetNodeId = false; // Flag to enable/disable targeting a specific nodeId
+        uint8_t baseLineTransmissions = 30;
+        // Baseline set to 40 to simulate a homogenous network where each node sends 30 messages every 30 seconds.
+        uint8_t transmissions = 0;
+        std::list<uint32_t> availableNetworks;
+
+
 
         void clearTargetBSSID() {
             useTargetNodeId = false;

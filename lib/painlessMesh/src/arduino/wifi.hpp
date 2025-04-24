@@ -8,6 +8,7 @@
 #include "painlessMeshSTA.h"
 
 #include "painlessmesh/callback.hpp"
+#include "painlessmesh/logger.hpp"
 #include "painlessmesh/mesh.hpp"
 #include "painlessmesh/router.hpp"
 #include "painlessmesh/tcp.hpp"
@@ -113,7 +114,7 @@ class Mesh : public painlessmesh::Mesh<Connection> {
    */
   void init(TSTRING ssid, TSTRING password, Scheduler *baseScheduler,
             uint16_t port = 5555, WiFiMode_t connectMode = WIFI_AP_STA,
-            uint8_t channel = 1, uint8_t hidden = 0,
+            uint8_t channel = 3, uint8_t hidden = 0,
             uint8_t maxconn = MAX_CONN) {
     this->setScheduler(baseScheduler);
     init(ssid, password, port, connectMode, channel, hidden, maxconn);
@@ -259,9 +260,11 @@ class Mesh : public painlessmesh::Mesh<Connection> {
     eventScanDoneHandler = WiFi.onEvent(
         [this](WiFiEvent_t event, WiFiEventInfo_t info) {
           if (this->semaphoreTake()) {
+            Log(DEBUG, "Semaphore taken by STA scan done\n");
             Log(CONNECTION,
                 "eventScanDoneHandler: ARDUINO_EVENT_WIFI_SCAN_DONE\n");
             this->stationScan.scanComplete();
+            Log(DEBUG, "Semaphore given by STA scan done\n");
             this->semaphoreGive();
           }
         },
@@ -274,8 +277,10 @@ class Mesh : public painlessmesh::Mesh<Connection> {
     eventSTAStartHandler = WiFi.onEvent(
         [this](WiFiEvent_t event, WiFiEventInfo_t info) {
           if (this->semaphoreTake()) {
+            Log(DEBUG, "Semaphore taken by STA Start\n");
             Log(CONNECTION,
                 "eventSTAStartHandler: ARDUINO_EVENT_WIFI_STA_START\n");
+            Log(DEBUG, "Semaphore given by STA Start\n");
             this->semaphoreGive();
           }
         },
@@ -288,10 +293,14 @@ class Mesh : public painlessmesh::Mesh<Connection> {
     eventSTADisconnectedHandler = WiFi.onEvent(
         [this](WiFiEvent_t event, WiFiEventInfo_t info) {
           if (this->semaphoreTake()) {
+            Log(DEBUG, "Semaphore taken by STA disconnection\n");
             Log(CONNECTION,
                 "eventSTADisconnectedHandler: "
                 "ARDUINO_EVENT_WIFI_STA_DISCONNECTED\n");
+            Log(ERROR, "disconnectd from %u\nreason: %i\n", tcp::encodeNodeId(info.wifi_sta_disconnected.bssid), info.wifi_sta_disconnected.reason);
+
             this->droppedConnectionCallbacks.execute(0, true);
+            Log(DEBUG, "Semaphore given by STA disconnection\n");
             this->semaphoreGive();
           }
         },
@@ -303,10 +312,13 @@ class Mesh : public painlessmesh::Mesh<Connection> {
 
     eventSTAGotIPHandler = WiFi.onEvent(
         [this](WiFiEvent_t event, WiFiEventInfo_t info) {
+          Log(CONNECTION, "Trying to create STA connection\n");
           if (this->semaphoreTake()) {
+            Log(DEBUG, "Semaphore taken by STA connection\n");
             Log(CONNECTION,
                 "eventSTAGotIPHandler: ARDUINO_EVENT_WIFI_STA_GOT_IP\n");
             this->tcpConnect();  // Connect to TCP port
+            Log(DEBUG, "Semaphore given by STA connection\n");
             this->semaphoreGive();
           }
         },

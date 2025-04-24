@@ -16,9 +16,11 @@ painlessMesh mesh;
 // User stub
 void sendMessage(); // Prototype so PlatformIO doesn't complain
 void logConnections();
+void reconfigure();
 
 Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
 Task taskLogConnections(TASK_SECOND * 10, TASK_FOREVER, &logConnections );
+Task taskReconfigure(TASK_HOUR, TASK_ONCE, &reconfigure);
 
 void sendMessage() {
   uint32_t nodeId = 3206793885;
@@ -31,6 +33,12 @@ void logConnections()
 {
     Serial.print("TOPOLOGY: ");
     Serial.println( mesh.subConnectionJson(true) );
+}
+
+void reconfigure()
+{
+    Serial.println("reconfigure():");
+    mesh.setTargetNodeId(3206773453);
 }
 
 // Needed for painless library
@@ -55,7 +63,7 @@ void setup() {
     Serial.begin(115200);
 
     //mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
-    mesh.setDebugMsgTypes(PEAR | CONNECTION | ERROR | STARTUP | DEBUG);
+    mesh.setDebugMsgTypes(PEAR | CONNECTION | ERROR | STARTUP | DEBUG |GENERAL |MESH_STATUS);
     // set before init() so that you can see startup messages
 
     mesh.init(MESH_PREFIX1, MESH_PASSWORD, &userScheduler, MESH_PORT);
@@ -75,8 +83,10 @@ void setup() {
 
     userScheduler.addTask( taskSendMessage );
     userScheduler.addTask(taskLogConnections);
+    //userScheduler.addTask(taskReconfigure);
     taskLogConnections.enable();
     taskSendMessage.enable();
+    //taskReconfigure.enableDelayed(3 * TASK_MINUTE);
 }
 
 void loop() {

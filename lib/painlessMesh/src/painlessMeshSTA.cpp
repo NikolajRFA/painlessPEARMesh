@@ -17,6 +17,7 @@
 
 #include "painlessmesh/layout.hpp"
 #include "painlessmesh/logger.hpp"
+#include "painlessmesh/logger.hpp"
 #include "painlessmesh/tcp.hpp"
 
 extern painlessmesh::logger::LogClass Log;
@@ -26,6 +27,8 @@ extern painlessmesh::logger::LogClass Log;
 void ICACHE_FLASH_ATTR StationScan::init(painlessmesh::wifi::Mesh *pMesh,
                                          TSTRING pssid, TSTRING ppassword,
                                          uint16_t pport) {
+  using namespace painlessmesh::logger;
+  Log(DEBUG, "StationScan::init() %s, %s, %i\n", pssid.c_str(), ppassword.c_str(), pport);
   ssid = pssid;
   password = ppassword;
   mesh = pMesh;
@@ -210,7 +213,7 @@ void ICACHE_FLASH_ATTR StationScan::checkStation()
     }
   }
 
-  if (targetRecord != nullptr)
+  if (targetRecord != nullptr && !containsTargetNodeId(aps, painlessmesh::tcp::encodeNodeId(targetRecord->bssid)))
   {
     WiFi_AP_Record_t record;
     record.rssi = targetRecord->rssi;
@@ -236,8 +239,9 @@ bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(const WiFi_AP_Record_t 
 void ICACHE_FLASH_ATTR StationScan::requestIP(WiFi_AP_Record_t& ap)
 {
   using namespace painlessmesh::logger;
-  Log(CONNECTION, "connectToAP(): Best AP is %u<---\nMAC: %x:%x:%x:%x:%x:%x\n",
-      painlessmesh::tcp::encodeNodeId(ap.bssid), ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5]);
+  Log(CONNECTION, "connectToAP(): Best AP is %u<--- RSSI: %i\nMAC: %x:%x:%x:%x:%x:%x\n",
+      painlessmesh::tcp::encodeNodeId(ap.bssid), ap.rssi, ap.bssid[0], ap.bssid[1], ap.bssid[2], ap.bssid[3], ap.bssid[4], ap.bssid[5]);
+  Log(CONNECTION, "connectToAP(): WiFi begin: ssid: %s, password: %s, mesh: %i\n", ap.ssid.c_str(), password.c_str(), mesh->_meshChannel);
   WiFi.begin(ap.ssid.c_str(), password.c_str(), mesh->_meshChannel, ap.bssid);
   return;
 }
@@ -245,6 +249,7 @@ void ICACHE_FLASH_ATTR StationScan::requestIP(WiFi_AP_Record_t& ap)
 void ICACHE_FLASH_ATTR StationScan::connectToAP() {
   using namespace painlessmesh;
   using namespace painlessmesh::logger;
+  Log(PEAR, "connectToAP(): record is: nodeId: %u\n", tcp::encodeNodeId(aps.front().bssid));
   // Next task will be to rescan
   task.setCallback([this]() { stationScan(); });
 
@@ -308,8 +313,7 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
         mesh->stability = 0;  // Discourage switching again
         // wifiEventCB should be triggered before this delay runs out
         // and reset the connecting
-        int delay = mesh->useTargetNodeId ? 5 : SCAN_INTERVAL;
-        task.delay(3 * delay);
+        task.delay(3 * SCAN_INTERVAL);
       } else {
         if (mesh->shouldContainRoot)
           // Increase scanning rate, because we want to find root
