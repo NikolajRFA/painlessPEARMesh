@@ -100,6 +100,7 @@ namespace painlessmesh {
         void routePackage(layout::Layout<T> layout, std::shared_ptr<T> connection,
                           TSTRING pkg, callback::MeshPackageCallbackList<T> cbl, uint32_t receivedAt) {
             using namespace logger;
+
             static size_t baseCapacity = 512;
             Log(COMMUNICATION, "routePackage(): Recvd from %u: %s\n", connection->nodeId,
                 pkg.c_str());

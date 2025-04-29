@@ -281,7 +281,6 @@ namespace painlessmesh {
          */
         void onReceive(receivedCallback_t onReceive) {
             using namespace painlessmesh;
-            rxPeriod++;
             this->callbackList.onPackage(
                 protocol::SINGLE,
                 [onReceive](protocol::Variant variant, std::shared_ptr<T>, uint32_t) {
@@ -467,9 +466,6 @@ namespace painlessmesh {
         uint8_t txPeriod = 0;
         uint8_t rxPeriod = 0;
         std::list<uint32_t> availableNetworks;
-        Pear pear;
-
-
 
         void clearTargetBSSID() {
             useTargetNodeId = false;
@@ -484,8 +480,8 @@ namespace painlessmesh {
 
             if (this->root) {
                 auto tree = this->asNodeTree();
-                auto nodeTree = layout::getNodeById(tree, from);
-                pear.processReceivedData(doc, nodeTree);
+                auto nodeTree = layout::getNodeById(std::make_shared<protocol::NodeTree>(tree), from);
+                Pear::getInstance().processReceivedData(doc, nodeTree);
             } else if (jsonContainsNewParent(doc)) {
                 uint32_t newTargetNodeId = doc["newParent"];
                 setTargetNodeId(newTargetNodeId);
@@ -599,6 +595,7 @@ namespace painlessmesh {
         Task nodeSyncTask;
         Task timeOutTask;
         Task reportPearDataTask;
+        Task runPearTask;
 
         Connection(AsyncClient *client, Mesh<painlessmesh::Connection> *mesh,
                    bool station)
@@ -611,6 +608,7 @@ namespace painlessmesh {
             auto self = this->shared_from_this();
             auto mesh = this->mesh;
             this->onReceive([mesh, self](const TSTRING &str) {
+                mesh->rxPeriod++;
                 auto variant = painlessmesh::protocol::Variant(str);
                 router::routePackage<painlessmesh::Connection>(
                     (*self->mesh), self->shared_from_this(), str,
@@ -626,6 +624,8 @@ namespace painlessmesh {
                 self->timeOutTask.disable();
                 self->reportPearDataTask.setCallback(NULL);
                 self->reportPearDataTask.disable();
+                self->runPearTask.setCallback(NULL);
+                self->runPearTask.disable();
                 auto nodeId = self->nodeId;
                 auto station = self->station;
                 mesh->addTask([mesh, nodeId, station]() {
@@ -657,7 +657,7 @@ namespace painlessmesh {
             else
                 this->nodeSyncTask.enableDelayed(10 * TASK_SECOND);
 
-            if (!root) {
+            if (!mesh->isRoot()) {
                 this->reportPearDataTask.set(30 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
                     Log(PEAR, "reportPearDataTask(): Sending pear data");
 
@@ -667,9 +667,16 @@ namespace painlessmesh {
                     mesh->rxPeriod = 0;
                     mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
                 });
+                mesh->mScheduler->addTask(this->reportPearDataTask);
+                this->reportPearDataTask.enableDelayed(30 * TASK_SECOND);
+            } else {
+                this->runPearTask.set(TASK_MINUTE, TASK_FOREVER, [self]() {
+                    Pear::getInstance().run(self->mesh->asNodeTree());
+                });
+                mesh->mScheduler->addTask(this->runPearTask);
+                this->runPearTask.enableDelayed(2*TASK_MINUTE);
             }
-            mesh->mScheduler->addTask(this->reportPearDataTask);
-            this->reportPearDataTask.enableDelayed();
+
 
             Log(CONNECTION, "painlessmesh::Connection: New connection established.\n");
             this->initialize(mesh->mScheduler);

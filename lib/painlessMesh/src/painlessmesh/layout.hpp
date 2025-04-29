@@ -192,13 +192,13 @@ namespace painlessmesh {
          * @param nodeId the nodeId for which the NodeTree should be found
          * @return the NodeTree with the corresponding nodeId
          */
-        inline protocol::NodeTree& getNodeById(protocol::NodeTree& nodeTree, const uint32_t nodeId) {
-            if (nodeTree.nodeId == nodeId) {
+        inline std::shared_ptr<protocol::NodeTree> getNodeById(std::shared_ptr<protocol::NodeTree> nodeTree, const uint32_t nodeId) {
+            if (nodeTree->nodeId == nodeId) {
                 return nodeTree;
             }
 
-            for (auto& subNode : nodeTree.subs) {
-                return getNodeById(subNode, nodeId);
+            for (auto& subNode : nodeTree->subs) {
+                return getNodeById(std::make_shared<protocol::NodeTree>(subNode), nodeId);
             }
             Log(logger::ERROR, "Node %ul not found\n", nodeId);
             throw std::runtime_error("Node not found");
