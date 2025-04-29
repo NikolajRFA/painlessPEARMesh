@@ -207,6 +207,7 @@ void ICACHE_FLASH_ATTR StationScan::checkStation()
       if ((*connection)->station && (*connection)->nodeId == mesh->targetNodeId)
       {
         Log(PEAR, "Target nodeId is already connected\n");
+        mesh->removeStationFromAvailableNetworks(mesh->targetNodeId);
         return;
       }
       connection++;

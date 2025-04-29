@@ -455,6 +455,10 @@ namespace painlessmesh {
             Log(PEAR, "TargetNodeId is set to %lu\n", targetNodeId);
         }
 
+        void removeStationFromAvailableNetworks(uint32_t currentStation){
+            availableNetworks.remove(currentStation);
+        }
+
     protected:
         uint32_t targetNodeId = 0; // Default to an invalid nodeId
         bool useTargetNodeId = false; // Flag to enable/disable targeting a specific nodeId
