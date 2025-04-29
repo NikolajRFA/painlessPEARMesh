@@ -25,9 +25,10 @@ inline bool jsonContainsNewParent(JsonDocument json) {
     return json["newParent"].is<uint32_t>();
 }
 
-inline String buildPearReportJson(uint8_t transmissionRate, std::list<uint32_t> networks) {
+inline String buildPearReportJson(uint8_t txPeriod, uint8_t rxPeriod, std::list<uint32_t> networks) {
     JsonDocument pearData;
-    pearData["transmissionRate"] = transmissionRate;
+    pearData["txPeriod"] = txPeriod;
+    pearData["rxPeriod"] = rxPeriod;
 
     JsonArray availableNetworksArray = pearData["availableNetworks"].to<JsonArray>();
     for (auto networkId: networks) {

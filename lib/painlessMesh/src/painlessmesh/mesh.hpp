@@ -281,6 +281,7 @@ namespace painlessmesh {
          */
         void onReceive(receivedCallback_t onReceive) {
             using namespace painlessmesh;
+            rxPeriod++;
             this->callbackList.onPackage(
                 protocol::SINGLE,
                 [onReceive](protocol::Variant variant, std::shared_ptr<T>, uint32_t) {
@@ -458,8 +459,9 @@ namespace painlessmesh {
         uint32_t targetNodeId = 0; // Default to an invalid nodeId
         bool useTargetNodeId = false; // Flag to enable/disable targeting a specific nodeId
         uint8_t baseLineTransmissions = 30;
-        // Baseline set to 40 to simulate a homogenous network where each node sends 30 messages every 30 seconds.
-        uint8_t transmissions = 0;
+        // Baseline set to 30 to simulate a homogenous network where each node sends 30 messages of their own every cycle.
+        uint8_t txPeriod = 0;
+        uint8_t rxPeriod = 0;
         std::list<uint32_t> availableNetworks;
         Pear pear;
 
@@ -655,9 +657,10 @@ namespace painlessmesh {
                 this->reportPearDataTask.set(30 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
                     Log(PEAR, "reportPearDataTask(): Sending pear data");
 
-                    uint8_t summedTransmissions = mesh->transmissions + mesh->baseLineTransmissions;
-                    String pearDataString = buildPearReportJson(summedTransmissions, mesh->getAvailableNetworks(true));
-
+                    uint8_t summedTransmissions = mesh->txPeriod + mesh->baseLineTransmissions;
+                    String pearDataString = buildPearReportJson(summedTransmissions, mesh->rxPeriod, mesh->getAvailableNetworks(true));
+                    mesh->txPeriod = 0;
+                    mesh->rxPeriod = 0;
                     mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
                 });
             }
@@ -669,7 +672,7 @@ namespace painlessmesh {
         }
 
         bool addMessage(const TSTRING &msg, bool priority = false) {
-            mesh->transmissions++;
+            mesh->txPeriod++;
             return this->write(msg, priority);
         }
 
