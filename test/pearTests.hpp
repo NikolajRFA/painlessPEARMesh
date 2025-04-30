@@ -239,12 +239,12 @@ void test_run_should_process_multiple_nodes_until_threshold(void) {
   child1Pear->periodRx = 999; // exceeds
 
   std::shared_ptr<PearNodeTree> child2Pear = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(child2)));
-  child2Pear->periodTx = 100; // does not exceed
-  child2Pear->periodRx = 50;  // does not exceed
+  child2Pear->periodTx = 25; // does not exceed
+  child2Pear->periodRx = 0;  // does not exceed
 
   std::shared_ptr<PearNodeTree> child4Pear = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(child4)));
   child4Pear->periodTx = 10;  // does not exceed
-  child4Pear->periodRx = 10;  // does not exceed
+  child4Pear->periodRx = 0;  // does not exceed
 
   // Connect PearNodeTree structure (manually mirror NodeTree)
   child1Pear->subs.push_back(child2);

@@ -18,7 +18,7 @@ namespace painlessmesh {
         int periodRx = 0;
         std::list<std::shared_ptr<PearNodeTree>> parentCandidates;
         int txThreshold = 30;
-        int rxThreshold = 0;
+        int rxThreshold = 1;
         int energyProfile = (txThreshold + rxThreshold) / 2;
 
         // Define the < operator for comparison
@@ -94,6 +94,7 @@ namespace painlessmesh {
          */
         void run(const protocol::NodeTree &rootNodeTree) {
             auto listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
+            noOfVerifiedDevices = 0;
             for (auto pearNodeTree: listOfAllDevices) {
                 if (noOfVerifiedDevices < 10) {
                     if (deviceExceedsLimit(pearNodeTree->nodeId)) updateParent(pearNodeTree);
@@ -101,7 +102,6 @@ namespace painlessmesh {
                     return;
                 }
             }
-            noOfVerifiedDevices = 0;
         }
 
         /**
