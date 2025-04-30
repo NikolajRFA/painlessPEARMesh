@@ -29,14 +29,18 @@ inline String buildPearReportJson(uint8_t txPeriod, uint8_t rxPeriod, std::list<
     JsonDocument pearData;
     pearData["txPeriod"] = txPeriod;
     pearData["rxPeriod"] = rxPeriod;
+    Serial.println("buildPearReportJson(): Building pear report!\n");
+    Serial.printf("buildPearReportJson(): txPeriod: %u <> rxPeriod: %u\n", txPeriod, rxPeriod);
 
     JsonArray availableNetworksArray = pearData["availableNetworks"].to<JsonArray>();
     for (auto networkId: networks) {
         availableNetworksArray.add(networkId);
+        Serial.printf("buildPearReportJson(): Adding %u to availableNetworksArray\n", networkId);
     }
 
     String pearDataString;
     serializeJson(pearData, pearDataString);
+    Serial.printf("buildPearReportJson(): Finished building pear report: %s\n", pearDataString.c_str());
 
     return pearDataString;
 }
