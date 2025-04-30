@@ -659,7 +659,7 @@ namespace painlessmesh {
 
             if (!mesh->isRoot()) {
                 this->reportPearDataTask.set(30 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
-                    Log(PEAR, "reportPearDataTask(): Sending pear data");
+                    Log(PEAR, "reportPearDataTask(): Sending pear data\n");
 
                     uint8_t summedTransmissions = mesh->txPeriod + mesh->baseLineTransmissions;
                     String pearDataString = buildPearReportJson(summedTransmissions, mesh->rxPeriod, mesh->getAvailableNetworks(true));
