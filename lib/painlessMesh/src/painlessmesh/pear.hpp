@@ -9,6 +9,7 @@
 #include <map>
 
 #include "protocol.hpp"
+#include "layout.hpp"
 
 namespace painlessmesh {
     class PearNodeTree : public protocol::NodeTree {
@@ -58,6 +59,14 @@ namespace painlessmesh {
         static Pear& getInstance() {
             static Pear instance; // Guaranteed to be created only once (thread-safe in C++11 and later)
             return instance;
+        }
+
+        static void reset()
+        {
+            auto instance = &getInstance();
+            instance->noOfVerifiedDevices = 0;
+            instance->pearNodeTreeMap.clear();
+            instance->reroutes.clear();
         }
 
         // Delete copy constructor and assignment operator
@@ -159,10 +168,10 @@ namespace painlessmesh {
          * - `deviceExceedsThreshold(candidate)` is a predicate function used to check if a candidate node is eligible.
          * - `reroutes` is a globally accessible map used to track rerouted parent relationships.
          */
-        void updateParent(std::shared_ptr<PearNodeTree> &pearNodeTree) {
+        void updateParent(std::shared_ptr<PearNodeTree>& pearNodeTree) {
             Serial.printf("updateParent(): Attempting to reroute the most consuming sub of node: %u\n", pearNodeTree->nodeId);
             std::set<std::shared_ptr<PearNodeTree>> descendingTxList;
-            for (auto sub: pearNodeTree->subs) {
+            for (const auto& sub: pearNodeTree->subs) {
                 const auto it = pearNodeTreeMap.find(sub.nodeId);
                 if (it == pearNodeTreeMap.end()) {
                     Serial.println("updateParent(): Sub not found in map");
@@ -172,10 +181,10 @@ namespace painlessmesh {
                 descendingTxList.insert(pearNodeTree);
             }
 
-            for (auto nodeToReroute: descendingTxList) {
+            for (const auto& nodeToReroute: descendingTxList) {
                 Serial.printf("updateParent(): Checking if node: %u is able to be rerouted to a valid candidate\n", nodeToReroute->nodeId);
                 if (!nodeToReroute->parentCandidates.empty()) {
-                    for (auto candidate: nodeToReroute->parentCandidates) {
+                    for (const auto& candidate: nodeToReroute->parentCandidates) {
                         Serial.printf("updateParent(): Checking candidate %u: rx %d, tx %d\n", candidate->nodeId, candidate->periodRx, candidate->periodTx);
                         if (deviceExceedsThreshold(candidate)) {
                             Serial.println("updateParent(): Candidate exceeds threshold, skipping");

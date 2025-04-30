@@ -4,6 +4,7 @@
 
 void processReceivedData_unseenPearNodeTree_mapWithPearNodeTree(void){
       using namespace painlessmesh;
+      Pear::reset();
       Pear& pear = Pear::getInstance();
       auto node1 = protocol::NodeTree(1, false);
       auto node2 = protocol::NodeTree(2, false);
@@ -30,6 +31,7 @@ void processReceivedData_unseenPearNodeTree_mapWithPearNodeTree(void){
 
 void deviceExceedsThreshold_deviceExceedingThreshold_true(void){
   using namespace painlessmesh;
+  Pear::reset();
   Pear& pear = painlessmesh::Pear::getInstance();
   auto nodeTree = std::make_shared<protocol::NodeTree>(protocol::NodeTree(1, false));
   auto pearNodeTree = std::make_shared<PearNodeTree>(painlessmesh::PearNodeTree(nodeTree));
@@ -41,6 +43,7 @@ void deviceExceedsThreshold_deviceExceedingThreshold_true(void){
 
 void deviceExceedsThreshold_deviceNotExceedingThreshold_false(void){
   using namespace painlessmesh;
+  Pear::reset();
   Pear& pear = Pear::getInstance();
   auto nodeTree = std::make_shared<protocol::NodeTree>(protocol::NodeTree(1, false));
   auto pearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(nodeTree));
@@ -52,6 +55,7 @@ void deviceExceedsThreshold_deviceNotExceedingThreshold_false(void){
 
 void deviceExceedsLimit_deviceInMapExceedingLimit_true(void){
   using namespace painlessmesh;
+  Pear::reset();
   Pear& pear = Pear::getInstance();
   auto nodeTree = painlessmesh::protocol::NodeTree(1, false);
   auto pearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<protocol::NodeTree>(nodeTree)));
@@ -64,6 +68,7 @@ void deviceExceedsLimit_deviceInMapExceedingLimit_true(void){
 
 void deviceExceedsLimit_deviceNotInMap_false(void){
   using namespace painlessmesh;
+  Pear::reset();
   Pear& pear = Pear::getInstance();
   auto nodeTree = std::make_shared<protocol::NodeTree>(protocol::NodeTree(1, false));
   auto pearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(nodeTree));
@@ -75,6 +80,7 @@ void deviceExceedsLimit_deviceNotInMap_false(void){
 
 void run_parentCandidateExceedsLimit_reroutesIsEmpty(void){
     using namespace painlessmesh;
+    Pear::reset();
     Pear& pear = Pear::getInstance();
     auto node1 = painlessmesh::protocol::NodeTree(1, true);
     auto node2 = painlessmesh::protocol::NodeTree(2, false);
@@ -111,6 +117,7 @@ void run_parentCandidateExceedsLimit_reroutesIsEmpty(void){
 
 void updateParent_nodeWithValidParentCandidates_reroutesContainsReroute(void){
   using namespace painlessmesh;
+  Pear::reset();
   Pear& pear = Pear::getInstance();
   using NodeTree = protocol::NodeTree;
   auto node1 = NodeTree(1, true);
@@ -135,6 +142,7 @@ void updateParent_nodeWithValidParentCandidates_reroutesContainsReroute(void){
 
 void updateParent_nodeWithInvalidParentCandidates_reroutesContainsNoRoutes(void){
   using namespace painlessmesh;
+  Pear::reset();
   Pear& pear = Pear::getInstance();
   auto node1 = protocol::NodeTree(1, true);
   auto sub1 = protocol::NodeTree(2, false);
@@ -161,6 +169,7 @@ void updateParent_nodeWithInvalidParentCandidates_reroutesContainsNoRoutes(void)
 void getAllDevicesBreadthFirst_rootNodeTree_listOfPearNodesBreadthFirst(void){
   using namespace painlessmesh;
   using NodeTree = protocol::NodeTree;
+  Pear::reset();
   Pear& pear = Pear::getInstance();
 
   // Create sub-sub-nodes
@@ -194,7 +203,7 @@ void getAllDevicesBreadthFirst_rootNodeTree_listOfPearNodesBreadthFirst(void){
   auto it1 = expectedList.begin();
   auto it2 = list.begin();
   while (it1 != expectedList.end() && it2 != list.end()) {
-    TEST_ASSERT_TRUE(*it1 == *it2); // Assumes operator== is defined for PearNodeTree
+    TEST_ASSERT_TRUE(**it1 == **it2); // Assumes operator== is defined for PearNodeTree
     ++it1;
     ++it2;
   }
@@ -204,6 +213,7 @@ void test_run_should_process_multiple_nodes_until_threshold(void) {
   using namespace painlessmesh;
   using protocol::NodeTree;
 
+  Pear::reset();
   Pear& pear = Pear::getInstance();
 
   // Step 1: Build deepest child first
