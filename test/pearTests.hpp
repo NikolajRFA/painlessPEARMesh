@@ -3,9 +3,10 @@
 #include "../lib/painlessmesh/src/painlessmesh/protocol.hpp"
 
 void processReceivedData_unseenPearNodeTree_mapWithPearNodeTree(void){
-      painlessmesh::Pear pear;
-      auto node1 = painlessmesh::protocol::NodeTree(1, false);
-      auto node2 = painlessmesh::protocol::NodeTree(2, false);
+      using namespace painlessmesh;
+      Pear& pear = Pear::getInstance();
+      auto node1 = protocol::NodeTree(1, false);
+      auto node2 = protocol::NodeTree(2, false);
 
       node1.subs.push_back(node2);
 
@@ -17,59 +18,64 @@ void processReceivedData_unseenPearNodeTree_mapWithPearNodeTree(void){
 
       TEST_ASSERT_EQUAL(0, pear.pearNodeTreeMap.count(node1.nodeId));
 
-      pear.processReceivedData(doc, node1);
+      pear.processReceivedData(doc, std::make_shared<protocol::NodeTree>(node1));
 
       auto pearNode = pear.pearNodeTreeMap[node1.nodeId];
 
       TEST_ASSERT_EQUAL(1, pear.pearNodeTreeMap.count(node1.nodeId));
-      TEST_ASSERT_EQUAL_INT(123, pearNode.periodTx);
-      TEST_ASSERT_EQUAL_INT(50, pearNode.periodRx);
-      TEST_ASSERT_EQUAL_INT(1, pearNode.parentCandidates.size());
+      TEST_ASSERT_EQUAL_INT(123, pearNode->periodTx);
+      TEST_ASSERT_EQUAL_INT(50, pearNode->periodRx);
+      TEST_ASSERT_EQUAL_INT(1, pearNode->parentCandidates.size());
 }
 
 void deviceExceedsThreshold_deviceExceedingThreshold_true(void){
-  painlessmesh::Pear pear;
-  auto nodeTree = painlessmesh::protocol::NodeTree(1, false);
-  auto pearNodeTree = painlessmesh::PearNodeTree(nodeTree);
-  pearNodeTree.periodTx = 3000;
-  pearNodeTree.periodRx = 3000;
+  using namespace painlessmesh;
+  Pear& pear = painlessmesh::Pear::getInstance();
+  auto nodeTree = std::make_shared<protocol::NodeTree>(protocol::NodeTree(1, false));
+  auto pearNodeTree = std::make_shared<PearNodeTree>(painlessmesh::PearNodeTree(nodeTree));
+  pearNodeTree->periodTx = 3000;
+  pearNodeTree->periodRx = 3000;
 
   TEST_ASSERT_TRUE(pear.deviceExceedsThreshold(pearNodeTree));
 }
 
 void deviceExceedsThreshold_deviceNotExceedingThreshold_false(void){
-  painlessmesh::Pear pear;
-  auto nodeTree = painlessmesh::protocol::NodeTree(1, false);
-  auto pearNodeTree = painlessmesh::PearNodeTree(nodeTree);
-  pearNodeTree.periodTx = 30;
-  pearNodeTree.periodRx = 20;
+  using namespace painlessmesh;
+  Pear& pear = Pear::getInstance();
+  auto nodeTree = std::make_shared<protocol::NodeTree>(protocol::NodeTree(1, false));
+  auto pearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(nodeTree));
+  pearNodeTree->periodTx = 30;
+  pearNodeTree->periodRx = 20;
 
   TEST_ASSERT_FALSE(pear.deviceExceedsThreshold(pearNodeTree));
 }
 
 void deviceExceedsLimit_deviceInMapExceedingLimit_true(void){
-  painlessmesh::Pear pear;
+  using namespace painlessmesh;
+  Pear& pear = Pear::getInstance();
   auto nodeTree = painlessmesh::protocol::NodeTree(1, false);
-  auto pearNodeTree = painlessmesh::PearNodeTree(nodeTree);
+  auto pearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<protocol::NodeTree>(nodeTree)));
 
-  pear.pearNodeTreeMap.insert({pearNodeTree.nodeId, pearNodeTree});
+  pear.pearNodeTreeMap.insert({pearNodeTree->nodeId, pearNodeTree});
 
-  TEST_ASSERT_TRUE(pear.deviceExceedsLimit(pearNodeTree.nodeId));
+  TEST_ASSERT_TRUE(pear.deviceExceedsLimit(pearNodeTree->nodeId));
   TEST_ASSERT_EQUAL_INT(0, pear.noOfVerifiedDevices);
 }
 
 void deviceExceedsLimit_deviceNotInMap_false(void){
-  painlessmesh::Pear pear;
-  auto nodeTree = painlessmesh::protocol::NodeTree(1, false);
-  auto pearNodeTree = painlessmesh::PearNodeTree(nodeTree);
+  using namespace painlessmesh;
+  Pear& pear = Pear::getInstance();
+  auto nodeTree = std::make_shared<protocol::NodeTree>(protocol::NodeTree(1, false));
+  auto pearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(nodeTree));
 
-  TEST_ASSERT_FALSE(pear.deviceExceedsLimit(pearNodeTree.nodeId));
+  TEST_ASSERT_FALSE(pear.deviceExceedsLimit(pearNodeTree->nodeId));
   TEST_ASSERT_EQUAL_INT(0, pear.noOfVerifiedDevices);
 }
 
 
 void run_parentCandidateExceedsLimit_reroutesIsEmpty(void){
-    painlessmesh::Pear pear;
+    using namespace painlessmesh;
+    Pear& pear = Pear::getInstance();
     auto node1 = painlessmesh::protocol::NodeTree(1, true);
     auto node2 = painlessmesh::protocol::NodeTree(2, false);
     auto node3 = painlessmesh::protocol::NodeTree(3, false);
@@ -93,8 +99,8 @@ void run_parentCandidateExceedsLimit_reroutesIsEmpty(void){
     docNode3["periodTx"] = 400;
     docNode3["periodRx"] = 300;
 
-    pear.processReceivedData(docNode3, node3);
-    pear.processReceivedData(docNode4, node4);
+    pear.processReceivedData(docNode3, std::make_shared<protocol::NodeTree>(node3));
+    pear.processReceivedData(docNode4, std::make_shared<protocol::NodeTree>(node4));
 
     pear.run(node1);
 
@@ -104,8 +110,9 @@ void run_parentCandidateExceedsLimit_reroutesIsEmpty(void){
 }
 
 void updateParent_nodeWithValidParentCandidates_reroutesContainsReroute(void){
-  painlessmesh::Pear pear;
-  using NodeTree = painlessmesh::protocol::NodeTree;
+  using namespace painlessmesh;
+  Pear& pear = Pear::getInstance();
+  using NodeTree = protocol::NodeTree;
   auto node1 = NodeTree(1, true);
   auto sub1 = NodeTree(2, false);
   auto sub2 = NodeTree(3, false);
@@ -113,46 +120,48 @@ void updateParent_nodeWithValidParentCandidates_reroutesContainsReroute(void){
   node1.subs.push_back(sub1);
   node1.subs.push_back(sub2);
   node1.subs.push_back(sub3);
-  auto pearNodeTree = painlessmesh::PearNodeTree(node1);
-  auto pCandidate = painlessmesh::PearNodeTree(node1);
-  std::list<painlessmesh::PearNodeTree> parentCandidates;
-  parentCandidates.push_back(pCandidate);
+  auto pearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<protocol::NodeTree>(node1)));
+  auto pCandidate = PearNodeTree(std::make_shared<protocol::NodeTree>(node1));
+  std::list<std::shared_ptr<PearNodeTree>> parentCandidates;
+  parentCandidates.push_back(std::make_shared<PearNodeTree>(pCandidate));
 
-  auto subPear1 = painlessmesh::PearNodeTree(sub1, 50, 100, parentCandidates);
-  pear.pearNodeTreeMap.insert({subPear1.nodeId, subPear1});
+  auto subPear1 = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<protocol::NodeTree>(sub1), 50, 100, parentCandidates));
+  pear.pearNodeTreeMap.insert({subPear1->nodeId, subPear1});
 
   pear.updateParent(pearNodeTree);
 
-  TEST_ASSERT_EQUAL_INT(1, pear.reroutes.count(subPear1.nodeId));
+  TEST_ASSERT_EQUAL_INT(1, pear.reroutes.count(subPear1->nodeId));
 }
 
 void updateParent_nodeWithInvalidParentCandidates_reroutesContainsNoRoutes(void){
-  painlessmesh::Pear pear;
-  auto node1 = painlessmesh::protocol::NodeTree(1, true);
-  auto sub1 = painlessmesh::protocol::NodeTree(2, false);
-  auto sub2 = painlessmesh::protocol::NodeTree(3, false);
-  auto sub3 = painlessmesh::protocol::NodeTree(4, false);
+  using namespace painlessmesh;
+  Pear& pear = Pear::getInstance();
+  auto node1 = protocol::NodeTree(1, true);
+  auto sub1 = protocol::NodeTree(2, false);
+  auto sub2 = protocol::NodeTree(3, false);
+  auto sub3 = protocol::NodeTree(4, false);
   node1.subs.push_back(sub1);
   node1.subs.push_back(sub2);
   node1.subs.push_back(sub3);
-  auto pearNodeTree = painlessmesh::PearNodeTree(node1);
-  auto pCandidate = painlessmesh::PearNodeTree(node1);
-  pCandidate.periodTx = 1000;
-  pCandidate.periodRx = 1000;
-  std::list<painlessmesh::PearNodeTree> parentCandidates;
+  auto pearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<protocol::NodeTree>(node1)));
+  auto pCandidate = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<protocol::NodeTree>(node1)));
+  pCandidate->periodTx = 1000;
+  pCandidate->periodRx = 1000;
+  std::list<std::shared_ptr<PearNodeTree>> parentCandidates;
   parentCandidates.push_back(pCandidate);
 
-  auto subPear1 = painlessmesh::PearNodeTree(sub1, 2000, 1000, parentCandidates);
-  pear.pearNodeTreeMap.insert({subPear1.nodeId, subPear1});
+  auto subPear1 = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<protocol::NodeTree>(sub1), 2000, 1000, parentCandidates));
+  pear.pearNodeTreeMap.insert({subPear1->nodeId, subPear1});
 
   pear.updateParent(pearNodeTree);
 
-  TEST_ASSERT_EQUAL_INT(0, pear.reroutes.count(subPear1.nodeId));
+  TEST_ASSERT_EQUAL_INT(0, pear.reroutes.count(subPear1->nodeId));
 }
 
 void getAllDevicesBreadthFirst_rootNodeTree_listOfPearNodesBreadthFirst(void){
-  painlessmesh::Pear pear;
-  using NodeTree = painlessmesh::protocol::NodeTree;
+  using namespace painlessmesh;
+  using NodeTree = protocol::NodeTree;
+  Pear& pear = Pear::getInstance();
 
   // Create sub-sub-nodes
   auto subSub1 = NodeTree(4, false);
@@ -172,11 +181,11 @@ void getAllDevicesBreadthFirst_rootNodeTree_listOfPearNodesBreadthFirst(void){
 
   auto list = pear.getAllDevicesBreadthFirst(rootNode);
 
-  std::list<painlessmesh::PearNodeTree> expectedList;
-  expectedList.push_back(painlessmesh::PearNodeTree(rootSub1));
-  expectedList.push_back(painlessmesh::PearNodeTree(rootSub2));
-  expectedList.push_back(painlessmesh::PearNodeTree(subSub1));
-  expectedList.push_back(painlessmesh::PearNodeTree(subSub2));
+  std::list<std::shared_ptr<PearNodeTree>> expectedList;
+  expectedList.push_back(std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(rootSub1))));
+  expectedList.push_back(std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(rootSub2))));
+  expectedList.push_back(std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(subSub1))));
+  expectedList.push_back(std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(subSub2))));
 
   // Check sizes
   TEST_ASSERT_EQUAL_UINT32(expectedList.size(), list.size());
@@ -193,8 +202,9 @@ void getAllDevicesBreadthFirst_rootNodeTree_listOfPearNodesBreadthFirst(void){
 
 void test_run_should_process_multiple_nodes_until_threshold(void) {
   using namespace painlessmesh;
+  using protocol::NodeTree;
 
-  Pear pear;
+  Pear& pear = Pear::getInstance();
 
   // Step 1: Build deepest child first
   protocol::NodeTree child2(3, false);
@@ -212,27 +222,27 @@ void test_run_should_process_multiple_nodes_until_threshold(void) {
   rootNode.subs.push_back(child4);
 
   // Create PearNodes and assign periods
-  PearNodeTree rootPear(rootNode);
+  std::shared_ptr<PearNodeTree> rootPear = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(rootNode)));
 
-  PearNodeTree child1Pear(child1);
-  child1Pear.periodTx = 999; // exceeds
-  child1Pear.periodRx = 999; // exceeds
+  std::shared_ptr<PearNodeTree> child1Pear = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(child1)));
+  child1Pear->periodTx = 999; // exceeds
+  child1Pear->periodRx = 999; // exceeds
 
-  PearNodeTree child2Pear(child2);
-  child2Pear.periodTx = 100; // does not exceed
-  child2Pear.periodRx = 50;  // does not exceed
+  std::shared_ptr<PearNodeTree> child2Pear = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(child2)));
+  child2Pear->periodTx = 100; // does not exceed
+  child2Pear->periodRx = 50;  // does not exceed
 
-  PearNodeTree child4Pear(child4);
-  child4Pear.periodTx = 10;  // does not exceed
-  child4Pear.periodRx = 10;  // does not exceed
+  std::shared_ptr<PearNodeTree> child4Pear = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(child4)));
+  child4Pear->periodTx = 10;  // does not exceed
+  child4Pear->periodRx = 10;  // does not exceed
 
   // Connect PearNodeTree structure (manually mirror NodeTree)
-  child1Pear.subs.push_back(child2Pear);
+  child1Pear->subs.push_back(child2);
 
   // Add parent candidates
-  child1Pear.parentCandidates.push_back(rootPear);
-  child2Pear.parentCandidates.push_back(child4Pear);  // Now has a valid alternate parent
-  child4Pear.parentCandidates.push_back(rootPear);
+  child1Pear->parentCandidates.push_back(rootPear);
+  child2Pear->parentCandidates.push_back(child4Pear);  // Now has a valid alternate parent
+  child4Pear->parentCandidates.push_back(rootPear);
 
   // Load the map
   pear.pearNodeTreeMap[1] = rootPear;
