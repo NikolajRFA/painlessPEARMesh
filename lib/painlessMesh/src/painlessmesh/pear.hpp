@@ -212,7 +212,8 @@ namespace painlessmesh {
             int periodRx = pearData["periodRx"];
             auto parentCandidatesJsonArray = pearData["parentCandidates"].as<JsonArray>();
             std::list<std::shared_ptr<PearNodeTree>> parentCandidates;
-            for (uint32_t id: parentCandidatesJsonArray) {
+            for (JsonVariant v : parentCandidatesJsonArray) {
+                uint32_t id = v.as<uint32_t>();
                 const auto it = pearNodeTreeMap.find(id);
                 if (it == pearNodeTreeMap.end()) {
                     const auto missingNode = layout::getNodeById(nodeTree, id);
