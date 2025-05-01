@@ -33,6 +33,7 @@ void sendMessage() {
 void logConnections() {
     Serial.print("TOPOLOGY: ");
     Serial.println(mesh.subConnectionJson(true));
+    Serial.printf("Number of nodes in mesh: %i\n",countUniqueNodeIds(mesh.subConnectionJson()));
 }
 
 void reconfigure() {

@@ -45,4 +45,43 @@ inline String buildPearReportJson(const uint8_t txPeriod, const uint8_t rxPeriod
     return pearDataString;
 }
 
+/**
+ * Method created using chatGPT - modified to match ArduinoJson 7+
+ * @param jsonString TSTRING represenation of the mesh connections
+ * @return number of nodes in the mesh
+ */
+inline size_t countUniqueNodeIds(const TSTRING& jsonString) {
+    JsonDocument doc;
+    const DeserializationError error = deserializeJson(doc, jsonString);
+
+    if (error) {
+        Serial.print(F("deserializeJson() failed: "));
+        Serial.println(error.c_str());
+        return 0;
+    }
+
+    std::set<uint32_t> uniqueNodeIds;
+
+    std::function<void(JsonVariant)> traverse;
+    traverse = [&](const JsonVariant node) {
+        if (!node.is<JsonObject>()) return;
+
+        const JsonVariant idField = node["nodeId"];
+        if (idField.is<uint32_t>()) {
+            uniqueNodeIds.insert(idField.as<uint32_t>());
+        }
+
+        const JsonVariant subsField = node["subs"];
+        if (subsField.is<JsonArray>()) {
+            for (JsonVariant subNode : subsField.as<JsonArray>()) {
+                traverse(subNode);
+            }
+        }
+    };
+
+    traverse(doc.as<JsonVariant>());
+
+    return uniqueNodeIds.size();
+}
+
 #endif
