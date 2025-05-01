@@ -477,10 +477,11 @@ namespace painlessmesh {
 
             JsonDocument doc;
             deserializeJson(doc, msg);
-
-            if (this->root) {
+            Serial.printf("onPearReceive(): isRoot(): %i\n", this->isRoot());
+            if (this->isRoot()) {
                 auto tree = this->asNodeTree();
                 auto nodeTree = layout::getNodeById(std::make_shared<protocol::NodeTree>(tree), from);
+                Serial.println("onPearReceive(): Calling processReceivedData on pear instance!");
                 Pear::getInstance().processReceivedData(doc, nodeTree);
             } else if (jsonContainsNewParent(doc)) {
                 uint32_t newTargetNodeId = doc["newParent"];
