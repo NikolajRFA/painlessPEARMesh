@@ -151,8 +151,8 @@ namespace painlessmesh {
         /**
          * @brief Evaluates and updates potential parent nodes for the given PearNodeTree based on transmission priorities and thresholds.
          *
-         * This method iterates over the subnodes of the given `pearNodeTree`, collects valid subnodes from the global
-         * `pearNodeTreeMap`, and sorts them into a set (`descendingTxList`). For each subnode, if it has available parent candidates,
+         * This method iterates over the sub nodes of the given `pearNodeTree`, collects valid sub nodes from the global
+         * `pearNodeTreeMap`, and sorts them into a set (`descendingTxList`). For each sub node, if it has available parent candidates,
          * the method attempts to reroute its parent assignment to the first candidate that does not exceed a defined threshold.
          *
          * Successful reroutes are recorded in the global `reroutes` map, where the key is the node ID of the child being rerouted,
@@ -161,7 +161,7 @@ namespace painlessmesh {
          * Nodes are only rerouted to the first eligible parent candidate that does not exceed the threshold.
          * No further candidates are evaluated once a valid one is found.
          *
-         * @param pearNodeTree The `PearNodeTree` whose subnodes are evaluated for potential parent updates.
+         * @param pearNodeTree The `PearNodeTree` whose sub nodes are evaluated for potential parent updates.
          *
          * @note This function assumes:
          * - `pearNodeTreeMap` is a globally accessible mapping from node IDs to `PearNodeTree` objects.
