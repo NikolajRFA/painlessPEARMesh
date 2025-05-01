@@ -9,6 +9,7 @@
 #include <map>
 
 #include "protocol.hpp"
+#include "layout.hpp"
 
 namespace painlessmesh {
     class PearNodeTree : public protocol::NodeTree {
@@ -17,7 +18,7 @@ namespace painlessmesh {
         int periodRx = 0;
         std::list<std::shared_ptr<PearNodeTree>> parentCandidates;
         int txThreshold = 30;
-        int rxThreshold = 0;
+        int rxThreshold = 1;
         int energyProfile = (txThreshold + rxThreshold) / 2;
 
         // Define the < operator for comparison
@@ -67,6 +68,14 @@ namespace painlessmesh {
             return instance;
         }
 
+        static void reset()
+        {
+            auto instance = &getInstance();
+            instance->noOfVerifiedDevices = 0;
+            instance->pearNodeTreeMap.clear();
+            instance->reroutes.clear();
+        }
+
         // Delete copy constructor and assignment operator
         Pear(const Pear&) = delete;
         Pear& operator=(const Pear&) = delete;
@@ -92,6 +101,7 @@ namespace painlessmesh {
          */
         void run(const protocol::NodeTree &rootNodeTree) {
             const auto listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
+            noOfVerifiedDevices = 0;
             for (const auto& pearNodeTree: listOfAllDevices) {
                 const auto reroutesContainsReroute = reroutes.count(pearNodeTree->nodeId);
                 if (noOfVerifiedDevices < 10 && !reroutesContainsReroute) {
@@ -102,7 +112,6 @@ namespace painlessmesh {
                     return;
                 }
             }
-            noOfVerifiedDevices = 0;
         }
 
         /**
