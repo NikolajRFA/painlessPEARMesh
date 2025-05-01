@@ -307,8 +307,15 @@ namespace painlessmesh {
 
             return result;
         }
+
+        void setRootNodeId(const uint32_t nodeId) {
+            rootNodeId = nodeId;
+        }
+
     protected:
         Pear(){}
+
+        uint32_t rootNodeId;
     };
 }
 
