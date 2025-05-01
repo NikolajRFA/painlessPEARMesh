@@ -241,10 +241,11 @@ namespace painlessmesh {
                 }*/
                 const auto it = pearNodeTreeMap.find(id);
                 if (it == pearNodeTreeMap.end()) {
-                    const auto missingNode = layout::getNodeById(nodeTree, id);
-                    auto missingNodePearTree = std::make_shared<PearNodeTree>(PearNodeTree(missingNode));
-                    pearNodeTreeMap.insert({id, missingNodePearTree});
-                    parentCandidates.push_back(missingNodePearTree);
+                    const auto missingNodeTree = layout::getNodeById(nodeTree, id);
+                    if (missingNodeTree == nullptr) break;
+                    auto missingPearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(missingNodeTree));
+                    pearNodeTreeMap.insert({id, missingPearNodeTree});
+                    parentCandidates.push_back(missingPearNodeTree);
                 } else {
                     const auto pearNodeTree = it->second;
                     parentCandidates.push_back(pearNodeTree);
