@@ -94,7 +94,7 @@ namespace painlessmesh {
         void run(const protocol::NodeTree &rootNodeTree) {
             auto listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
             for (auto pearNodeTree: listOfAllDevices) {
-                if (noOfVerifiedDevices < 10) {
+                if (noOfVerifiedDevices < 10 && !reroutes.count(pearNodeTree->nodeId)) {
                     if (deviceExceedsLimit(pearNodeTree->nodeId)) updateParent(pearNodeTree);
                 } else {
                     return;
