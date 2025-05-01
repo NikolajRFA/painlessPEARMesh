@@ -51,6 +51,14 @@ namespace painlessmesh {
             this->periodTx = periodTx;
             this->parentCandidates = parentCandidates;
         }
+
+        PearNodeTree(const std::shared_ptr<NodeTree>& nodeTree, const int txThreshold, const int rxThreshold) {
+            this->nodeId = nodeTree->nodeId;
+            this->root = nodeTree->root;
+            this->subs = nodeTree->subs;
+            this->txThreshold = txThreshold;
+            this->rxThreshold = rxThreshold;
+        }
     };
 
     class Pear {
