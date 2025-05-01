@@ -182,6 +182,11 @@ namespace painlessmesh {
                 descendingTxList.insert(pearNodeTree);
             }
 
+            if (descendingTxList.empty()) {
+                Serial.println("updateParent(): No subs founds - unable to reroute incoming traffic!");
+                return;
+            }
+
             for (auto nodeToReroute: descendingTxList) {
                 Serial.printf("updateParent(): Checking if node: %u is able to be rerouted to a valid candidate\n", nodeToReroute->nodeId);
                 if (!nodeToReroute->parentCandidates.empty()) {
@@ -217,10 +222,10 @@ namespace painlessmesh {
          * @note This method assumes that `layout::getNodeById()` can retrieve nodes from the `nodeTree` structure and that
          *       `PearNodeTree` has a constructor accepting a `NodeTree`, or a `NodeTree` with additional metadata like tx/rx and candidates.
          */
-        void processReceivedData(JsonDocument &pearData, std::shared_ptr<protocol::NodeTree> nodeTree) {
-            int periodTx = pearData["periodTx"];
-            int periodRx = pearData["periodRx"];
+        void processReceivedData(JsonDocument &pearData, const std::shared_ptr<protocol::NodeTree>& nodeTree) {
             Serial.println("processReceivedData(): Started processing received data!");
+            int periodTx = pearData["txPeriod"];
+            int periodRx = pearData["rxPeriod"];
             Serial.printf("processReceivedData(): pearData: periodTx: %i, periodRx: %i\n", periodTx, periodRx);
             auto parentCandidatesJsonArray = pearData["parentCandidates"].as<JsonArray>();
             std::list<std::shared_ptr<PearNodeTree>> parentCandidates;
@@ -228,6 +233,12 @@ namespace painlessmesh {
             for (JsonVariant v : parentCandidatesJsonArray) {
                 uint32_t id = v.as<uint32_t>();
                 Serial.printf("JsonVariant: %s, converted to uint32_t: %u\n", v.as<String>(), id);
+                /*if(id == rootNodeId){
+                    // If a node has the root node as a parent candidate then we always want to reroute the node to the root
+                    Serial.println("Reroute to root available - adding reroute!");
+                    reroutes.insert({id, rootNodeId});
+                    continue;
+                }*/
                 const auto it = pearNodeTreeMap.find(id);
                 if (it == pearNodeTreeMap.end()) {
                     const auto missingNode = layout::getNodeById(nodeTree, id);
