@@ -114,7 +114,7 @@ namespace painlessmesh {
          *
          * @return `true` if both `periodRx` > `rxThreshold` and `periodTx` > `txThreshold`; otherwise, `false`.
          */
-        bool deviceExceedsThreshold(const std::shared_ptr<PearNodeTree> pearNodeTree) {
+        bool deviceExceedsThreshold(const std::shared_ptr<PearNodeTree>& pearNodeTree) {
             Serial.printf("Checking if node >%u< exceeds the threshold\n", pearNodeTree->nodeId);
             Serial.printf("txPeriod: %u > txThreshold: %u\n", pearNodeTree->periodTx, pearNodeTree->txThreshold);
             Serial.printf("rxPeriod: %u > rxThreshold: %u\n", pearNodeTree->periodRx, pearNodeTree->rxThreshold);
