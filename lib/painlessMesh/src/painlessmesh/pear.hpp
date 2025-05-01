@@ -93,9 +93,12 @@ namespace painlessmesh {
         void run(const protocol::NodeTree &rootNodeTree) {
             const auto listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
             for (const auto& pearNodeTree: listOfAllDevices) {
-                if (noOfVerifiedDevices < 10 && !reroutes.count(pearNodeTree->nodeId)) {
+                const auto reroutesContainsReroute = reroutes.count(pearNodeTree->nodeId);
+                if (noOfVerifiedDevices < 10 && !reroutesContainsReroute) {
                     if (deviceExceedsLimit(pearNodeTree->nodeId)) updateParent(pearNodeTree);
                 } else {
+                    Serial.printf("Number of verified devices: %u\n", noOfVerifiedDevices);
+                    Serial.printf("Reroutes already contains a record %d\n", reroutesContainsReroute);
                     return;
                 }
             }
@@ -182,7 +185,7 @@ namespace painlessmesh {
             }
 
             if (descendingTxList.empty()) {
-                Serial.println("updateParent(): No subs founds - unable to reroute incoming traffic!");
+                Serial.println("updateParent(): No subs founds - unable to optimize DPDU!");
                 return;
             }
 
