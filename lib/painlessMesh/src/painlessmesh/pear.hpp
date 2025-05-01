@@ -242,7 +242,8 @@ namespace painlessmesh {
                 if (it == pearNodeTreeMap.end()) {
                     const auto missingNodeTree = layout::getNodeById(nodeTree, id);
                     if (missingNodeTree == nullptr) break;
-                    auto missingPearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(missingNodeTree));
+                    //auto missingPearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(missingNodeTree));
+                    auto missingPearNodeTree = std::make_shared<PearNodeTree>(missingNodeTree);
                     pearNodeTreeMap.insert({id, missingPearNodeTree});
                     parentCandidates.push_back(missingPearNodeTree);
                 } else {
@@ -283,7 +284,7 @@ namespace painlessmesh {
             // Start with the children of the root, not the root itself
             for (const auto &child : rootNodeTree.subs) {
                 Serial.printf("getAllDevicesBreadthFirst(): Adding node: %u (%i subs) to queue\n", child.nodeId, child.subs.size());
-                queue.push(std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<protocol::NodeTree>(child))));
+                queue.push(std::make_shared<PearNodeTree>(std::make_shared<protocol::NodeTree>(child)));
             }
 
             while (!queue.empty()) {
