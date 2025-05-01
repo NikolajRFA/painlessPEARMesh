@@ -116,7 +116,7 @@ namespace painlessmesh {
          */
         bool deviceExceedsThreshold(const std::shared_ptr<PearNodeTree> pearNodeTree) {
             Serial.printf("Checking if node >%u< exceeds the threshold\n", pearNodeTree->nodeId);
-            Serial.printf("txPeriod: %u > txThreshold: %u\n", pearNodeTree->periodTx, pearNodeTree->txThreshold, pearNodeTree->periodRx, pearNodeTree->rxThreshold);
+            Serial.printf("txPeriod: %u > txThreshold: %u\n", pearNodeTree->periodTx, pearNodeTree->txThreshold);
             Serial.printf("rxPeriod: %u > rxThreshold: %u\n", pearNodeTree->periodRx, pearNodeTree->rxThreshold);
             return pearNodeTree->periodRx > pearNodeTree->rxThreshold && pearNodeTree->periodTx > pearNodeTree->txThreshold;
         }
@@ -138,6 +138,8 @@ namespace painlessmesh {
             const auto it = pearNodeTreeMap.find(deviceId);
             if (it == pearNodeTreeMap.end()) return false;
             const auto pearNodeTree = it->second;
+            Serial.printf("deviceExceedsLimit(): Raw pointer: %p\n", pearNodeTree.get());
+            Serial.printf("deviceExceedsLimit(): Found pearNodeTree: %u (tx: %u, rx: %u)\n", pearNodeTree->nodeId, pearNodeTree->periodTx, pearNodeTree->periodRx);
             if (deviceExceedsThreshold(pearNodeTree)) {
                 Serial.printf("deviceExceedsLimit(): Node: %u exceeds the threshold: rx: %i, tx: %i\n", deviceId, pearNodeTree->rxThreshold, pearNodeTree->txThreshold);
                 return true;
@@ -218,10 +220,14 @@ namespace painlessmesh {
         void processReceivedData(JsonDocument &pearData, std::shared_ptr<protocol::NodeTree> nodeTree) {
             int periodTx = pearData["periodTx"];
             int periodRx = pearData["periodRx"];
+            Serial.println("processReceivedData(): Started processing received data!");
+            Serial.printf("processReceivedData(): pearData: periodTx: %i, periodRx: %i\n", periodTx, periodRx);
             auto parentCandidatesJsonArray = pearData["parentCandidates"].as<JsonArray>();
             std::list<std::shared_ptr<PearNodeTree>> parentCandidates;
+            Serial.printf("processReceivedData(): parentCandidates count: %i\n", parentCandidatesJsonArray.size());
             for (JsonVariant v : parentCandidatesJsonArray) {
                 uint32_t id = v.as<uint32_t>();
+                Serial.printf("JsonVariant: %s, converted to uint32_t: %u\n", v.as<String>(), id);
                 const auto it = pearNodeTreeMap.find(id);
                 if (it == pearNodeTreeMap.end()) {
                     const auto missingNode = layout::getNodeById(nodeTree, id);
