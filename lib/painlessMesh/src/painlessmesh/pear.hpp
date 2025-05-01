@@ -253,7 +253,7 @@ namespace painlessmesh {
             }
 
             if (pearNodeTreeMap.count(nodeTree->nodeId)) {
-                auto foundPearNodeTree = pearNodeTreeMap[nodeTree->nodeId];
+                const auto foundPearNodeTree = pearNodeTreeMap[nodeTree->nodeId];
                 foundPearNodeTree->periodTx = periodTx;
                 foundPearNodeTree->periodRx = periodRx;
                 foundPearNodeTree->parentCandidates = parentCandidates;
