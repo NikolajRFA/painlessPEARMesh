@@ -194,7 +194,7 @@ namespace painlessmesh {
                         Serial.printf("updateParent(): Checking candidate %u: rx %d, tx %d\n", candidate->nodeId, candidate->periodRx, candidate->periodTx);
                         if (deviceExceedsThreshold(candidate)) {
                             Serial.println("updateParent(): Candidate exceeds threshold, skipping");
-                            break;
+                            continue;
                         }
                         reroutes.insert({nodeToReroute->nodeId, candidate->nodeId});
                         Serial.printf("updateParent(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
