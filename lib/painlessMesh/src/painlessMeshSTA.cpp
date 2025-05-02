@@ -147,6 +147,9 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
       aps.sort([this](const WiFi_AP_Record_t& a, const WiFi_AP_Record_t& b) {
         return compareWiFiAPRecords(a, b, mesh->useTargetNodeId, mesh->targetNodeId);
       });
+
+      if (!mesh->useTargetNodeId) mesh->setTargetNodeId(tcp::encodeNodeId(aps.front().bssid));
+
       // Next task is to connect to the top ap
       task.yield([this]() { connectToAP(); });
     });
