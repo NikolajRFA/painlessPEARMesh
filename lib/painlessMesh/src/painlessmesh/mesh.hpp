@@ -677,6 +677,9 @@ namespace painlessmesh {
             } else {
                 this->runPearTask.set(TASK_MINUTE, TASK_FOREVER, [self]() {
                     Pear::getInstance().run(self->mesh->asNodeTree());
+                    for (const auto& reroute: Pear::getInstance().reroutes) {
+                        self->mesh->sendPear(reroute.first, reroute.second);
+                    }
                 });
                 mesh->mScheduler->addTask(this->runPearTask);
                 this->runPearTask.enableDelayed(2*TASK_MINUTE);

@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <map>
 
+#include "jsonHelper.hpp"
 #include "protocol.hpp"
 #include "layout.hpp"
 #include "logger.hpp"
@@ -83,7 +84,7 @@ namespace painlessmesh {
 
         uint8_t noOfVerifiedDevices = 0;
         std::map<uint32_t, std::shared_ptr<PearNodeTree>> pearNodeTreeMap;
-        std::unordered_map<uint32_t, uint32_t> reroutes; // Create logic to send the reroute information
+        std::unordered_map<uint32_t, String> reroutes; // Create logic to send the reroute information
 
         /**
          * @brief Executes the main evaluation routine (PEAR) on the entire device tree.
@@ -213,7 +214,17 @@ namespace painlessmesh {
                             Log(PEAR_DEBUG, "updateParent(): Candidate exceeds threshold, skipping");
                             continue;
                         }
-                        reroutes.insert({nodeToReroute->nodeId, candidate->nodeId});
+                        JsonDocument doc;
+                        // create an object
+
+                        // Add an array of integers to the JSON object
+                        doc["newParent"] = candidate->nodeId;
+
+                        // Convert JSON object to string
+                        String jsonString;
+                        serializeJson(doc, jsonString);
+
+                        reroutes.insert({nodeToReroute->nodeId, jsonString});
                         Log(PEAR,"updateParent(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
                     }
                 }
