@@ -10,7 +10,7 @@
 
 #include "protocol.hpp"
 #include "layout.hpp"
-
+#include "logger.hpp"
 namespace painlessmesh {
     class PearNodeTree : public protocol::NodeTree {
     public:
@@ -107,8 +107,9 @@ namespace painlessmesh {
                 if (noOfVerifiedDevices < 10 && !reroutesContainsReroute) {
                     if (deviceExceedsLimit(pearNodeTree->nodeId)) updateParent(pearNodeTree);
                 } else {
-                    Serial.printf("Number of verified devices: %u\n", noOfVerifiedDevices);
-                    if (reroutesContainsReroute) Serial.printf("Reroutes already contains a reroute for %u\n", pearNodeTree->nodeId);
+                    using namespace painlessmesh::logger;
+                    Log(PEAR, "Number of verified devices: %u\n", noOfVerifiedDevices);
+                    if (reroutesContainsReroute) Log(PEAR, "Reroutes already contains a reroute for %u\n", pearNodeTree->nodeId);
                     return;
                 }
             }
@@ -126,9 +127,11 @@ namespace painlessmesh {
          * @return `true` if both `periodRx` > `rxThreshold` and `periodTx` > `txThreshold`; otherwise, `false`.
          */
         static bool deviceExceedsThreshold(const std::shared_ptr<PearNodeTree>& pearNodeTree) {
-            Serial.printf("Checking if node >%u< exceeds the threshold\n", pearNodeTree->nodeId);
-            Serial.printf("txPeriod: %u > txThreshold: %u\n", pearNodeTree->periodTx, pearNodeTree->txThreshold);
-            Serial.printf("rxPeriod: %u > rxThreshold: %u\n", pearNodeTree->periodRx, pearNodeTree->rxThreshold);
+            using namespace painlessmesh::logger;
+            Log(PEAR, "Checking if node >%u< exceeds the threshold\n", pearNodeTree->nodeId);
+            Log(PEAR_DEBUG, "txPeriod: %u > txThreshold: %u\n", pearNodeTree->periodTx, pearNodeTree->txThreshold);
+            Log(PEAR_DEBUG, "rxPeriod: %u > rxThreshold: %u\n", pearNodeTree->periodRx, pearNodeTree->rxThreshold);
+
             return pearNodeTree->periodRx > pearNodeTree->rxThreshold && pearNodeTree->periodTx > pearNodeTree->txThreshold;
         }
 
@@ -144,18 +147,19 @@ namespace painlessmesh {
          * @return `true` if the device exceeds the operational threshold, `false` otherwise or if the device is not found.
          */
         bool deviceExceedsLimit(const uint32_t deviceId) {
-            Serial.printf("deviceExceedsLimit(): Checking if node: %u exceeds limit\n", deviceId);
+            using namespace painlessmesh::logger;
+            Log(PEAR, "deviceExceedsLimit(): Checking if node: %u exceeds limit\n", deviceId);
             //auto pearNodeTree = findPearNodeTreeById(deviceId);
             const auto it = pearNodeTreeMap.find(deviceId);
             if (it == pearNodeTreeMap.end()) return false;
             const auto pearNodeTree = it->second;
-            Serial.printf("deviceExceedsLimit(): Raw pointer: %p\n", pearNodeTree.get());
-            Serial.printf("deviceExceedsLimit(): Found pearNodeTree: %u (tx: %u, rx: %u)\n", pearNodeTree->nodeId, pearNodeTree->periodTx, pearNodeTree->periodRx);
+            Log(PEAR_DEBUG, "deviceExceedsLimit(): Raw pointer: %p\n", pearNodeTree.get());
+            Log(PEAR_DEBUG, "deviceExceedsLimit(): Found pearNodeTree: %u (tx: %u, rx: %u)\n", pearNodeTree->nodeId, pearNodeTree->periodTx, pearNodeTree->periodRx);
             if (deviceExceedsThreshold(pearNodeTree)) {
-                Serial.printf("deviceExceedsLimit(): Node: %u exceeds the threshold: rx: %i, tx: %i\n", deviceId, pearNodeTree->rxThreshold, pearNodeTree->txThreshold);
+                Log(PEAR,"deviceExceedsLimit(): Node: %u exceeds the threshold: rx: %i, tx: %i\n", deviceId, pearNodeTree->rxThreshold, pearNodeTree->txThreshold);
                 return true;
             }
-            Serial.printf("deviceExceedsLimit(): Incrementing verified devices as node: %u does not exceed the threshold\n", deviceId);
+            Log(PEAR_DEBUG, "deviceExceedsLimit(): Incrementing verified devices as node: %u does not exceed the threshold\n", deviceId);
             noOfVerifiedDevices++;
             return false;
         }
@@ -181,12 +185,13 @@ namespace painlessmesh {
          * - `reroutes` is a globally accessible map used to track rerouted parent relationships.
          */
         void updateParent(const std::shared_ptr<PearNodeTree> &pearNodeTree) {
-            Serial.printf("updateParent(): Attempting to reroute the most consuming sub of node: %u\n", pearNodeTree->nodeId);
+            using namespace painlessmesh::logger;
+            Log(PEAR_DEBUG, "updateParent(): Attempting to reroute the most consuming sub of node: %u\n", pearNodeTree->nodeId);
             std::set<std::shared_ptr<PearNodeTree>> descendingTxList;
             for (const auto& sub: pearNodeTree->subs) {
                 const auto it = pearNodeTreeMap.find(sub.nodeId);
                 if (it == pearNodeTreeMap.end()) {
-                    Serial.println("updateParent(): Sub not found in map");
+                    Log(PEAR_DEBUG, "updateParent(): Sub not found in map");
                     continue;
                 }
                 const auto pearNodeTreeSub = it->second;
@@ -194,21 +199,21 @@ namespace painlessmesh {
             }
 
             if (descendingTxList.empty()) {
-                Serial.println("updateParent(): No subs founds - unable to optimize DPDU!");
+                Log(PEAR, "updateParent(): No subs founds - unable to optimize DPDU!");
                 return;
             }
 
             for (const auto& nodeToReroute: descendingTxList) {
-                Serial.printf("updateParent(): Checking if node: %u is able to be rerouted to a valid candidate\n", nodeToReroute->nodeId);
+                Log(PEAR_DEBUG, "updateParent(): Checking if node: %u is able to be rerouted to a valid candidate\n", nodeToReroute->nodeId);
                 if (!nodeToReroute->parentCandidates.empty()) {
                     for (const auto& candidate: nodeToReroute->parentCandidates) {
-                        Serial.printf("updateParent(): Checking candidate %u: rx %d, tx %d\n", candidate->nodeId, candidate->periodRx, candidate->periodTx);
+                        Log(PEAR_DEBUG, "updateParent(): Checking candidate %u: rx %d, tx %d\n", candidate->nodeId, candidate->periodRx, candidate->periodTx);
                         if (deviceExceedsThreshold(candidate)) {
-                            Serial.println("updateParent(): Candidate exceeds threshold, skipping");
+                            Log(PEAR_DEBUG, "updateParent(): Candidate exceeds threshold, skipping");
                             continue;
                         }
                         reroutes.insert({nodeToReroute->nodeId, candidate->nodeId});
-                        Serial.printf("updateParent(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
+                        Log(PEAR,"updateParent(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
                     }
                 }
             }
@@ -234,16 +239,17 @@ namespace painlessmesh {
          *       `PearNodeTree` has a constructor accepting a `NodeTree`, or a `NodeTree` with additional metadata like tx/rx and candidates.
          */
         void processReceivedData(JsonDocument &pearData, const std::shared_ptr<protocol::NodeTree>& nodeTree) {
-            Serial.println("processReceivedData(): Started processing received data!");
+            using namespace painlessmesh::logger;
+            Log(PEAR_DEBUG,"processReceivedData(): Started processing received data!");
             const int periodTx = pearData["txPeriod"];
             const int periodRx = pearData["rxPeriod"];
-            Serial.printf("processReceivedData(): pearData: periodTx: %i, periodRx: %i, nodeId: %u\n", periodTx, periodRx, nodeTree->nodeId);
+            Log(PEAR_DEBUG,"processReceivedData(): pearData: periodTx: %i, periodRx: %i, nodeId: %u\n", periodTx, periodRx, nodeTree->nodeId);
             const auto parentCandidatesJsonArray = pearData["parentCandidates"].as<JsonArray>();
             std::list<std::shared_ptr<PearNodeTree>> parentCandidates;
-            Serial.printf("processReceivedData(): parentCandidates count: %i\n", parentCandidatesJsonArray.size());
+            Log(PEAR_DEBUG,"processReceivedData(): parentCandidates count: %i\n", parentCandidatesJsonArray.size());
             for (JsonVariant v : parentCandidatesJsonArray) {
                 auto id = v.as<uint32_t>();
-                Serial.printf("JsonVariant: %s, converted to uint32_t: %u\n", v.as<String>().c_str(), id);
+                Log(PEAR_DEBUG,"JsonVariant: %s, converted to uint32_t: %u\n", v.as<String>().c_str(), id);
                 /*if(id == rootNodeId){
                     // If a node has the root node as a parent candidate then we always want to reroute the node to the root
                     Serial.println("Reroute to root available - adding reroute!");
@@ -252,8 +258,8 @@ namespace painlessmesh {
                 }*/
                 const auto it = pearNodeTreeMap.find(id);
                 if (it == pearNodeTreeMap.end()) {
-                    Serial.printf("processReceivedData(): Attempting to find NodeTree instance with nodeId: %u\n", id);
-                    Serial.printf("processReceivedData(): Passing NodeTree with id: %u to search from\n", nodeTree->nodeId);
+                    Log(PEAR_DEBUG,"processReceivedData(): Attempting to find NodeTree instance with nodeId: %u\n", id);
+                    Log(PEAR_DEBUG,"processReceivedData(): Passing NodeTree with id: %u to search from\n", nodeTree->nodeId);
                     const auto missingNodeTree = layout::getNodeById(nodeTree, id);
                     if (missingNodeTree == nullptr) break;
                     //auto missingPearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(missingNodeTree));
@@ -294,10 +300,11 @@ namespace painlessmesh {
         std::list<std::shared_ptr<PearNodeTree>> getAllDevicesBreadthFirst(const protocol::NodeTree &rootNodeTree) {
             std::list<std::shared_ptr<PearNodeTree>> result;
             std::queue<std::shared_ptr<PearNodeTree>> queue;
+            using namespace painlessmesh::logger;
 
             // Start with the children of the root, not the root itself
             for (const auto &child : rootNodeTree.subs) {
-                Serial.printf("getAllDevicesBreadthFirst(): Adding node: %u (%i subs) to queue\n", child.nodeId, child.subs.size());
+                Log(PEAR_DEBUG,"getAllDevicesBreadthFirst(): Adding node: %u (%i subs) to queue\n", child.nodeId, child.subs.size());
                 queue.push(std::make_shared<PearNodeTree>(std::make_shared<protocol::NodeTree>(child)));
             }
 
@@ -305,7 +312,7 @@ namespace painlessmesh {
                 auto current = std::make_shared<PearNodeTree>(queue.front());
                 queue.pop();
 
-                Serial.printf("getAllDevicesBreadthFirst(): Adding node: %u to listOfAllDevices\n", current->nodeId);
+                Log(PEAR_DEBUG,"getAllDevicesBreadthFirst(): Adding node: %u to listOfAllDevices\n", current->nodeId);
                 result.push_back(current);
 
                 for (const auto &child : current->subs) {
@@ -313,7 +320,7 @@ namespace painlessmesh {
                     if (it != pearNodeTreeMap.end()) {
                         queue.push(it->second);
                     } else {
-                        Serial.printf("getAllDevicesBreadthFirst(): Warning: child %u not found in map, using default-constructed PearNodeTree\n", child.nodeId);
+                        Log(PEAR,"getAllDevicesBreadthFirst(): Warning: child %u not found in map, using default-constructed PearNodeTree\n", child.nodeId);
                         queue.push(std::make_shared<PearNodeTree>(std::make_shared<protocol::NodeTree>(child)));
                     }
                 }
