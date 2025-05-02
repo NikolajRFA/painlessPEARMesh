@@ -237,7 +237,7 @@ namespace painlessmesh {
             Serial.println("processReceivedData(): Started processing received data!");
             const int periodTx = pearData["txPeriod"];
             const int periodRx = pearData["rxPeriod"];
-            Serial.printf("processReceivedData(): pearData: periodTx: %i, periodRx: %i\n", periodTx, periodRx);
+            Serial.printf("processReceivedData(): pearData: periodTx: %i, periodRx: %i, nodeId: %u\n", periodTx, periodRx, nodeTree->nodeId);
             const auto parentCandidatesJsonArray = pearData["parentCandidates"].as<JsonArray>();
             std::list<std::shared_ptr<PearNodeTree>> parentCandidates;
             Serial.printf("processReceivedData(): parentCandidates count: %i\n", parentCandidatesJsonArray.size());
@@ -252,6 +252,8 @@ namespace painlessmesh {
                 }*/
                 const auto it = pearNodeTreeMap.find(id);
                 if (it == pearNodeTreeMap.end()) {
+                    Serial.printf("processReceivedData(): Attempting to find NodeTree instance with nodeId: %u\n", id);
+                    Serial.printf("processReceivedData(): Passing NodeTree with id: %u to search from\n", nodeTree->nodeId);
                     const auto missingNodeTree = layout::getNodeById(nodeTree, id);
                     if (missingNodeTree == nullptr) break;
                     //auto missingPearNodeTree = std::make_shared<PearNodeTree>(PearNodeTree(missingNodeTree));
