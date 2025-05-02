@@ -481,6 +481,10 @@ namespace painlessmesh {
             if (this->isRoot()) {
                 auto tree = this->asNodeTree();
                 auto nodeTree = layout::getNodeById(std::make_shared<protocol::NodeTree>(tree), from);
+                if (nodeTree == nullptr) {
+                    Serial.printf("onPearReceive(): getNodeById returned a nullptr");
+                    return;
+                }
                 Serial.println("onPearReceive(): Calling processReceivedData on pear instance!");
                 Pear::getInstance().processReceivedData(doc, nodeTree);
             } else if (jsonContainsNewParent(doc)) {
