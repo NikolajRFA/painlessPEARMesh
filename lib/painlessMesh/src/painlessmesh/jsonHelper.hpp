@@ -52,7 +52,7 @@ inline String buildPearReportJson(const uint8_t txPeriod, const uint8_t rxPeriod
  */
 inline size_t countUniqueNodeIds(const TSTRING& jsonString) {
     JsonDocument doc;
-    const DeserializationError error = deserializeJson(doc, jsonString);
+    const DeserializationError error = deserializeJson(doc, jsonString, DeserializationOption::NestingLimit(30));
 
     if (error) {
         Serial.print(F("deserializeJson() failed: "));
