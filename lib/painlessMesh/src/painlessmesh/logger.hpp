@@ -19,7 +19,8 @@ namespace painlessmesh {
             REMOTE = 1 << 9, // not yet implemented
             APPLICATION = 1 << 10,
             DEBUG = 1 << 11,
-            PEAR = 1 << 12
+            PEAR = 1 << 12,
+            PEAR_DEBUG = 1 << 13
         } LogLevel;
 
         class LogClass {
@@ -66,6 +67,10 @@ namespace painlessmesh {
                 }
                 if (types & PEAR) {
                     Serial.print(F(" PEAR |"));
+                }
+                if (types & PEAR_DEBUG)
+                {
+                    Serial.print(F(" PEAR_DEBUG |"));
                 }
                 Serial.println();
                 return;
@@ -119,6 +124,9 @@ namespace painlessmesh {
                                 break;
                             case PEAR:
                                 Serial.print(F("PEAR: "));
+                                break;
+                            case PEAR_DEBUG:
+                                Serial.print(F("PEAR_DEBUG: "));
                                 break;
                         }
                     }
