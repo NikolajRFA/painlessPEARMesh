@@ -11,6 +11,7 @@
 #include "protocol.hpp"
 #include "layout.hpp"
 #include "logger.hpp"
+
 namespace painlessmesh {
     class PearNodeTree : public protocol::NodeTree {
     public:
@@ -108,8 +109,8 @@ namespace painlessmesh {
                     if (deviceExceedsLimit(pearNodeTree->nodeId)) updateParent(pearNodeTree);
                 } else {
                     using namespace painlessmesh::logger;
-                    Log(PEAR, "Number of verified devices: %u\n", noOfVerifiedDevices);
-                    if (reroutesContainsReroute) Log(PEAR, "Reroutes already contains a reroute for %u\n", pearNodeTree->nodeId);
+                    Log(PEAR_DEBUG, "Number of verified devices: %u\n", noOfVerifiedDevices);
+                    if (reroutesContainsReroute) Log(PEAR_DEBUG, "Reroutes already contains a reroute for %u\n", pearNodeTree->nodeId);
                     return;
                 }
             }
@@ -128,7 +129,7 @@ namespace painlessmesh {
          */
         static bool deviceExceedsThreshold(const std::shared_ptr<PearNodeTree>& pearNodeTree) {
             using namespace painlessmesh::logger;
-            Log(PEAR, "Checking if node >%u< exceeds the threshold\n", pearNodeTree->nodeId);
+            Log(PEAR_DEBUG, "Checking if node >%u< exceeds the threshold\n", pearNodeTree->nodeId);
             Log(PEAR_DEBUG, "txPeriod: %u > txThreshold: %u\n", pearNodeTree->periodTx, pearNodeTree->txThreshold);
             Log(PEAR_DEBUG, "rxPeriod: %u > rxThreshold: %u\n", pearNodeTree->periodRx, pearNodeTree->rxThreshold);
 
@@ -148,7 +149,7 @@ namespace painlessmesh {
          */
         bool deviceExceedsLimit(const uint32_t deviceId) {
             using namespace painlessmesh::logger;
-            Log(PEAR, "deviceExceedsLimit(): Checking if node: %u exceeds limit\n", deviceId);
+            Log(PEAR_DEBUG, "deviceExceedsLimit(): Checking if node: %u exceeds limit\n", deviceId);
             //auto pearNodeTree = findPearNodeTreeById(deviceId);
             const auto it = pearNodeTreeMap.find(deviceId);
             if (it == pearNodeTreeMap.end()) return false;
@@ -156,7 +157,7 @@ namespace painlessmesh {
             Log(PEAR_DEBUG, "deviceExceedsLimit(): Raw pointer: %p\n", pearNodeTree.get());
             Log(PEAR_DEBUG, "deviceExceedsLimit(): Found pearNodeTree: %u (tx: %u, rx: %u)\n", pearNodeTree->nodeId, pearNodeTree->periodTx, pearNodeTree->periodRx);
             if (deviceExceedsThreshold(pearNodeTree)) {
-                Log(PEAR,"deviceExceedsLimit(): Node: %u exceeds the threshold: rx: %i, tx: %i\n", deviceId, pearNodeTree->rxThreshold, pearNodeTree->txThreshold);
+                Log(PEAR_DEBUG,"deviceExceedsLimit(): Node: %u exceeds the threshold: rx: %i, tx: %i\n", deviceId, pearNodeTree->rxThreshold, pearNodeTree->txThreshold);
                 return true;
             }
             Log(PEAR_DEBUG, "deviceExceedsLimit(): Incrementing verified devices as node: %u does not exceed the threshold\n", deviceId);
@@ -199,7 +200,7 @@ namespace painlessmesh {
             }
 
             if (descendingTxList.empty()) {
-                Log(PEAR, "updateParent(): No subs founds - unable to optimize DPDU!");
+                Log(PEAR_DEBUG, "updateParent(): No subs founds - unable to optimize DPDU!");
                 return;
             }
 
@@ -320,7 +321,7 @@ namespace painlessmesh {
                     if (it != pearNodeTreeMap.end()) {
                         queue.push(it->second);
                     } else {
-                        Log(PEAR,"getAllDevicesBreadthFirst(): Warning: child %u not found in map, using default-constructed PearNodeTree\n", child.nodeId);
+                        Log(PEAR_DEBUG,"getAllDevicesBreadthFirst(): Warning: child %u not found in map, using default-constructed PearNodeTree\n", child.nodeId);
                         queue.push(std::make_shared<PearNodeTree>(std::make_shared<protocol::NodeTree>(child)));
                     }
                 }
