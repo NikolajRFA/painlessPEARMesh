@@ -33,7 +33,7 @@ void sendMessage() {
 void logConnections() {
     Serial.print("TOPOLOGY: ");
     Serial.println(mesh.subConnectionJson(true));
-    Serial.printf("Number of nodes in mesh: %i\n",countUniqueNodeIds(mesh.subConnectionJson()));
+    Serial.printf("Number of nodes in mesh: %i\n", countUniqueNodeIds(mesh.subConnectionJson()));
 }
 
 void reconfigure() {
@@ -74,9 +74,7 @@ void setup() {
         Pear::getInstance().setRootNodeId(CHIP1); // hacky initialisation of pear
         Pear::getInstance().pearNodeTreeMap.insert({
             CHIP1,
-            std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<protocol::NodeTree>(mesh.asNodeTree()), 9999,
-                                                        9999))
-        });
+            std::make_shared<PearNodeTree>(std::make_shared<protocol::NodeTree>(mesh.asNodeTree()), 9999, 9999)});
         mesh.setDontConnect(true);
         mesh.setRoot();
     }

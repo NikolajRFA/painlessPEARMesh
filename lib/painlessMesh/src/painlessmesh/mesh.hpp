@@ -454,8 +454,8 @@ namespace painlessmesh {
             Log(PEAR, "TargetNodeId is set to %lu\n", targetNodeId);
         }
 
-        void removeStationFromAvailableNetworks(uint32_t currentStation){
-            availableNetworks.remove(currentStation);
+        void removeStationFromAvailableNetworks(const uint32_t currentStationId){
+            availableNetworks.remove(currentStationId);
         }
 
     protected:

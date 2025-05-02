@@ -273,7 +273,7 @@ namespace painlessmesh {
                 foundPearNodeTree->parentCandidates = parentCandidates;
                 foundPearNodeTree->subs = nodeTree->subs;
             } else {
-                pearNodeTreeMap.insert({nodeTree->nodeId, std::make_shared<PearNodeTree>(PearNodeTree(nodeTree, periodTx, periodRx, parentCandidates))});
+                pearNodeTreeMap.insert({nodeTree->nodeId, std::make_shared<PearNodeTree>(nodeTree, periodTx, periodRx, parentCandidates)});
             }
         }
 
@@ -314,7 +314,7 @@ namespace painlessmesh {
                         queue.push(it->second);
                     } else {
                         Serial.printf("getAllDevicesBreadthFirst(): Warning: child %u not found in map, using default-constructed PearNodeTree\n", child.nodeId);
-                        queue.push(std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<protocol::NodeTree>(child))));
+                        queue.push(std::make_shared<PearNodeTree>(std::make_shared<protocol::NodeTree>(child)));
                     }
                 }
             }
