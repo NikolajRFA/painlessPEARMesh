@@ -5,6 +5,7 @@
 #include "jsonHelperTests.hpp"
 #include "getRootNodeIdTests.hpp"
 #include "decodeNodeIdTests.hpp"
+#include "pearTests.hpp"
 
 void setUp(void)
 {
@@ -33,6 +34,14 @@ int runUnityTests(void)
     RUN_TEST(decodeNodeId_3206773453_8813BF237ACD);
     RUN_TEST(decodeNodeId_3206793885_8813BF23CA9D);
     RUN_TEST(decodeNodeId_3211408993_8813BF6A3661);
+    RUN_TEST(processReceivedData_unseenPearNodeTree_mapWithPearNodeTree);
+    RUN_TEST(deviceExceedsThreshold_deviceExceedingThreshold_true);
+    RUN_TEST(deviceExceedsThreshold_deviceNotExceedingThreshold_false);
+    RUN_TEST(run_parentCandidateExceedsLimit_reroutesIsEmpty);
+    RUN_TEST(updateParent_nodeWithValidParentCandidates_reroutesContainsReroute);
+    RUN_TEST(updateParent_nodeWithInvalidParentCandidates_reroutesContainsNoRoutes);
+    RUN_TEST(getAllDevicesBreadthFirst_rootNodeTree_listOfPearNodesBreadthFirst);
+    RUN_TEST(test_run_should_process_multiple_nodes_until_threshold);
     return UNITY_END();
 }
 
@@ -41,10 +50,11 @@ int runUnityTests(void)
  */
 void setup()
 {
+    Serial.begin(115200);
     // Wait ~2 seconds before the Unity test runner
     // establishes connection with a board Serial interface
     delay(2000);
-
+    Serial.println("Test starting...");
     runUnityTests();
 }
 void loop() {}

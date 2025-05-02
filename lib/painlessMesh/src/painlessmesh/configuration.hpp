@@ -41,14 +41,14 @@
 typedef String TSTRING;
 
 // backward compatibility
-template <typename T>
+template<typename T>
 using SimpleList = std::list<T>;
 
 namespace painlessmesh {
-namespace wifi {
-class Mesh;
-};
-};  // namespace painlessmesh
+    namespace wifi {
+        class Mesh;
+    };
+}; // namespace painlessmesh
 
 /** A convenience typedef to access the mesh class*/
 #ifdef PAINLESSMESH_ENABLE_ARDUINO_WIFI

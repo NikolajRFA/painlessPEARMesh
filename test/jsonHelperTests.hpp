@@ -45,12 +45,13 @@ void buildNewParentJsonAndjsonContainsNewParent_nodeId_true(){
 }
 
 void buildPearReportJson_transmissionRateAndNetworksList_buildsExpectedJson(){
-  uint8_t transmissionRate = 69;
+  uint8_t rxPeriod = 10;
+  uint8_t txPeriod = 20;
   std::list<uint32_t> networks;
 
   networks.push_back(123);
   networks.push_back(456);
   networks.push_back(789);
 
-  TEST_ASSERT_EQUAL_STRING("{\"transmissionRate\":69,\"availableNetworks\":[123,456,789]}\"", buildPearReportJson(transmissionRate, networks).c_str());
+  TEST_ASSERT_EQUAL_STRING("{\"txPeriod\":20,\"rxPeriod\":10,\"availableNetworks\":[123,456,789]}\"", buildPearReportJson(txPeriod, rxPeriod, networks).c_str());
 }

@@ -16,27 +16,27 @@ painlessMesh mesh;
 // User stub
 void sendMessage(); // Prototype so PlatformIO doesn't complain
 void logConnections();
+
 void reconfigure();
 
-Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
-Task taskLogConnections(TASK_SECOND * 10, TASK_FOREVER, &logConnections );
+Task taskSendMessage(TASK_SECOND * 1, TASK_FOREVER, &sendMessage);
+Task taskLogConnections(TASK_SECOND * 10, TASK_FOREVER, &logConnections);
 Task taskReconfigure(TASK_HOUR, TASK_ONCE, &reconfigure);
 
 void sendMessage() {
-  uint32_t nodeId = 3206793885;
-  String jsonString = buildNewParentJson(nodeId);
-  //if (mesh.getNodeId() == CHIP1) mesh.sendPear(3211408993, jsonString);
-  taskSendMessage.setInterval( TASK_SECOND * 20 );
+    uint32_t nodeId = 3206793885;
+    String jsonString = buildNewParentJson(nodeId);
+    //if (mesh.getNodeId() == CHIP1) mesh.sendPear(3211408993, jsonString);
+    taskSendMessage.setInterval(TASK_SECOND * 20);
 }
 
-void logConnections()
-{
+void logConnections() {
     Serial.print("TOPOLOGY: ");
-    Serial.println( mesh.subConnectionJson(true) );
+    Serial.println(mesh.subConnectionJson(true));
+    Serial.printf("Number of nodes in mesh: %i\n", countUniqueNodeIds(mesh.subConnectionJson()));
 }
 
-void reconfigure()
-{
+void reconfigure() {
     Serial.println("reconfigure():");
     mesh.setTargetNodeId(3206773453);
 }
@@ -63,7 +63,7 @@ void setup() {
     Serial.begin(115200);
 
     //mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
-    mesh.setDebugMsgTypes(PEAR | CONNECTION | ERROR | STARTUP | DEBUG |GENERAL |MESH_STATUS);
+    mesh.setDebugMsgTypes(PEAR | CONNECTION | ERROR | STARTUP | DEBUG | GENERAL | MESH_STATUS);
     // set before init() so that you can see startup messages
 
     mesh.init(MESH_PREFIX1, MESH_PASSWORD, &userScheduler, MESH_PORT);
@@ -71,6 +71,10 @@ void setup() {
     Serial.print("Node id: ");
     Serial.println(nodeId);
     if (nodeId == CHIP1) {
+        Pear::getInstance().setRootNodeId(CHIP1); // hacky initialisation of pear
+        Pear::getInstance().pearNodeTreeMap.insert({
+            CHIP1,
+            std::make_shared<PearNodeTree>(std::make_shared<protocol::NodeTree>(mesh.asNodeTree()), 9999, 9999)});
         mesh.setDontConnect(true);
         mesh.setRoot();
     }
@@ -81,7 +85,7 @@ void setup() {
     mesh.onChangedConnections(&changedConnectionCallback);
     mesh.onNodeTimeAdjusted(&nodeTimeAdjustedCallback);
 
-    userScheduler.addTask( taskSendMessage );
+    userScheduler.addTask(taskSendMessage);
     userScheduler.addTask(taskLogConnections);
     //userScheduler.addTask(taskReconfigure);
     taskLogConnections.enable();

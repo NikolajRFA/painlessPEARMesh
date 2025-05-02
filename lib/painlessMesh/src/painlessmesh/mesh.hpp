@@ -210,9 +210,9 @@ namespace painlessmesh {
             return sendSingle(rootId, msg);
         }
 
-    /** Scans for WiFi networks matching the mesh prefix and extracts matching networks bssids
-     * @return List of bssids from available networks in the mesh
-     */
+        /** Scans for WiFi networks matching the mesh prefix and extracts matching networks bssids
+         * @return List of bssids from available networks in the mesh
+         */
         std::list<uint32_t> getAvailableNetworks(bool mock = false) {
             if (mock) {
                 VISIBLE_NETWORKS
@@ -405,7 +405,7 @@ namespace painlessmesh {
          * current node.
          */
         std::list<uint32_t> getNodeList(bool includeSelf = false) {
-            return painlessmesh::layout::asList(this->asNodeTree(), includeSelf);
+            return layout::asList(this->asNodeTree(), includeSelf);
         }
 
         /**
@@ -454,15 +454,18 @@ namespace painlessmesh {
             Log(PEAR, "TargetNodeId is set to %lu\n", targetNodeId);
         }
 
+        void removeStationFromAvailableNetworks(const uint32_t currentStationId){
+            availableNetworks.remove(currentStationId);
+        }
+
     protected:
         uint32_t targetNodeId = 0; // Default to an invalid nodeId
         bool useTargetNodeId = false; // Flag to enable/disable targeting a specific nodeId
         uint8_t baseLineTransmissions = 30;
-        // Baseline set to 40 to simulate a homogenous network where each node sends 30 messages every 30 seconds.
-        uint8_t transmissions = 0;
+        // Baseline set to 30 to simulate a homogenous network where each node sends 30 messages of their own every cycle.
+        uint8_t txPeriod = 0;
+        uint8_t rxPeriod = 0;
         std::list<uint32_t> availableNetworks;
-
-
 
         void clearTargetBSSID() {
             useTargetNodeId = false;
@@ -472,14 +475,24 @@ namespace painlessmesh {
             using namespace painlessmesh::logger;
             Log(PEAR, "Received %s from node %u\n", msg.c_str(), from);
 
-      JsonDocument doc;
-      deserializeJson(doc, msg);
-      if (jsonContainsNewParent(doc))
-      {
-        uint32_t newTargetNodeId = doc["newParent"];
-        setTargetNodeId(newTargetNodeId);
-      }
-    }
+            JsonDocument doc;
+            deserializeJson(doc, msg);
+            Serial.printf("onPearReceive(): isRoot(): %i\n", this->isRoot());
+            if (this->isRoot()) {
+                auto tree = this->asNodeTree();
+                auto nodeTree = layout::getNodeById(std::make_shared<protocol::NodeTree>(tree), from);
+                if (nodeTree == nullptr) {
+                    Serial.printf("onPearReceive(): getNodeById returned a nullptr");
+                    return;
+                }
+                Serial.println("onPearReceive(): Calling processReceivedData on pear instance!");
+                Pear::getInstance().processReceivedData(doc, nodeTree);
+            } else if (jsonContainsNewParent(doc)) {
+                uint32_t newTargetNodeId = doc["newParent"];
+                setTargetNodeId(newTargetNodeId);
+            }
+        }
+
 
         void setScheduler(Scheduler *baseScheduler) {
             this->mScheduler = baseScheduler;
@@ -587,6 +600,7 @@ namespace painlessmesh {
         Task nodeSyncTask;
         Task timeOutTask;
         Task reportPearDataTask;
+        Task runPearTask;
 
         Connection(AsyncClient *client, Mesh<painlessmesh::Connection> *mesh,
                    bool station)
@@ -599,6 +613,7 @@ namespace painlessmesh {
             auto self = this->shared_from_this();
             auto mesh = this->mesh;
             this->onReceive([mesh, self](const TSTRING &str) {
+                mesh->rxPeriod++;
                 auto variant = painlessmesh::protocol::Variant(str);
                 router::routePackage<painlessmesh::Connection>(
                     (*self->mesh), self->shared_from_this(), str,
@@ -614,6 +629,8 @@ namespace painlessmesh {
                 self->timeOutTask.disable();
                 self->reportPearDataTask.setCallback(NULL);
                 self->reportPearDataTask.disable();
+                self->runPearTask.setCallback(NULL);
+                self->runPearTask.disable();
                 auto nodeId = self->nodeId;
                 auto station = self->station;
                 mesh->addTask([mesh, nodeId, station]() {
@@ -645,27 +662,33 @@ namespace painlessmesh {
             else
                 this->nodeSyncTask.enableDelayed(10 * TASK_SECOND);
 
-            if (nodeId != CHIP1)
-            {
-                this->reportPearDataTask.set(30 * TASK_SECOND, TASK_FOREVER, [this, mesh]()
-                {
-                    Log(PEAR, "reportPearDataTask(): Sending pear data");
+            if (!mesh->isRoot()) {
+                this->reportPearDataTask.set(30 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
+                    Log(PEAR, "reportPearDataTask(): Sending pear data\n");
 
-                    uint8_t summedTransmissions = mesh->transmissions + mesh->baseLineTransmissions;
-                    String pearDataString = buildPearReportJson(summedTransmissions, mesh->getAvailableNetworks(true));
-
+                    uint8_t summedTransmissions = mesh->txPeriod + mesh->baseLineTransmissions;
+                    String pearDataString = buildPearReportJson(summedTransmissions, mesh->rxPeriod, mesh->getAvailableNetworks(true));
+                    mesh->txPeriod = 0;
+                    mesh->rxPeriod = 0;
                     mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
                 });
+                mesh->mScheduler->addTask(this->reportPearDataTask);
+                this->reportPearDataTask.enableDelayed(30 * TASK_SECOND);
+            } else {
+                this->runPearTask.set(TASK_MINUTE, TASK_FOREVER, [self]() {
+                    Pear::getInstance().run(self->mesh->asNodeTree());
+                });
+                mesh->mScheduler->addTask(this->runPearTask);
+                this->runPearTask.enableDelayed(2*TASK_MINUTE);
             }
-            mesh->mScheduler->addTask(this->reportPearDataTask);
-            this->reportPearDataTask.enableDelayed();
+
 
             Log(CONNECTION, "painlessmesh::Connection: New connection established.\n");
             this->initialize(mesh->mScheduler);
         }
 
         bool addMessage(const TSTRING &msg, bool priority = false) {
-            mesh->transmissions++;
+            mesh->txPeriod++;
             return this->write(msg, priority);
         }
 
