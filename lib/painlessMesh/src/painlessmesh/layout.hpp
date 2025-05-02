@@ -198,9 +198,12 @@ namespace painlessmesh {
             }
 
             for (auto& subNode : nodeTree->subs) {
-                return getNodeById(std::make_shared<protocol::NodeTree>(subNode), nodeId);
+                auto result = getNodeById(std::make_shared<protocol::NodeTree>(subNode), nodeId);
+                if (result != nullptr) {
+                    return result;
+                }
             }
-            Log(logger::ERROR, "Node %u not found\n", nodeId);
+
             return nullptr;
         }
 
