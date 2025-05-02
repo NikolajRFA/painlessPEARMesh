@@ -108,7 +108,7 @@ namespace painlessmesh {
                     if (deviceExceedsLimit(pearNodeTree->nodeId)) updateParent(pearNodeTree);
                 } else {
                     Serial.printf("Number of verified devices: %u\n", noOfVerifiedDevices);
-                    Serial.printf("Reroutes already contains a record %d\n", reroutesContainsReroute);
+                    if (reroutesContainsReroute) Serial.printf("Reroutes already contains a reroute for %u\n", pearNodeTree->nodeId);
                     return;
                 }
             }
