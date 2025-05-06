@@ -12,6 +12,7 @@
 #include "painlessmesh/jsonHelper.hpp"
 #include <unordered_map>
 #include <vector>
+#include "pear.hpp"
 
 #ifdef PAINLESSMESH_ENABLE_OTA
 #include "painlessmesh/ota.hpp"
