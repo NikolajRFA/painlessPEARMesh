@@ -8,10 +8,10 @@
 #include "painlessmesh/connection.hpp"
 #include "painlessmesh/ntp.hpp"
 #include "painlessmesh/plugin.hpp"
-#include "painlessmesh/tcp.hpp"
 #include "painlessmesh/jsonHelper.hpp"
 #include <unordered_map>
 #include <vector>
+#include "pear.hpp"
 
 #ifdef PAINLESSMESH_ENABLE_OTA
 #include "painlessmesh/ota.hpp"
