@@ -41,7 +41,10 @@ void ICACHE_FLASH_ATTR StationScan::init(painlessmesh::wifi::Mesh *pMesh,
 void ICACHE_FLASH_ATTR StationScan::stationScan() {
   using namespace painlessmesh::logger;
   Log(CONNECTION, "stationScan(): %s\n", ssid.c_str());
-
+  if (checkStation()) {
+    Log(PEAR, "Already connected to target - cancelling scan\n");
+    return;
+  }
 #ifdef ESP32
   WiFi.scanNetworks(true, true, false, 300U,  0);
 #elif defined(ESP8266)
@@ -148,7 +151,7 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
         return compareWiFiAPRecords(a, b, mesh->useTargetNodeId, mesh->targetNodeId);
       });
 
-      if (!mesh->useTargetNodeId) mesh->setTargetNodeId(tcp::encodeNodeId(aps.front().bssid));
+      if (!mesh->useTargetNodeId && !mesh->isRoot()) mesh->setTargetNodeId(tcp::encodeNodeId(aps.front().bssid));
 
       // Next task is to connect to the top ap
       task.yield([this]() { connectToAP(); });
@@ -199,7 +202,7 @@ void ICACHE_FLASH_ATTR StationScan::filterAPs()
 }
 
 bool forceReconnect = false;
-void ICACHE_FLASH_ATTR StationScan::checkStation()
+bool ICACHE_FLASH_ATTR StationScan::checkStation()
 {
   using namespace painlessmesh::logger;
   if (!mesh->subs.empty())
@@ -214,7 +217,7 @@ void ICACHE_FLASH_ATTR StationScan::checkStation()
       if ((*connection)->station && (*connection)->nodeId == mesh->targetNodeId)
       {
         Log(PEAR, "Target nodeId is already connected\n");
-        return;
+        return true;
       }
       connection++;
     }
@@ -230,6 +233,7 @@ void ICACHE_FLASH_ATTR StationScan::checkStation()
     aps.push_front(record);
     forceReconnect = true;
   }
+  return false;
 }
 
 bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(const WiFi_AP_Record_t &a, const WiFi_AP_Record_t &b,

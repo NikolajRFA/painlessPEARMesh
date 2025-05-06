@@ -8,6 +8,7 @@
 #include "painlessmesh/connection.hpp"
 #include "painlessmesh/ntp.hpp"
 #include "painlessmesh/plugin.hpp"
+#include "painlessmesh/tcp.hpp"
 #include "painlessmesh/jsonHelper.hpp"
 #include <unordered_map>
 #include <vector>
@@ -676,10 +677,12 @@ namespace painlessmesh {
                 this->reportPearDataTask.enableDelayed(30 * TASK_SECOND);
             } else {
                 this->runPearTask.set(TASK_MINUTE, TASK_FOREVER, [self]() {
+                    Log(PEAR, "Running pear algorithm!\n");
                     Pear::getInstance().run(self->mesh->asNodeTree());
                     for (const auto& reroute: Pear::getInstance().reroutes) {
                         self->mesh->sendPear(reroute.first, reroute.second);
                     }
+                    Pear::getInstance().reroutes.clear();
                 });
                 mesh->mScheduler->addTask(this->runPearTask);
                 this->runPearTask.enableDelayed(2*TASK_MINUTE);
