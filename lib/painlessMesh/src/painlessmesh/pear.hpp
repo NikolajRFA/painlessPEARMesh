@@ -214,15 +214,7 @@ namespace painlessmesh {
                             Log(PEAR_DEBUG, "updateParent(): Candidate exceeds threshold, skipping");
                             continue;
                         }
-                        JsonDocument doc;
-                        // create an object
-
-                        // Add an array of integers to the JSON object
-                        doc["newParent"] = candidate->nodeId;
-
-                        // Convert JSON object to string
-                        String jsonString;
-                        serializeJson(doc, jsonString);
+                        String jsonString = buildNewParentJson(candidate->nodeId);
 
                         reroutes.insert({nodeToReroute->nodeId, jsonString});
                         Log(PEAR,"updateParent(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
@@ -262,12 +254,15 @@ namespace painlessmesh {
             for (JsonVariant v : parentCandidatesJsonArray) {
                 auto id = v.as<uint32_t>();
                 Log(PEAR_DEBUG,"JsonVariant: %s, converted to uint32_t: %u\n", v.as<String>().c_str(), id);
-                /*if(id == rootNodeId){
+                if(id == rootNodeId){
                     // If a node has the root node as a parent candidate then we always want to reroute the node to the root
                     Serial.println("Reroute to root available - adding reroute!");
-                    reroutes.insert({id, rootNodeId});
+
+                    String jsonString = buildNewParentJson(rootNodeId);
+
+                    reroutes.insert({id, jsonString});
                     continue;
-                }*/
+                }
                 const auto it = pearNodeTreeMap.find(id);
                 if (it == pearNodeTreeMap.end()) {
                     Log(PEAR_DEBUG,"processReceivedData(): Attempting to find NodeTree instance with nodeId: %u\n", id);
