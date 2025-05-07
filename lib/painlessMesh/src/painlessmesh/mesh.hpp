@@ -664,11 +664,11 @@ namespace painlessmesh {
                 this->nodeSyncTask.enableDelayed(10 * TASK_SECOND);
 
             if (!mesh->isRoot()) {
-                this->reportPearDataTask.set(30 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
+                this->reportPearDataTask.set(TASK_MINUTE, TASK_FOREVER, [this, mesh]() {
                     Log(PEAR, "reportPearDataTask(): Sending pear data\n");
 
-                    uint8_t summedTransmissions = mesh->txPeriod + mesh->baseLineTransmissions;
-                    String pearDataString = buildPearReportJson(summedTransmissions, mesh->rxPeriod, mesh->getAvailableNetworks(true));
+                    const uint8_t summedTransmissions = mesh->txPeriod + mesh->baseLineTransmissions;
+                    const String pearDataString = buildPearReportJson(summedTransmissions, mesh->rxPeriod, mesh->getAvailableNetworks(true));
                     mesh->txPeriod = 0;
                     mesh->rxPeriod = 0;
                     mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
