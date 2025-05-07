@@ -6,6 +6,7 @@
 #include "getRootNodeIdTests.hpp"
 #include "decodeNodeIdTests.hpp"
 #include "pearTests.hpp"
+#include "stopwatchTests.hpp"
 
 void setUp(void)
 {
@@ -42,6 +43,9 @@ int runUnityTests(void)
     RUN_TEST(updateParent_nodeWithInvalidParentCandidates_reroutesContainsNoRoutes);
     RUN_TEST(getAllDevicesBreadthFirst_rootNodeTree_listOfPearNodesBreadthFirst);
     RUN_TEST(test_run_should_process_multiple_nodes_until_threshold);
+    RUN_TEST(timeSinceLastReportPearDataTask_delay500_true);
+    RUN_TEST(timeSinceLastRunPearTask_delay500_true);
+    RUN_TEST(timeSinceLastrunPearTask_delay500x2_true);
     return UNITY_END();
 }
 
