@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <vector>
 #include "pear.hpp"
+#include "stopwatch.hpp"
 
 #ifdef PAINLESSMESH_ENABLE_OTA
 #include "painlessmesh/ota.hpp"
@@ -665,7 +666,7 @@ namespace painlessmesh {
 
             if (!mesh->isRoot()) {
                 this->reportPearDataTask.set(TASK_MINUTE, TASK_FOREVER, [this, mesh]() {
-                    Log(PEAR, "reportPearDataTask(): Sending pear data\n");
+                    Log(PEAR, "reportPearDataTask(): Sending pear data - time since last send: %i\n", Stopwatch::getInstance().timeSinceLastReportPearDataTask());
 
                     const uint8_t summedTransmissions = mesh->txPeriod + mesh->baseLineTransmissions;
                     const String pearDataString = buildPearReportJson(summedTransmissions, mesh->rxPeriod, mesh->getAvailableNetworks(true));
@@ -688,7 +689,7 @@ namespace painlessmesh {
                     }
                 }
                 this->runPearTask.set(2*TASK_MINUTE, TASK_FOREVER, [self]() {
-                    Log(PEAR, "Running pear algorithm!\n");
+                    Log(PEAR, "Running pear algorithm! - time since last run: %i\n", Stopwatch::getInstance().timeSinceLastRunPearTask());
                     Pear::getInstance().run(self->mesh->asNodeTree());
                     for (const auto& reroute: Pear::getInstance().reroutes) {
                         self->mesh->sendPear(reroute.first, reroute.second);
