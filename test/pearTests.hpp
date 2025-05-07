@@ -12,8 +12,8 @@ void processReceivedData_unseenPearNodeTree_mapWithPearNodeTree(void){
       node1.subs.push_back(node2);
 
       JsonDocument doc;
-      doc["periodTx"] = 123;
-      doc["periodRx"] = 50;
+      doc["txPeriod"] = 123;
+      doc["rxPeriod"] = 50;
       JsonArray array = doc["parentCandidates"].to<JsonArray>();
       array.add(node2.nodeId);
 
@@ -96,14 +96,14 @@ void run_parentCandidateExceedsLimit_reroutesIsEmpty(void){
     node2.subs.push_back(node4);
 
     JsonDocument docNode4;
-    docNode4["periodTx"] = 200;
-    docNode4["periodRx"] = 125;
+    docNode4["txPeriod"] = 200;
+    docNode4["rxPeriod"] = 125;
     JsonArray array2 = docNode4["parentCandidates"].to<JsonArray>();
     array2.add(node3.nodeId);
 
     JsonDocument docNode3;
-    docNode3["periodTx"] = 400;
-    docNode3["periodRx"] = 300;
+    docNode3["txPeriod"] = 400;
+    docNode3["rxPeriod"] = 300;
 
     pear.processReceivedData(docNode3, std::make_shared<protocol::NodeTree>(node3));
     pear.processReceivedData(docNode4, std::make_shared<protocol::NodeTree>(node4));
