@@ -90,6 +90,13 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
   Log(CONNECTION, "scanComplete(): num = %d\n", num);
 
   for (auto i = 0; i < num; ++i) {
+    VISIBLE_NETWORKS
+    const auto myVisibleNetworks = visibleNetworks.at(mesh->nodeId);
+    if (std::find(myVisibleNetworks.begin(), myVisibleNetworks.end(), tcp::encodeNodeId(WiFi.BSSID(i))) == myVisibleNetworks.end())
+    {
+      continue;
+    }
+
     WiFi_AP_Record_t record;
     record.ssid = WiFi.SSID(i);
 
