@@ -676,6 +676,17 @@ namespace painlessmesh {
                 mesh->mScheduler->addTask(this->reportPearDataTask);
                 this->reportPearDataTask.enableDelayed(30 * TASK_SECOND);
             } else {
+                if (Pear::getInstance().pearNodeTreeMap.empty()) {
+                    CHIP_ID_ARRAY
+                    ENERGY_PROFILE_MAP
+                    ENERGY_PROFIlES
+                    for (uint32_t chipId: chipIdArray) {
+                        auto energyProfile = energyProfileMap.at(chipId);
+                        auto txThreshold = energyProfiles.at(energyProfile).first;
+                        auto rxThreshold = energyProfiles.at(energyProfile).second;
+                        Pear::getInstance().pearNodeTreeMap.insert({chipId, std::make_shared<PearNodeTree>(chipId, txThreshold, rxThreshold)});
+                    }
+                }
                 this->runPearTask.set(2*TASK_MINUTE, TASK_FOREVER, [self]() {
                     Log(PEAR, "Running pear algorithm!\n");
                     Pear::getInstance().run(self->mesh->asNodeTree());

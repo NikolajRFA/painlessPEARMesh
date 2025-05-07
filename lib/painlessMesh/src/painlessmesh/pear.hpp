@@ -61,6 +61,13 @@ namespace painlessmesh {
             this->txThreshold = txThreshold;
             this->rxThreshold = rxThreshold;
         }
+
+        PearNodeTree(const uint32_t nodeId, const int txThreshold, const int rxThreshold) {
+            this->nodeId = nodeId;
+            this->root = false;
+            this->txThreshold = txThreshold;
+            this->rxThreshold = rxThreshold;
+        }
     };
 
     class Pear {
