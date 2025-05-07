@@ -19,8 +19,8 @@ namespace painlessmesh {
         int periodTx = 0;
         int periodRx = 0;
         std::list<std::shared_ptr<PearNodeTree> > parentCandidates;
-        int txThreshold = 30;
-        int rxThreshold = 1;
+        int txThreshold = 38;
+        int rxThreshold = 8;
         int energyProfile = (txThreshold + rxThreshold) / 2;
 
         // Define the < operator for comparison

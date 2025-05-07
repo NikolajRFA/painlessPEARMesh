@@ -676,7 +676,7 @@ namespace painlessmesh {
                 mesh->mScheduler->addTask(this->reportPearDataTask);
                 this->reportPearDataTask.enableDelayed(30 * TASK_SECOND);
             } else {
-                this->runPearTask.set(TASK_MINUTE, TASK_FOREVER, [self]() {
+                this->runPearTask.set(2*TASK_MINUTE, TASK_FOREVER, [self]() {
                     Log(PEAR, "Running pear algorithm!\n");
                     Pear::getInstance().run(self->mesh->asNodeTree());
                     for (const auto& reroute: Pear::getInstance().reroutes) {
@@ -685,7 +685,7 @@ namespace painlessmesh {
                     Pear::getInstance().reroutes.clear();
                 });
                 mesh->mScheduler->addTask(this->runPearTask);
-                this->runPearTask.enableDelayed(2*TASK_MINUTE);
+                this->runPearTask.enableDelayed(3*TASK_MINUTE);
             }
 
 
