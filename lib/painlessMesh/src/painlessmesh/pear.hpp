@@ -295,7 +295,7 @@ namespace painlessmesh {
 
                     String jsonString = buildNewParentJson(rootNodeId);
 
-                    reroutes.insert({id, jsonString});
+                    reroutes.insert({nodeTree->nodeId, jsonString});
                     break;
                 }
             }
