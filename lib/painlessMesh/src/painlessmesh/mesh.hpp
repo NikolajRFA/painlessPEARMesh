@@ -682,6 +682,7 @@ namespace painlessmesh {
                     ENERGY_PROFILE_MAP
                     ENERGY_PROFIlES
                     for (uint32_t chipId: chipIdArray) {
+                        if (chipId == CHIP1) continue;
                         auto energyProfile = energyProfileMap.at(chipId);
                         auto txThreshold = energyProfiles.at(energyProfile).first;
                         auto rxThreshold = energyProfiles.at(energyProfile).second;
