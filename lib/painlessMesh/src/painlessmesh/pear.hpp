@@ -109,10 +109,12 @@ namespace painlessmesh {
          * - Only one device is processed due to the immediate `return` statement inside the loop.
          */
         void run(const protocol::NodeTree &rootNodeTree) {
-            const auto listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
+            if (listOfAllDevices.empty()) listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
             noOfVerifiedDevices = 0;
-            for (const auto &pearNodeTree: listOfAllDevices) {
-                const auto reroutesContainsReroute = reroutes.count(pearNodeTree->nodeId);
+            for (int i = lastCheckedDevice; i < listOfAllDevices.size(); ++i) {
+            lastCheckedDevice++;
+            auto pearNodeTree = listOfAllDevices[i];
+            const auto reroutesContainsReroute = reroutes.count(pearNodeTree->nodeId);
                 if (noOfVerifiedDevices < 10 && !reroutesContainsReroute) {
                     if (deviceExceedsLimit(pearNodeTree->nodeId)) updateParent(pearNodeTree);
                 } else {
@@ -329,8 +331,8 @@ namespace painlessmesh {
          * @note This method assumes that the conversion from `protocol::NodeTree` to `PearNodeTree` is valid through the constructor
          *       `PearNodeTree(child)` where `child` is of type `NodeTree`.
          */
-        std::list<std::shared_ptr<PearNodeTree> > getAllDevicesBreadthFirst(const protocol::NodeTree &rootNodeTree) {
-            std::list<std::shared_ptr<PearNodeTree> > result;
+        std::vector<std::shared_ptr<PearNodeTree> > getAllDevicesBreadthFirst(const protocol::NodeTree &rootNodeTree) {
+            std::vector<std::shared_ptr<PearNodeTree> > result;
             std::queue<std::shared_ptr<PearNodeTree> > queue;
             using namespace painlessmesh::logger;
 
@@ -371,7 +373,8 @@ namespace painlessmesh {
     protected:
         Pear() {
         }
-
+        uint16_t lastCheckedDevice = 0;
+        std::vector<std::shared_ptr<PearNodeTree>> listOfAllDevices;
         uint32_t rootNodeId;
     };
 }
