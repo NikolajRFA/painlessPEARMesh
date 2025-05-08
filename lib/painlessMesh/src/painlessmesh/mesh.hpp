@@ -197,7 +197,7 @@ namespace painlessmesh {
         bool sendPear(uint32_t destId, TSTRING msg) {
             Log(logger::PEAR, "sendPear(): dest=%u msg=%s\n", destId,
                 msg.c_str());
-            auto pear = painlessmesh::protocol::Pear(this->nodeId, destId, msg);
+            auto pear = painlessmesh::protocol::PearMsg(this->nodeId, destId, msg);
             return painlessmesh::router::send<T>(pear, (*this));
         }
 
@@ -291,9 +291,9 @@ namespace painlessmesh {
                     return false;
                 });
             this->callbackList.onPackage(
-                protocol::PEAR,
+                protocol::PEAR_MSG,
                 [this](protocol::Variant variant, std::shared_ptr<T>, uint32_t) {
-                    auto pkg = variant.to<protocol::Pear>();
+                    auto pkg = variant.to<protocol::PearMsg>();
                     onPearReceive(pkg.from, pkg.msg);
                     return false;
                 });
