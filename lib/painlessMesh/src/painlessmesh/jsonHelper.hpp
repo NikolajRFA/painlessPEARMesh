@@ -2,8 +2,7 @@
 #define JSON_HELPER_HPP
 
 #include <ArduinoJson.h>
-
-#include "pear.hpp"
+#include <set>
 
 
 using namespace painlessmesh;

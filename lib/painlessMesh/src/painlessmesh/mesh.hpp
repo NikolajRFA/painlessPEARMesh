@@ -12,6 +12,8 @@
 #include "painlessmesh/jsonHelper.hpp"
 #include <unordered_map>
 #include <vector>
+#include "pear.hpp"
+#include "stopwatch.hpp"
 
 #ifdef PAINLESSMESH_ENABLE_OTA
 #include "painlessmesh/ota.hpp"
@@ -663,11 +665,11 @@ namespace painlessmesh {
                 this->nodeSyncTask.enableDelayed(10 * TASK_SECOND);
 
             if (!mesh->isRoot()) {
-                this->reportPearDataTask.set(30 * TASK_SECOND, TASK_FOREVER, [this, mesh]() {
-                    Log(PEAR, "reportPearDataTask(): Sending pear data\n");
+                this->reportPearDataTask.set(TASK_MINUTE, TASK_FOREVER, [this, mesh]() {
+                    Log(PEAR, "reportPearDataTask(): Sending pear data - time since last send: %i\n", Stopwatch::getInstance().timeSinceLastReportPearDataTask());
 
-                    uint8_t summedTransmissions = mesh->txPeriod + mesh->baseLineTransmissions;
-                    String pearDataString = buildPearReportJson(summedTransmissions, mesh->rxPeriod, mesh->getAvailableNetworks(true));
+                    const uint8_t summedTransmissions = mesh->txPeriod + mesh->baseLineTransmissions;
+                    const String pearDataString = buildPearReportJson(summedTransmissions, mesh->rxPeriod, mesh->getAvailableNetworks(true));
                     mesh->txPeriod = 0;
                     mesh->rxPeriod = 0;
                     mesh->sendPear(layout::getRootNodeId(mesh->asNodeTree()), pearDataString);
@@ -675,11 +677,31 @@ namespace painlessmesh {
                 mesh->mScheduler->addTask(this->reportPearDataTask);
                 this->reportPearDataTask.enableDelayed(30 * TASK_SECOND);
             } else {
-                this->runPearTask.set(TASK_MINUTE, TASK_FOREVER, [self]() {
+                if (Pear::getInstance().pearNodeTreeMap.size() == 1) {
+                    CHIP_ID_ARRAY
+                    ENERGY_PROFILE_MAP
+                    ENERGY_PROFIlES
+                    for (uint32_t chipId: chipIdArray) {
+                        if (chipId == CHIP1) continue;
+                        auto energyProfile = energyProfileMap.at(chipId);
+                        auto txThreshold = energyProfiles.at(energyProfile).first;
+                        auto rxThreshold = energyProfiles.at(energyProfile).second;
+                        Pear::getInstance().pearNodeTreeMap.insert({
+                            chipId, std::make_shared<PearNodeTree>(chipId, txThreshold, rxThreshold)
+                        });
+                    }
+                }
+                this->runPearTask.set(2 * TASK_MINUTE, TASK_FOREVER, [self]() {
+                    Log(PEAR, "Running pear algorithm! - time since last run: %i\n",
+                        Stopwatch::getInstance().timeSinceLastRunPearTask());
                     Pear::getInstance().run(self->mesh->asNodeTree());
+                    for (const auto& reroute: Pear::getInstance().reroutes) {
+                        self->mesh->sendPear(reroute.first, reroute.second);
+                    }
+                    Pear::getInstance().reroutes.clear();
                 });
                 mesh->mScheduler->addTask(this->runPearTask);
-                this->runPearTask.enableDelayed(2*TASK_MINUTE);
+                this->runPearTask.enableDelayed(5*TASK_MINUTE);
             }
 
 
