@@ -686,11 +686,14 @@ namespace painlessmesh {
                         auto energyProfile = energyProfileMap.at(chipId);
                         auto txThreshold = energyProfiles.at(energyProfile).first;
                         auto rxThreshold = energyProfiles.at(energyProfile).second;
-                        Pear::getInstance().pearNodeTreeMap.insert({chipId, std::make_shared<PearNodeTree>(chipId, txThreshold, rxThreshold)});
+                        Pear::getInstance().pearNodeTreeMap.insert({
+                            chipId, std::make_shared<PearNodeTree>(chipId, txThreshold, rxThreshold)
+                        });
                     }
                 }
-                this->runPearTask.set(2*TASK_MINUTE, TASK_FOREVER, [self]() {
-                    Log(PEAR, "Running pear algorithm! - time since last run: %i\n", Stopwatch::getInstance().timeSinceLastRunPearTask());
+                this->runPearTask.set(2 * TASK_MINUTE, TASK_FOREVER, [self]() {
+                    Log(PEAR, "Running pear algorithm! - time since last run: %i\n",
+                        Stopwatch::getInstance().timeSinceLastRunPearTask());
                     Pear::getInstance().run(self->mesh->asNodeTree());
                     for (const auto& reroute: Pear::getInstance().reroutes) {
                         self->mesh->sendPear(reroute.first, reroute.second);
