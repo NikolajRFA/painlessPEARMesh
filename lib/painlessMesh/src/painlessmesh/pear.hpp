@@ -159,20 +159,20 @@ namespace painlessmesh {
          */
         bool deviceExceedsLimit(const uint32_t deviceId) {
             using namespace painlessmesh::logger;
-            Serial.printf( "deviceExceedsLimit(): Checking if node: %u exceeds limit\n", deviceId);
+            Log(PEAR_DEBUG, "deviceExceedsLimit(): Checking if node: %u exceeds limit\n", deviceId);
             //auto pearNodeTree = findPearNodeTreeById(deviceId);
             const auto it = pearNodeTreeMap.find(deviceId);
             if (it == pearNodeTreeMap.end()) return false;
             const auto pearNodeTree = it->second;
-            Serial.printf( "deviceExceedsLimit(): Raw pointer: %p\n", pearNodeTree.get());
-            Serial.printf( "deviceExceedsLimit(): Found pearNodeTree: %u (tx: %u, rx: %u)\n", pearNodeTree->nodeId,
+            Log(PEAR_DEBUG, "deviceExceedsLimit(): Raw pointer: %p\n", pearNodeTree.get());
+            Log(PEAR_DEBUG, "deviceExceedsLimit(): Found pearNodeTree: %u (tx: %u, rx: %u)\n", pearNodeTree->nodeId,
                 pearNodeTree->periodTx, pearNodeTree->periodRx);
             if (deviceExceedsThreshold(pearNodeTree)) {
-                Serial.printf( "deviceExceedsLimit(): Node: %u exceeds the threshold: rx: %i, tx: %i\n", deviceId,
+                Log(PEAR_DEBUG, "deviceExceedsLimit(): Node: %u exceeds the threshold: rx: %i, tx: %i\n", deviceId,
                     pearNodeTree->rxThreshold, pearNodeTree->txThreshold);
                 return true;
             }
-            Serial.printf(
+            Log(PEAR_DEBUG,
                 "deviceExceedsLimit(): Incrementing verified devices as node: %u does not exceed the threshold\n",
                 deviceId);
             noOfVerifiedDevices++;
