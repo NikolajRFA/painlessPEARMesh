@@ -31,7 +31,7 @@ namespace painlessmesh {
             CONTROL = 7, // deprecated
             BROADCAST = 8, // application data for everyone
             SINGLE = 9, // application data for a single node
-            PEAR = 10
+            PEAR_MSG = 10
         };
 
         enum TimeType {
@@ -95,22 +95,22 @@ namespace painlessmesh {
          * @brief PEAR package
          *
          */
-        class Pear : public Single {
+        class PearMsg : public Single {
         public:
-            int type = PEAR;
+            int type = PEAR_MSG;
 
             using Single::Single;
 
-            Pear() {
-                type = PEAR;
+            PearMsg() {
+                type = PEAR_MSG;
             }
 
-            Pear(uint32_t fromID, uint32_t destID, TSTRING &message) : Single(fromID, destID, message) {
-                type = PEAR;
+            PearMsg(uint32_t fromID, uint32_t destID, TSTRING &message) : Single(fromID, destID, message) {
+                type = PEAR_MSG;
             }
 
-            Pear(JsonObject jsonObj) : Single(jsonObj) {
-                type = PEAR;
+            PearMsg(JsonObject jsonObj) : Single(jsonObj) {
+                type = PEAR_MSG;
             }
 
             JsonObject addTo(JsonObject &&jsonObj) const override {
@@ -564,7 +564,7 @@ namespace painlessmesh {
              *
              * @param pear The pear package
              */
-            Variant(Pear pear)
+            Variant(PearMsg pear)
 #if ARDUINOJSON_VERSION_MAJOR == 7
                 : jsonBuffer() {
 #else
@@ -697,7 +697,7 @@ namespace painlessmesh {
                     return (router::Type) jsonObj["routing"].as<int>();
 
                 auto type = this->type();
-                if (type == SINGLE || type == TIME_DELAY || type == PEAR) return router::SINGLE;
+                if (type == SINGLE || type == TIME_DELAY || type == PEAR_MSG) return router::SINGLE;
                 if (type == BROADCAST) return router::BROADCAST;
                 if (type == NODE_SYNC_REQUEST || type == NODE_SYNC_REPLY ||
                     type == TIME_SYNC)
@@ -762,8 +762,8 @@ namespace painlessmesh {
         }
 
         template<>
-        inline bool Variant::is<Pear>() {
-            return jsonObj["type"].as<int>() == PEAR;
+        inline bool Variant::is<PearMsg>() {
+            return jsonObj["type"].as<int>() == PEAR_MSG;
         }
 
         template<>
