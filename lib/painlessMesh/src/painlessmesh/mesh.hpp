@@ -677,7 +677,7 @@ namespace painlessmesh {
                 mesh->mScheduler->addTask(this->reportPearDataTask);
                 this->reportPearDataTask.enableDelayed(30 * TASK_SECOND);
             } else {
-                if (Pear::getInstance().pearNodeTreeMap.empty()) {
+                if (Pear::getInstance().pearNodeTreeMap.size() == 1) {
                     CHIP_ID_ARRAY
                     ENERGY_PROFILE_MAP
                     ENERGY_PROFIlES
