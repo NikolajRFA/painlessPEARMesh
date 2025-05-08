@@ -7,6 +7,7 @@ void timeSinceLastReportPearDataTask_delay500_true()
     int timeSinceLastReportPearDataTaskInitial = Stopwatch::getInstance().timeSinceLastReportPearDataTask();
     delay(500);
     int timeSinceLastReportPearDataTask = Stopwatch::getInstance().timeSinceLastReportPearDataTask();
+    TEST_MESSAGE(String(timeSinceLastReportPearDataTask).c_str());
 
     TEST_ASSERT_EQUAL_INT(0, timeSinceLastReportPearDataTaskInitial);
     TEST_ASSERT_TRUE(timeSinceLastReportPearDataTask >= 500 && timeSinceLastReportPearDataTask <= 510);

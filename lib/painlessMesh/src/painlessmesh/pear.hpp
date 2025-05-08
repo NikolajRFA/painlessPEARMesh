@@ -82,6 +82,8 @@ namespace painlessmesh {
             instance->noOfVerifiedDevices = 0;
             instance->pearNodeTreeMap.clear();
             instance->reroutes.clear();
+            instance->lastCheckedDevice = 0;
+            instance->listOfAllDevices.clear();
         }
 
         // Delete copy constructor and assignment operator
@@ -109,23 +111,34 @@ namespace painlessmesh {
          * - Only one device is processed due to the immediate `return` statement inside the loop.
          */
         void run(const protocol::NodeTree &rootNodeTree) {
-            if (listOfAllDevices.empty()) listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
-            noOfVerifiedDevices = 0;
-            for (int i = lastCheckedDevice; i < listOfAllDevices.size(); ++i) {
-            lastCheckedDevice++;
-            auto pearNodeTree = listOfAllDevices[i];
-            const auto reroutesContainsReroute = reroutes.count(pearNodeTree->nodeId);
-                if (noOfVerifiedDevices < 10 && !reroutesContainsReroute) {
-                    if (deviceExceedsLimit(pearNodeTree->nodeId)) updateParent(pearNodeTree);
+            if (listOfAllDevices.empty()) {
+                listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
+            }
+
+            constexpr int MAX_VERIFIED_DEVICES = 10;
+            using namespace painlessmesh::logger;
+
+            while (lastCheckedDevice < listOfAllDevices.size() && noOfVerifiedDevices < MAX_VERIFIED_DEVICES) {
+                auto pearNodeTree = listOfAllDevices[lastCheckedDevice++];
+                Log(PEAR,"Running pear on device: %u\n", pearNodeTree->nodeId);
+                const bool hasReroute = reroutes.count(pearNodeTree->nodeId) > 0;
+
+                if (!hasReroute && deviceExceedsLimit(pearNodeTree->nodeId)) {
+                    updateParent(pearNodeTree);
                 } else {
-                    using namespace painlessmesh::logger;
-                    Log(PEAR_DEBUG, "Number of verified devices: %u\n", noOfVerifiedDevices);
-                    if (reroutesContainsReroute) Log(PEAR_DEBUG, "Reroutes already contains a reroute for %u\n",
-                                                     pearNodeTree->nodeId);
-                    return;
+                    ++noOfVerifiedDevices;
+                }
+            }
+
+            if (noOfVerifiedDevices >= MAX_VERIFIED_DEVICES) {
+                Log(PEAR_DEBUG, "Number of verified devices: %u\n", noOfVerifiedDevices);
+                if (reroutes.count(listOfAllDevices[lastCheckedDevice - 1]->nodeId)) {
+                    Log(PEAR_DEBUG, "Reroutes already contains a reroute for %u\n",
+                        listOfAllDevices[lastCheckedDevice - 1]->nodeId);
                 }
             }
         }
+
 
         /**
          * @brief Determines whether a given device exceeds both transmission and reception thresholds.
@@ -174,10 +187,6 @@ namespace painlessmesh {
                     pearNodeTree->rxThreshold, pearNodeTree->txThreshold);
                 return true;
             }
-            Log(PEAR_DEBUG,
-                "deviceExceedsLimit(): Incrementing verified devices as node: %u does not exceed the threshold\n",
-                deviceId);
-            noOfVerifiedDevices++;
             return false;
         }
 
@@ -373,8 +382,10 @@ namespace painlessmesh {
     protected:
         Pear() {
         }
+
         uint16_t lastCheckedDevice = 0;
-        std::vector<std::shared_ptr<PearNodeTree>> listOfAllDevices;
+        uint16_t numberOfRunsWithoutReroutes = 0;
+        std::vector<std::shared_ptr<PearNodeTree> > listOfAllDevices;
         uint32_t rootNodeId;
     };
 }
