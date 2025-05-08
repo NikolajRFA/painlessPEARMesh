@@ -301,12 +301,14 @@ namespace painlessmesh {
             }
 
             if (pearNodeTreeMap.count(nodeTree->nodeId)) {
+                Log(PEAR_DEBUG, "processReceivedData(): Node being processed found in tree - updating data\n");
                 const auto foundPearNodeTree = pearNodeTreeMap[nodeTree->nodeId];
                 foundPearNodeTree->periodTx = periodTx;
                 foundPearNodeTree->periodRx = periodRx;
                 foundPearNodeTree->parentCandidates = parentCandidates;
                 foundPearNodeTree->subs = nodeTree->subs;
             } else {
+                Log(PEAR_DEBUG, "processReceivedData(): Node being processed NOT found in tree - inserting data\n");
                 pearNodeTreeMap.insert({
                     nodeTree->nodeId, std::make_shared<PearNodeTree>(nodeTree, periodTx, periodRx, parentCandidates)
                 });
