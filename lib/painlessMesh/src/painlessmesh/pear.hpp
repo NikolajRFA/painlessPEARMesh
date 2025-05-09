@@ -85,6 +85,8 @@ namespace painlessmesh {
             instance->reroutes.clear();
             instance->lastCheckedDevice = 0;
             instance->listOfAllDevices.clear();
+            instance->numberOfRunsWithoutReroutes = 0;
+            instance->numberOfRunsWithoutReroutesNeeded = 0;
         }
 
         // Delete copy constructor and assignment operator
@@ -115,14 +117,15 @@ namespace painlessmesh {
             if (listOfAllDevices.empty()) {
                 Stopwatch::getInstance().timeSinceFirstRunPearTimestamp();
                 listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
-                numberOfRunsWithoutReroutesNeeded = listOfAllDevices.size()/MAX_VERIFIED_DEVICES;
+                numberOfRunsWithoutReroutesNeeded =
+                        (listOfAllDevices.size() + MAX_VERIFIED_DEVICES - 1) / MAX_VERIFIED_DEVICES;
             }
 
             using namespace painlessmesh::logger;
 
             while (lastCheckedDevice < listOfAllDevices.size() && noOfVerifiedDevices < MAX_VERIFIED_DEVICES) {
                 auto pearNodeTree = listOfAllDevices[lastCheckedDevice++];
-                Log(PEAR,"Running pear on device: %u\n", pearNodeTree->nodeId);
+                Log(PEAR, "Running pear on device: %u\n", pearNodeTree->nodeId);
                 const bool hasReroute = reroutes.count(pearNodeTree->nodeId) > 0;
 
                 if (!hasReroute && deviceExceedsLimit(pearNodeTree->nodeId)) {
@@ -138,7 +141,8 @@ namespace painlessmesh {
             }
 
             if (numberOfRunsWithoutReroutes == numberOfRunsWithoutReroutesNeeded) {
-                Log(PEAR, "NETWORK IS STABLE!\nTime since first pear run: %i\n", Stopwatch::getInstance().timeSinceFirstRunPearTimestamp());
+                Log(PEAR, "NETWORK IS STABLE!\nTime since first pear run: %i\n",
+                    Stopwatch::getInstance().timeSinceFirstRunPearTimestamp());
             }
         }
 
@@ -389,8 +393,8 @@ namespace painlessmesh {
         uint16_t lastCheckedDevice = 0;
         std::vector<std::shared_ptr<PearNodeTree> > listOfAllDevices;
         uint32_t rootNodeId;
-        uint8_t numberOfRunsWithoutReroutesNeeded;
-        uint8_t numberOfRunsWithoutReroutes;
+        uint8_t numberOfRunsWithoutReroutesNeeded = 0;
+        uint8_t numberOfRunsWithoutReroutes = 0;
         const int MAX_VERIFIED_DEVICES = 10;
     };
 }
