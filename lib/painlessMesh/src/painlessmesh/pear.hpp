@@ -12,6 +12,7 @@
 #include "protocol.hpp"
 #include "layout.hpp"
 #include "logger.hpp"
+#include "stopwatch.hpp"
 
 namespace painlessmesh {
     class PearNodeTree : public protocol::NodeTree {
@@ -112,6 +113,7 @@ namespace painlessmesh {
          */
         void run(const protocol::NodeTree &rootNodeTree) {
             if (listOfAllDevices.empty()) {
+                Stopwatch::getInstance().timeSinceFirstRunPearTimestamp();
                 listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
                 numberOfRunsWithoutReroutesNeeded = listOfAllDevices.size()/MAX_VERIFIED_DEVICES;
             }
@@ -136,7 +138,7 @@ namespace painlessmesh {
             }
 
             if (numberOfRunsWithoutReroutes == numberOfRunsWithoutReroutesNeeded) {
-                Log(PEAR, "NETWORK IS STABLE!\nNETWORK IS STABLE!\nNETWORK IS STABLE!\n");
+                Log(PEAR, "NETWORK IS STABLE!\nTime since first pear run: %i\n", Stopwatch::getInstance().timeSinceFirstRunPearTimestamp());
             }
         }
 
@@ -389,7 +391,7 @@ namespace painlessmesh {
         uint32_t rootNodeId;
         uint8_t numberOfRunsWithoutReroutesNeeded;
         uint8_t numberOfRunsWithoutReroutes;
-        constexpr int MAX_VERIFIED_DEVICES = 10;
+        const int MAX_VERIFIED_DEVICES = 10;
     };
 }
 

@@ -35,6 +35,9 @@ void timeSinceLastrunPearTask_delay500x2_true()
     delay(500);
     int timeSinceLastRunPearTaskSecondInterval = Stopwatch::getInstance().timeSinceLastRunPearTask();
 
+    TEST_MESSAGE(String(timeSinceLastRunPearTaskFirstInterval).c_str());
+    TEST_MESSAGE(String(timeSinceLastRunPearTaskSecondInterval).c_str());
+
     TEST_ASSERT_EQUAL_INT(0, timeSinceLastRunPearTaskInitial);
     TEST_ASSERT_TRUE(timeSinceLastRunPearTaskFirstInterval >= 500 && timeSinceLastRunPearTaskFirstInterval <= 510);
     TEST_ASSERT_TRUE(timeSinceLastRunPearTaskSecondInterval >= 500 && timeSinceLastRunPearTaskSecondInterval <= 510);
