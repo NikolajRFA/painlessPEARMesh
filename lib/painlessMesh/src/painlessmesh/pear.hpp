@@ -248,6 +248,16 @@ namespace painlessmesh {
                             Log(PEAR_DEBUG, "updateParent(): Candidate exceeds threshold, skipping");
                             continue;
                         }
+                        bool rerouteToSub = false;
+                        for (const auto& sub: nodeToReroute->subs) {
+                            if (sub.nodeId == candidate->nodeId) {
+                                rerouteToSub = true;
+                                Log(PEAR_DEBUG, "updateParent(): The candidate is a sub of the node being rerouted, skipping");
+                                break;
+                            }
+                        }
+                        if (rerouteToSub) continue;
+
                         String jsonString = buildNewParentJson(candidate->nodeId);
 
                         reroutes.insert({nodeToReroute->nodeId, jsonString});
