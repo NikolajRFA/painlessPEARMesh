@@ -89,28 +89,35 @@ void run_parentCandidateExceedsLimit_reroutesIsEmpty(void){
     auto node5 = painlessmesh::protocol::NodeTree(5, false);
     auto node6 = painlessmesh::protocol::NodeTree(6, false);
 
-    node1.subs.push_back(node2);
-    node1.subs.push_back(node3);
     node3.subs.push_back(node5);
     node3.subs.push_back(node6);
     node2.subs.push_back(node4);
+    node1.subs.push_back(node2);
+    node1.subs.push_back(node3);
 
     JsonDocument docNode4;
-    docNode4["txPeriod"] = 200;
-    docNode4["rxPeriod"] = 125;
+    docNode4["txPeriod"] = 100; // Exceeds base value of 38, sub(s) should be rerouted
+    docNode4["rxPeriod"] = 100;
     JsonArray array2 = docNode4["parentCandidates"].to<JsonArray>();
     array2.add(node3.nodeId);
 
     JsonDocument docNode3;
-    docNode3["txPeriod"] = 400;
+    docNode3["txPeriod"] = 400; // Exceeds base value of 38, therefore we cannot reroute to this node
     docNode3["rxPeriod"] = 300;
 
-    pear.processReceivedData(docNode3, std::make_shared<protocol::NodeTree>(node3));
+    JsonDocument docNode5;
+    docNode5["txPeriod"] = 200; // sub of 3, should try to reroute to 4, but 4 exceeds
+    docNode5["rxPeriod"] = 200;
+    JsonArray array3 = docNode5["ParentCandidates"].to<JsonArray>();
+    array3.add(node4.nodeId);
+
     pear.processReceivedData(docNode4, std::make_shared<protocol::NodeTree>(node4));
+    pear.processReceivedData(docNode3, std::make_shared<protocol::NodeTree>(node3));
+    pear.processReceivedData(docNode5, std::make_shared<protocol::NodeTree>(node5));
 
     pear.run(node1);
 
-    TEST_ASSERT_EQUAL_INT(0, pear.noOfVerifiedDevices);
+    TEST_ASSERT_EQUAL_INT(2, pear.noOfVerifiedDevices);
 
     TEST_ASSERT_EQUAL_INT(0, pear.reroutes.count(node4.nodeId));
 }
@@ -209,67 +216,45 @@ void getAllDevicesBreadthFirst_rootNodeTree_listOfPearNodesBreadthFirst(void){
   }
 }
 
-void test_run_should_process_multiple_nodes_until_threshold(void) {
+void test_run_should_reroute_1_node(void) {
   using namespace painlessmesh;
-  using protocol::NodeTree;
-
   Pear::reset();
   Pear& pear = Pear::getInstance();
+  auto node1 = painlessmesh::protocol::NodeTree(1, true);
+  auto node2 = painlessmesh::protocol::NodeTree(2, false);
+  auto node3 = painlessmesh::protocol::NodeTree(3, false);
+  auto node4 = painlessmesh::protocol::NodeTree(4, false);
+  auto node5 = painlessmesh::protocol::NodeTree(5, false);
+  auto node6 = painlessmesh::protocol::NodeTree(6, false);
 
-  // Step 1: Build deepest child first
-  protocol::NodeTree child2(3, false);
+  node4.subs.push_back(node5);
+  node4.subs.push_back(node6);
+  node2.subs.push_back(node4);
+  node1.subs.push_back(node2);
+  node1.subs.push_back(node3);
 
-  // Step 2: Then build its parent and attach child2
-  protocol::NodeTree child1(2, false);
-  child1.subs.push_back(child2);
+  JsonDocument docNode4;
+  docNode4["txPeriod"] = 100; // Exceeds base value of 38, should be rerouted
+  docNode4["rxPeriod"] = 100; // Exceeds base value of 8, should be rerouted
 
-  // Step 3: Create another node that doesn't exceed the limit
-  protocol::NodeTree child4(4, false);
 
-  // Step 4: Now build the root and attach both child1 and child4
-  protocol::NodeTree rootNode(1, true);
-  rootNode.subs.push_back(child1);
-  rootNode.subs.push_back(child4);
+  JsonDocument docNode3;
+  docNode3["txPeriod"] = 0; // does not exceed, so we can reroute to this
+  docNode3["rxPeriod"] = 0;
 
-  // Create PearNodes and assign periods
-  std::shared_ptr<PearNodeTree> rootPear = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(rootNode)));
+  JsonDocument docNode5;
+  docNode5["txPeriod"] = 100; // Exceeds base value of 38, should be rerouted
+  docNode5["rxPeriod"] = 100; // Exceeds base value of 8, should be rerouted
+  const JsonArray parentCandidates = docNode5["parentCandidates"].to<JsonArray>();
+  parentCandidates.add(node3.nodeId);
 
-  std::shared_ptr<PearNodeTree> child1Pear = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(child1)));
-  child1Pear->periodTx = 999; // exceeds
-  child1Pear->periodRx = 999; // exceeds
+  pear.processReceivedData(docNode4, std::make_shared<protocol::NodeTree>(node4));
+  pear.processReceivedData(docNode3, std::make_shared<protocol::NodeTree>(node3));
+  pear.processReceivedData(docNode5, std::make_shared<protocol::NodeTree>(node5));
 
-  std::shared_ptr<PearNodeTree> child2Pear = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(child2)));
-  child2Pear->periodTx = 25; // does not exceed
-  child2Pear->periodRx = 0;  // does not exceed
+  pear.run(node1);
 
-  std::shared_ptr<PearNodeTree> child4Pear = std::make_shared<PearNodeTree>(PearNodeTree(std::make_shared<NodeTree>(child4)));
-  child4Pear->periodTx = 10;  // does not exceed
-  child4Pear->periodRx = 0;  // does not exceed
-
-  // Connect PearNodeTree structure (manually mirror NodeTree)
-  child1Pear->subs.push_back(child2);
-
-  // Add parent candidates
-  child1Pear->parentCandidates.push_back(rootPear);
-  child2Pear->parentCandidates.push_back(child4Pear);  // Now has a valid alternate parent
-  child4Pear->parentCandidates.push_back(rootPear);
-
-  // Load the map
-  pear.pearNodeTreeMap[1] = rootPear;
-  pear.pearNodeTreeMap[2] = child1Pear;
-  pear.pearNodeTreeMap[3] = child2Pear;
-  pear.pearNodeTreeMap[4] = child4Pear;
-
-  // Call run
-  pear.run(rootNode);
-
-  // Expectations:
-  // - child 1 exceeds threshold → reroute subs
-  // - child 2 is sub to child 1 - we want to reroute this node
-  // - Child 2 should be rerouted to child 4
-  // - Child 3 and 4 are checked using deviceExceedsLimit() - they are within the limit
-  // - this means noOfVerifiedDevices is incremented twice
-  TEST_ASSERT_EQUAL_UINT32(2, pear.noOfVerifiedDevices);
+  TEST_ASSERT_EQUAL_UINT32(4, pear.noOfVerifiedDevices);
   TEST_ASSERT_EQUAL_UINT32(1, pear.reroutes.size());
-  TEST_ASSERT_TRUE(pear.reroutes.count(3)); // node 3 rerouted to node 4
+  TEST_ASSERT_TRUE(pear.reroutes.count(5)); // node 4 rerouted to node 3
 }

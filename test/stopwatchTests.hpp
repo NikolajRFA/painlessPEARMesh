@@ -7,6 +7,7 @@ void timeSinceLastReportPearDataTask_delay500_true()
     int timeSinceLastReportPearDataTaskInitial = Stopwatch::getInstance().timeSinceLastReportPearDataTask();
     delay(500);
     int timeSinceLastReportPearDataTask = Stopwatch::getInstance().timeSinceLastReportPearDataTask();
+    TEST_MESSAGE(String(timeSinceLastReportPearDataTask).c_str());
 
     TEST_ASSERT_EQUAL_INT(0, timeSinceLastReportPearDataTaskInitial);
     TEST_ASSERT_TRUE(timeSinceLastReportPearDataTask >= 500 && timeSinceLastReportPearDataTask <= 510);
@@ -33,6 +34,9 @@ void timeSinceLastrunPearTask_delay500x2_true()
     int timeSinceLastRunPearTaskFirstInterval = Stopwatch::getInstance().timeSinceLastRunPearTask();
     delay(500);
     int timeSinceLastRunPearTaskSecondInterval = Stopwatch::getInstance().timeSinceLastRunPearTask();
+
+    TEST_MESSAGE(String(timeSinceLastRunPearTaskFirstInterval).c_str());
+    TEST_MESSAGE(String(timeSinceLastRunPearTaskSecondInterval).c_str());
 
     TEST_ASSERT_EQUAL_INT(0, timeSinceLastRunPearTaskInitial);
     TEST_ASSERT_TRUE(timeSinceLastRunPearTaskFirstInterval >= 500 && timeSinceLastRunPearTaskFirstInterval <= 510);

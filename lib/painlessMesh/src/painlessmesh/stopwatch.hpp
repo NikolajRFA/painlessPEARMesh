@@ -45,16 +45,32 @@ namespace painlessmesh
             return timeSinceLastRunPearTask;
         }
 
+        int timeSinceFirstRunPearTimestamp()
+        {
+            const unsigned long now = millis();
+            if (firstRunPearTimestamp == 0)
+            {
+                firstRunPearTimestamp = now;
+                return 0;
+            }
+
+            int timeSinceFirstRunPearTask = now - firstRunPearTimestamp;
+            firstRunPearTimestamp = now;
+            return timeSinceFirstRunPearTask;
+        }
+
         void reset()
         {
             lastReportPearDataTaskTimestamp = 0;
             lastRunPearTaskTimestamp = 0;
+            firstRunPearTimestamp = 0;
         }
 
     protected:
         Stopwatch(){}
         uint32_t lastReportPearDataTaskTimestamp = 0;
         uint32_t lastRunPearTaskTimestamp = 0;
+        uint32_t firstRunPearTimestamp = 0;
     };
 }
 
