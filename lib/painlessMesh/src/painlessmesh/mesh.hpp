@@ -135,7 +135,7 @@ namespace painlessmesh {
                         auto txThreshold = energyProfiles.at(energyProfile).first;
                         auto rxThreshold = energyProfiles.at(energyProfile).second;
                         Pear::getInstance().pearNodeTreeMap.insert({
-                            chipId, std::make_shared<PearNodeTree>(chipId, txThreshold, rxThreshold)
+                            chipId, std::make_shared<PearNodeTree>(chipId, txThreshold, rxThreshold, energyProfile)
                         });
                     }
                 }

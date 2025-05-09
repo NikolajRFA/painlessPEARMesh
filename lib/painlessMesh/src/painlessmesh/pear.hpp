@@ -22,7 +22,7 @@ namespace painlessmesh {
         std::list<std::shared_ptr<PearNodeTree> > parentCandidates;
         int txThreshold = 38;
         int rxThreshold = 8;
-        int energyProfile = (txThreshold + rxThreshold) / 2;
+        int energyProfile = 999; // Initialised as 999 to indicate it hasn't been set.
 
         // Define the < operator for comparison
         bool operator<(const PearNodeTree &other) const {
@@ -63,11 +63,12 @@ namespace painlessmesh {
             this->rxThreshold = rxThreshold;
         }
 
-        PearNodeTree(const uint32_t nodeId, const int txThreshold, const int rxThreshold) {
+        PearNodeTree(const uint32_t nodeId, const int txThreshold, const int rxThreshold, const int energyProfile) {
             this->nodeId = nodeId;
             this->root = false;
             this->txThreshold = txThreshold;
             this->rxThreshold = rxThreshold;
+            this->energyProfile = energyProfile;
         }
     };
 
