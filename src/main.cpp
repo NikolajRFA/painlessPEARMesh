@@ -78,6 +78,7 @@ void setup() {
         mesh.setDontConnect(true);
         mesh.setRoot();
     }
+    mesh.initPearTasks();
     mesh.setContainsRoot();
 
     mesh.onReceive(&receivedCallback);

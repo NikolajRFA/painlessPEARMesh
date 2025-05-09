@@ -1,5 +1,4 @@
 #include "unity.h"
-#include "painlessMeshSTA.h"
 #include "compareWiFiAPRecordsTests.hpp"
 #include "containsTargetNodeIdTests.hpp"
 #include "jsonHelperTests.hpp"
