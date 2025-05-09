@@ -113,9 +113,9 @@ namespace painlessmesh {
         void run(const protocol::NodeTree &rootNodeTree) {
             if (listOfAllDevices.empty()) {
                 listOfAllDevices = getAllDevicesBreadthFirst(rootNodeTree);
+                numberOfRunsWithoutReroutesNeeded = listOfAllDevices.size()/MAX_VERIFIED_DEVICES;
             }
 
-            constexpr int MAX_VERIFIED_DEVICES = 10;
             using namespace painlessmesh::logger;
 
             while (lastCheckedDevice < listOfAllDevices.size() && noOfVerifiedDevices < MAX_VERIFIED_DEVICES) {
@@ -125,17 +125,18 @@ namespace painlessmesh {
 
                 if (!hasReroute && deviceExceedsLimit(pearNodeTree->nodeId)) {
                     updateParent(pearNodeTree);
+                    numberOfRunsWithoutReroutes = 0;
                 } else {
                     ++noOfVerifiedDevices;
                 }
             }
 
-            if (noOfVerifiedDevices >= MAX_VERIFIED_DEVICES) {
-                Log(PEAR_DEBUG, "Number of verified devices: %u\n", noOfVerifiedDevices);
-                if (reroutes.count(listOfAllDevices[lastCheckedDevice - 1]->nodeId)) {
-                    Log(PEAR_DEBUG, "Reroutes already contains a reroute for %u\n",
-                        listOfAllDevices[lastCheckedDevice - 1]->nodeId);
-                }
+            if (reroutes.size() == 0) {
+                numberOfRunsWithoutReroutes++;
+            }
+
+            if (numberOfRunsWithoutReroutes == numberOfRunsWithoutReroutesNeeded) {
+                Log(PEAR, "NETWORK IS STABLE!\nNETWORK IS STABLE!\nNETWORK IS STABLE!\n");
             }
         }
 
@@ -384,9 +385,11 @@ namespace painlessmesh {
         }
 
         uint16_t lastCheckedDevice = 0;
-        uint16_t numberOfRunsWithoutReroutes = 0;
         std::vector<std::shared_ptr<PearNodeTree> > listOfAllDevices;
         uint32_t rootNodeId;
+        uint8_t numberOfRunsWithoutReroutesNeeded;
+        uint8_t numberOfRunsWithoutReroutes;
+        constexpr int MAX_VERIFIED_DEVICES = 10;
     };
 }
 
