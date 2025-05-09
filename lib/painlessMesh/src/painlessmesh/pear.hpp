@@ -248,6 +248,10 @@ namespace painlessmesh {
                             Log(PEAR_DEBUG, "updateParent(): Candidate exceeds threshold, skipping");
                             continue;
                         }
+                        if (std::find(nodeToReroute->subs.begin(), nodeToReroute->subs.end(), protocol::NodeTree(candidate->nodeId, false)) != nodeToReroute->subs.end()) {
+                            Log(PEAR_DEBUG, "updateParent(): The candidate is a sub of the node being rerouted, skipping");
+                            continue;
+                        }
                         String jsonString = buildNewParentJson(candidate->nodeId);
 
                         reroutes.insert({nodeToReroute->nodeId, jsonString});
