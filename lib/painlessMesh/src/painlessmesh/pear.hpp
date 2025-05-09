@@ -26,7 +26,7 @@ namespace painlessmesh {
 
         // Define the < operator for comparison
         bool operator<(const PearNodeTree &other) const {
-            return periodRx > other.periodRx;
+            return periodTx > other.periodTx;
         }
 
         bool operator==(const PearNodeTree &other) const {
