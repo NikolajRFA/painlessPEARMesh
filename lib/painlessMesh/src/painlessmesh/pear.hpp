@@ -198,6 +198,16 @@ namespace painlessmesh {
             return false;
         }
 
+        static bool isNodeInSubs(const std::shared_ptr<PearNodeTree> &parentNode,
+                                 const std::shared_ptr<PearNodeTree> &potentialSub) {
+            for (const auto &sub: parentNode->subs) {
+                if (sub.nodeId == potentialSub->nodeId) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /**
          * @brief Evaluates and updates potential parent nodes for the given PearNodeTree based on transmission priorities and thresholds.
          *
@@ -242,29 +252,21 @@ namespace painlessmesh {
                 Log(PEAR_DEBUG, "updateParent(): Checking if node: %u is able to be rerouted to a valid candidate\n",
                     nodeToReroute->nodeId);
                 if (!nodeToReroute->parentCandidates.empty()) {
-                    for (const auto &candidate: nodeToReroute->parentCandidates) {
-                        Log(PEAR_DEBUG, "updateParent(): Checking candidate %u: rx %d, tx %d\n", candidate->nodeId,
-                            candidate->periodRx, candidate->periodTx);
-                        if (deviceExceedsThreshold(candidate)) {
-                            Log(PEAR_DEBUG, "updateParent(): Candidate exceeds threshold, skipping");
+                    for (const auto &candidate : nodeToReroute->parentCandidates) {
+                        Log(PEAR_DEBUG, "updateParent(): Checking candidate %u: rx %d, tx %d\n", candidate->nodeId, candidate->periodRx, candidate->periodTx);
+
+                        if (deviceExceedsThreshold(candidate) || isNodeInSubs(nodeToReroute, candidate)) {
                             continue;
                         }
-                        bool rerouteToSub = false;
-                        for (const auto& sub: nodeToReroute->subs) {
-                            if (sub.nodeId == candidate->nodeId) {
-                                rerouteToSub = true;
-                                Log(PEAR_DEBUG, "updateParent(): The candidate is a sub of the node being rerouted, skipping");
-                                break;
-                            }
+
+                        if (candidate->energyProfile <= nodeToReroute->energyProfile) {
+                            String jsonString = buildNewParentJson(candidate->nodeId);
+                            reroutes.insert({nodeToReroute->nodeId, jsonString});
+                            Log(PEAR, "updateParent(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
+                            break;
                         }
-                        if (rerouteToSub) continue;
-
-                        String jsonString = buildNewParentJson(candidate->nodeId);
-
-                        reroutes.insert({nodeToReroute->nodeId, jsonString});
-                        Log(PEAR, "updateParent(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
-                        break;
                     }
+
                 }
             }
         }
