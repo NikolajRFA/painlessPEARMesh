@@ -258,21 +258,28 @@ namespace painlessmesh {
                 Log(PEAR_DEBUG, "updateParent(): Checking if node: %u is able to be rerouted to a valid candidate\n",
                     nodeToReroute->nodeId);
                 if (!nodeToReroute->parentCandidates.empty()) {
-                    for (const auto &candidate : nodeToReroute->parentCandidates) {
-                        Log(PEAR_DEBUG, "updateParent(): Checking candidate %u: rx %d, tx %d\n", candidate->nodeId, candidate->periodRx, candidate->periodTx);
+
+                    std::set<std::shared_ptr<PearNodeTree>, PearNodeTree::compareByEnergyProfile>
+                            parentCandidatesSortedByEnergyProfile;
+                    for (const auto &candidate: nodeToReroute->parentCandidates) {
+                        if (candidate->energyProfile <= nodeToReroute->energyProfile) {
+                            parentCandidatesSortedByEnergyProfile.insert(candidate);
+                        }
+                    }
+
+                    for (const auto &candidate: parentCandidatesSortedByEnergyProfile) {
+                        Log(PEAR_DEBUG, "updateParent(): Checking candidate %u: rx %d, tx %d\n", candidate->nodeId,
+                            candidate->periodRx, candidate->periodTx);
 
                         if (deviceExceedsThreshold(candidate) || isNodeInSubs(nodeToReroute, candidate)) {
                             continue;
                         }
 
-                        if (candidate->energyProfile <= nodeToReroute->energyProfile) {
-                            String jsonString = buildNewParentJson(candidate->nodeId);
-                            reroutes.insert({nodeToReroute->nodeId, jsonString});
-                            Log(PEAR, "updateParent(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
-                            break;
-                        }
+                        String jsonString = buildNewParentJson(candidate->nodeId);
+                        reroutes.insert({nodeToReroute->nodeId, jsonString});
+                        Log(PEAR, "updateParent(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
+                        break;
                     }
-
                 }
             }
         }
