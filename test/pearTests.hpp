@@ -258,3 +258,28 @@ void test_run_should_reroute_1_node(void) {
   TEST_ASSERT_EQUAL_UINT32(1, pear.reroutes.size());
   TEST_ASSERT_TRUE(pear.reroutes.count(5)); // node 4 rerouted to node 3
 }
+
+
+void energyProfileSetInsert_unorderedEnergyProfiles_setWithOrderedEnergyProfilesAsc(void){
+  using namespace painlessmesh;
+  std::set<std::shared_ptr<PearNodeTree>, PearNodeTree::compareByEnergyProfile> pearNodeTreesSortedByEnergyProfiles;
+
+  auto low = std::make_shared<PearNodeTree>(1, 20, 10, 5);
+  auto medium = std::make_shared<PearNodeTree>(2, 20, 10, 3);
+  auto high = std::make_shared<PearNodeTree>(3, 20, 10, 1);
+
+  pearNodeTreesSortedByEnergyProfiles.insert(medium);
+  pearNodeTreesSortedByEnergyProfiles.insert(high);
+  pearNodeTreesSortedByEnergyProfiles.insert(low);
+
+  std::list<std::shared_ptr<PearNodeTree>> expectedList = {high, medium, low};
+
+
+  auto it1 = expectedList.begin();
+  auto it2 = pearNodeTreesSortedByEnergyProfiles.begin();
+  while (it1 != expectedList.end() && it2 != pearNodeTreesSortedByEnergyProfiles.end()) {
+    TEST_ASSERT_TRUE(**it1 == **it2); // Assumes operator== is defined for PearNodeTree
+    ++it1;
+    ++it2;
+  }
+}
