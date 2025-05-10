@@ -36,6 +36,12 @@ namespace painlessmesh {
                    && parentCandidates == other.parentCandidates;
         }
 
+        struct compareByEnergyProfile {
+            bool operator()(const std::shared_ptr<PearNodeTree> &a, const std::shared_ptr<PearNodeTree> &b) const {
+                return a->energyProfile < b->energyProfile;
+            }
+        };
+
 
         PearNodeTree() = default;
 
