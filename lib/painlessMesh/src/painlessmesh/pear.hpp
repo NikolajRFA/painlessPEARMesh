@@ -61,12 +61,13 @@ namespace painlessmesh {
             this->parentCandidates = parentCandidates;
         }
 
-        PearNodeTree(const std::shared_ptr<NodeTree> &nodeTree, const int txThreshold, const int rxThreshold) {
+        PearNodeTree(const std::shared_ptr<NodeTree> &nodeTree, const int txThreshold, const int rxThreshold, const int energyProfile) {
             this->nodeId = nodeTree->nodeId;
             this->root = nodeTree->root;
             this->subs = nodeTree->subs;
             this->txThreshold = txThreshold;
             this->rxThreshold = rxThreshold;
+            this->energyProfile = energyProfile;
         }
 
         PearNodeTree(const uint32_t nodeId, const int txThreshold, const int rxThreshold, const int energyProfile) {
@@ -142,6 +143,8 @@ namespace painlessmesh {
                     ++noOfVerifiedDevices;
                 }
             }
+            noOfVerifiedDevices = 0;
+            if (lastCheckedDevice == listOfAllDevices.size()) lastCheckedDevice = 0;
 
             if (reroutes.size() == 0) {
                 numberOfRunsWithoutReroutes++;
