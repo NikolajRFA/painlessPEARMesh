@@ -74,7 +74,7 @@ void setup() {
         Pear::getInstance().setRootNodeId(CHIP1); // hacky initialisation of pear
         Pear::getInstance().pearNodeTreeMap.insert({
             CHIP1,
-            std::make_shared<PearNodeTree>(std::make_shared<protocol::NodeTree>(mesh.asNodeTree()), 9999, 9999)});
+            std::make_shared<PearNodeTree>(std::make_shared<protocol::NodeTree>(mesh.asNodeTree()), 9999, 9999, 0)});
         mesh.setDontConnect(true);
         mesh.setRoot();
     }
