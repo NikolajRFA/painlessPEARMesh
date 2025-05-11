@@ -313,7 +313,7 @@ namespace painlessmesh {
             const int periodRx = pearData["rxPeriod"];
             Log(PEAR_DEBUG, "processReceivedData(): pearData: periodTx: %i, periodRx: %i, nodeId: %u\n", periodTx,
                 periodRx, nodeTree->nodeId);
-            const auto parentCandidatesJsonArray = pearData["parentCandidates"].as<JsonArray>();
+            const auto parentCandidatesJsonArray = pearData[PARENT_CANDIDATES].as<JsonArray>();
             std::list<std::shared_ptr<PearNodeTree> > parentCandidates;
             Log(PEAR_DEBUG, "processReceivedData(): parentCandidates count: %i\n", parentCandidatesJsonArray.size());
             for (JsonVariant v: parentCandidatesJsonArray) {

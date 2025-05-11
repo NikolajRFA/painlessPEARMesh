@@ -14,7 +14,7 @@ void processReceivedData_unseenPearNodeTree_mapWithPearNodeTree(void){
       JsonDocument doc;
       doc["txPeriod"] = 123;
       doc["rxPeriod"] = 50;
-      JsonArray array = doc["parentCandidates"].to<JsonArray>();
+      JsonArray array = doc[PARENT_CANDIDATES].to<JsonArray>();
       array.add(node2.nodeId);
 
       TEST_ASSERT_EQUAL(0, pear.pearNodeTreeMap.count(node1.nodeId));
@@ -98,7 +98,7 @@ void run_parentCandidateExceedsLimit_reroutesIsEmpty(void){
     JsonDocument docNode4;
     docNode4["txPeriod"] = 100; // Exceeds base value of 38, sub(s) should be rerouted
     docNode4["rxPeriod"] = 100;
-    JsonArray array2 = docNode4["parentCandidates"].to<JsonArray>();
+    JsonArray array2 = docNode4[PARENT_CANDIDATES].to<JsonArray>();
     array2.add(node3.nodeId);
 
     JsonDocument docNode3;
@@ -108,7 +108,7 @@ void run_parentCandidateExceedsLimit_reroutesIsEmpty(void){
     JsonDocument docNode5;
     docNode5["txPeriod"] = 200; // sub of 3, should try to reroute to 4, but 4 exceeds
     docNode5["rxPeriod"] = 200;
-    JsonArray array3 = docNode5["ParentCandidates"].to<JsonArray>();
+    JsonArray array3 = docNode5[PARENT_CANDIDATES].to<JsonArray>();
     array3.add(node4.nodeId);
 
     pear.processReceivedData(docNode4, std::make_shared<protocol::NodeTree>(node4));
@@ -245,7 +245,7 @@ void test_run_should_reroute_1_node(void) {
   JsonDocument docNode5;
   docNode5["txPeriod"] = 100; // Exceeds base value of 38, should be rerouted
   docNode5["rxPeriod"] = 100; // Exceeds base value of 8, should be rerouted
-  const JsonArray parentCandidates = docNode5["parentCandidates"].to<JsonArray>();
+  const JsonArray parentCandidates = docNode5[PARENT_CANDIDATES].to<JsonArray>();
   parentCandidates.add(node3.nodeId);
 
   pear.processReceivedData(docNode4, std::make_shared<protocol::NodeTree>(node4));
