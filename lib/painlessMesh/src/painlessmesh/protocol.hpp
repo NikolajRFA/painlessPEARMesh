@@ -177,11 +177,11 @@ namespace painlessmesh {
                     nodeId = jsonObj["from"].as<uint32_t>();
 
 #if ARDUINOJSON_VERSION_MAJOR < 7
-    if (jsonObj.containsKey("subs")) {
+    if (jsonObj.containsKey(SUBS)) {
 #else
-                if (jsonObj["subs"].is<JsonArray>()) {
+                if (jsonObj[SUBS].is<JsonArray>()) {
 #endif
-                    auto jsonArr = jsonObj["subs"].as<JsonArray>();
+                    auto jsonArr = jsonObj[SUBS].as<JsonArray>();
                     for (size_t i = 0; i < jsonArr.size(); ++i) {
                         subs.push_back(NodeTree(jsonArr[i].as<JsonObject>()));
                     }
@@ -193,9 +193,9 @@ namespace painlessmesh {
                 if (root) jsonObj["root"] = root;
                 if (subs.size() > 0) {
 #if ARDUINOJSON_VERSION_MAJOR == 7
-                    JsonArray subsArr = jsonObj["subs"].to<JsonArray>();
+                    JsonArray subsArr = jsonObj[SUBS].to<JsonArray>();
 #else
-      JsonArray subsArr = jsonObj.createNestedArray("subs");
+      JsonArray subsArr = jsonObj.createNestedArray(SUBS);
 #endif
                     for (auto &&s: subs) {
 #if ARDUINOJSON_VERSION_MAJOR == 7
