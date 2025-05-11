@@ -8,4 +8,4 @@
 #define NODE_ID "nodeId"
 #define SUBS "subs"
 
-#endif JSON_KEY_CONSTANTS_HPP
+#endif
