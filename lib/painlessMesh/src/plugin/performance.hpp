@@ -107,7 +107,7 @@ class Track {
   Track() {}
 
   void addTo(JsonObject& jsonObj) const {
-    jsonObj["nodeId"] = nodeId;
+    jsonObj[NODE_ID] = nodeId;
     jsonObj["hardware"] = hardware;
     jsonObj["hits"] = hits;
     jsonObj["misses"] = misses;

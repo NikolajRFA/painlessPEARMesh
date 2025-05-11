@@ -165,13 +165,13 @@ namespace painlessmesh {
             NodeTree(JsonObject jsonObj) {
 #if ARDUINOJSON_VERSION_MAJOR < 7
     if (jsonObj.containsKey("root")) root = jsonObj["root"].as<bool>();
-    if (jsonObj.containsKey("nodeId"))
+    if (jsonObj.containsKey(NODE_ID))
 #else
 
                 if (jsonObj["root"].is<bool>()) root = jsonObj["root"].as<bool>();
-                if (jsonObj["nodeId"].is<uint32_t>())
+                if (jsonObj[NODE_ID].is<uint32_t>())
 #endif
-                    nodeId = jsonObj["nodeId"].as<uint32_t>();
+                    nodeId = jsonObj[NODE_ID].as<uint32_t>();
                 else
                     nodeId = jsonObj["from"].as<uint32_t>();
 
@@ -188,7 +188,7 @@ namespace painlessmesh {
             }
 
             JsonObject addTo(JsonObject &&jsonObj) const {
-                jsonObj["nodeId"] = nodeId;
+                jsonObj[NODE_ID] = nodeId;
                 if (root) jsonObj["root"] = root;
                 if (subs.size() > 0) {
 #if ARDUINOJSON_VERSION_MAJOR == 7
