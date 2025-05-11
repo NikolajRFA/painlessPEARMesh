@@ -3,6 +3,7 @@
 
 #include <ArduinoJson.h>
 #include <set>
+#include "jsonKeyConstanst.hpp"
 
 
 using namespace painlessmesh;
@@ -12,7 +13,7 @@ inline String buildNewParentJson(const uint32_t nodeId) {
     // create an object
 
     // Add an array of integers to the JSON object
-    doc["newParent"] = nodeId;
+    doc[NEW_PARENT] = nodeId;
 
     // Convert JSON object to string
     String jsonString;
@@ -21,17 +22,17 @@ inline String buildNewParentJson(const uint32_t nodeId) {
 }
 
 inline bool jsonContainsNewParent(JsonDocument json) {
-    return json["newParent"].is<uint32_t>();
+    return json[NEW_PARENT].is<uint32_t>();
 }
 
 inline String buildPearReportJson(const uint8_t txPeriod, const uint8_t rxPeriod, const std::list<uint32_t>& networks) {
     JsonDocument pearData;
-    pearData["txPeriod"] = txPeriod;
-    pearData["rxPeriod"] = rxPeriod;
+    pearData[TX_PERIOD] = txPeriod;
+    pearData[RX_PERIOD] = rxPeriod;
     Serial.println("buildPearReportJson(): Building pear report!\n");
     Serial.printf("buildPearReportJson(): txPeriod: %u, rxPeriod: %u\n", txPeriod, rxPeriod);
 
-    const JsonArray parentCandidates = pearData["parentCandidates"].to<JsonArray>();
+    const JsonArray parentCandidates = pearData[PARENT_CANDIDATES].to<JsonArray>();
     for (auto networkId: networks) {
         parentCandidates.add(networkId);
         Serial.printf("buildPearReportJson(): Adding %u to parentCandidates\n", networkId);
@@ -65,12 +66,12 @@ inline size_t countUniqueNodeIds(const TSTRING& jsonString) {
     traverse = [&](const JsonVariant node) {
         if (!node.is<JsonObject>()) return;
 
-        const JsonVariant idField = node["nodeId"];
+        const JsonVariant idField = node[NODE_ID];
         if (idField.is<uint32_t>()) {
             uniqueNodeIds.insert(idField.as<uint32_t>());
         }
 
-        const JsonVariant subsField = node["subs"];
+        const JsonVariant subsField = node[SUBS];
         if (subsField.is<JsonArray>()) {
             for (JsonVariant subNode : subsField.as<JsonArray>()) {
                 traverse(subNode);
