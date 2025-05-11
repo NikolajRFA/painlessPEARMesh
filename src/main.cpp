@@ -21,7 +21,6 @@ void reconfigure();
 
 Task taskSendMessage(TASK_SECOND * 1, TASK_FOREVER, &sendMessage);
 Task taskLogConnections(TASK_SECOND * 10, TASK_FOREVER, &logConnections);
-Task taskReconfigure(TASK_HOUR, TASK_ONCE, &reconfigure);
 
 void sendMessage() {
     uint32_t nodeId = 3206793885;
@@ -34,11 +33,6 @@ void logConnections() {
     Serial.print("TOPOLOGY: ");
     Serial.println(mesh.subConnectionJson(true));
     Serial.printf("Number of nodes in mesh: %i\n", countUniqueNodeIds(mesh.subConnectionJson()));
-}
-
-void reconfigure() {
-    Serial.println("reconfigure():");
-    mesh.setTargetNodeId(3206773453);
 }
 
 // Needed for painless library
@@ -88,10 +82,8 @@ void setup() {
 
     userScheduler.addTask(taskSendMessage);
     userScheduler.addTask(taskLogConnections);
-    //userScheduler.addTask(taskReconfigure);
     taskLogConnections.enable();
     taskSendMessage.enable();
-    //taskReconfigure.enableDelayed(3 * TASK_MINUTE);
 }
 
 void loop() {
