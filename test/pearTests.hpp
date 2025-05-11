@@ -12,7 +12,7 @@ void processReceivedData_unseenPearNodeTree_mapWithPearNodeTree(void){
       node1.subs.push_back(node2);
 
       JsonDocument doc;
-      doc["txPeriod"] = 123;
+      doc[TX_PERIOD] = 123;
       doc["rxPeriod"] = 50;
       JsonArray array = doc[PARENT_CANDIDATES].to<JsonArray>();
       array.add(node2.nodeId);
@@ -96,17 +96,17 @@ void run_parentCandidateExceedsLimit_reroutesIsEmpty(void){
     node1.subs.push_back(node3);
 
     JsonDocument docNode4;
-    docNode4["txPeriod"] = 100; // Exceeds base value of 38, sub(s) should be rerouted
+    docNode4[TX_PERIOD] = 100; // Exceeds base value of 38, sub(s) should be rerouted
     docNode4["rxPeriod"] = 100;
     JsonArray array2 = docNode4[PARENT_CANDIDATES].to<JsonArray>();
     array2.add(node3.nodeId);
 
     JsonDocument docNode3;
-    docNode3["txPeriod"] = 400; // Exceeds base value of 38, therefore we cannot reroute to this node
+    docNode3[TX_PERIOD] = 400; // Exceeds base value of 38, therefore we cannot reroute to this node
     docNode3["rxPeriod"] = 300;
 
     JsonDocument docNode5;
-    docNode5["txPeriod"] = 200; // sub of 3, should try to reroute to 4, but 4 exceeds
+    docNode5[TX_PERIOD] = 200; // sub of 3, should try to reroute to 4, but 4 exceeds
     docNode5["rxPeriod"] = 200;
     JsonArray array3 = docNode5[PARENT_CANDIDATES].to<JsonArray>();
     array3.add(node4.nodeId);
@@ -234,16 +234,16 @@ void test_run_should_reroute_1_node(void) {
   node1.subs.push_back(node3);
 
   JsonDocument docNode4;
-  docNode4["txPeriod"] = 100; // Exceeds base value of 38, should be rerouted
+  docNode4[TX_PERIOD] = 100; // Exceeds base value of 38, should be rerouted
   docNode4["rxPeriod"] = 100; // Exceeds base value of 8, should be rerouted
 
 
   JsonDocument docNode3;
-  docNode3["txPeriod"] = 0; // does not exceed, so we can reroute to this
+  docNode3[TX_PERIOD] = 0; // does not exceed, so we can reroute to this
   docNode3["rxPeriod"] = 0;
 
   JsonDocument docNode5;
-  docNode5["txPeriod"] = 100; // Exceeds base value of 38, should be rerouted
+  docNode5[TX_PERIOD] = 100; // Exceeds base value of 38, should be rerouted
   docNode5["rxPeriod"] = 100; // Exceeds base value of 8, should be rerouted
   const JsonArray parentCandidates = docNode5[PARENT_CANDIDATES].to<JsonArray>();
   parentCandidates.add(node3.nodeId);

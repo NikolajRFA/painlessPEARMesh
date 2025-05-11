@@ -309,7 +309,7 @@ namespace painlessmesh {
         void processReceivedData(JsonDocument &pearData, const std::shared_ptr<protocol::NodeTree> &nodeTree) {
             using namespace painlessmesh::logger;
             Log(PEAR_DEBUG, "processReceivedData(): Started processing received data!");
-            const int periodTx = pearData["txPeriod"];
+            const int periodTx = pearData[TX_PERIOD];
             const int periodRx = pearData["rxPeriod"];
             Log(PEAR_DEBUG, "processReceivedData(): pearData: periodTx: %i, periodRx: %i, nodeId: %u\n", periodTx,
                 periodRx, nodeTree->nodeId);
