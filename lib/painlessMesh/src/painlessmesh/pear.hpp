@@ -310,7 +310,7 @@ namespace painlessmesh {
             using namespace painlessmesh::logger;
             Log(PEAR_DEBUG, "processReceivedData(): Started processing received data!");
             const int periodTx = pearData[TX_PERIOD];
-            const int periodRx = pearData["rxPeriod"];
+            const int periodRx = pearData[RX_PERIOD];
             Log(PEAR_DEBUG, "processReceivedData(): pearData: periodTx: %i, periodRx: %i, nodeId: %u\n", periodTx,
                 periodRx, nodeTree->nodeId);
             const auto parentCandidatesJsonArray = pearData[PARENT_CANDIDATES].as<JsonArray>();
