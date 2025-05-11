@@ -6,6 +6,7 @@
 
 #include "Arduino.h"
 #include "painlessmesh/configuration.hpp"
+#include "painlessmesh/jsonKeyConstanst.hpp"
 
 namespace painlessmesh {
     namespace router {

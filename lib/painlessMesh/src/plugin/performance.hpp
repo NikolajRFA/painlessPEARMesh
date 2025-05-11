@@ -5,6 +5,7 @@
 
 #include "painlessmesh/logger.hpp"
 #include "painlessmesh/plugin.hpp"
+#include "painlessmesh/jsonKeyConstanst.hpp"
 
 namespace painlessmesh {
 namespace plugin {
