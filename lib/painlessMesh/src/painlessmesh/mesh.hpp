@@ -539,7 +539,7 @@ namespace painlessmesh {
                 Serial.println("onPearReceive(): Calling processReceivedData on pear instance!");
                 Pear::getInstance().processReceivedData(doc, nodeTree);
             } else if (jsonContainsNewParent(doc)) {
-                uint32_t newTargetNodeId = doc["newParent"];
+                uint32_t newTargetNodeId = doc[NEW_PARENT];
                 setTargetNodeId(newTargetNodeId);
             }
         }

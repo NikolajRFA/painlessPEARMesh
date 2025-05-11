@@ -18,7 +18,7 @@ void jsonContainsNewParent_jsonWithNewParent_true()
     JsonDocument doc;
 
     // Add an array of integers to the JSON object
-    doc["newParent"] = nodeId;
+    doc[NEW_PARENT] = nodeId;
 
     TEST_ASSERT_TRUE(jsonContainsNewParent(doc));
 }

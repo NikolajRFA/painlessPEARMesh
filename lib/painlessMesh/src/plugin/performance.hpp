@@ -5,6 +5,7 @@
 
 #include "painlessmesh/logger.hpp"
 #include "painlessmesh/plugin.hpp"
+#include "painlessmesh/jsonKeyConstanst.hpp"
 
 namespace painlessmesh {
 namespace plugin {
@@ -107,7 +108,7 @@ class Track {
   Track() {}
 
   void addTo(JsonObject& jsonObj) const {
-    jsonObj["nodeId"] = nodeId;
+    jsonObj[NODE_ID] = nodeId;
     jsonObj["hardware"] = hardware;
     jsonObj["hits"] = hits;
     jsonObj["misses"] = misses;
