@@ -260,7 +260,7 @@ void ICACHE_FLASH_ATTR StationScan::requestIP(WiFi_AP_Record_t& ap)
   return;
 }
 
-void StationScan::removeStationFromAvailableNetworksIfInNodeSubs() {
+void ICACHE_FLASH_ATTR StationScan::removeStationFromAvailableNetworksIfInNodeSubs() const {
   auto connection = mesh->subs.begin();
   while (connection != mesh->subs.end())
   {
