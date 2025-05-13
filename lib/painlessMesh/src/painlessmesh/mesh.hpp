@@ -525,18 +525,18 @@ namespace painlessmesh {
         void onPearReceive(uint32_t from, String &msg) {
             using namespace painlessmesh::logger;
             Log(PEAR, "Received %s from node %u\n", msg.c_str(), from);
-
+            Log(DATA, "%s\n", msg.c_str());
             JsonDocument doc;
             deserializeJson(doc, msg);
-            Serial.printf("onPearReceive(): isRoot(): %i\n", this->isRoot());
+            Log(PEAR_DEBUG, "onPearReceive(): isRoot(): %i\n", this->isRoot());
             if (this->isRoot()) {
                 auto tree = this->asNodeTree();
                 auto nodeTree = layout::getNodeById(std::make_shared<protocol::NodeTree>(tree), from);
                 if (nodeTree == nullptr) {
-                    Serial.printf("onPearReceive(): getNodeById returned a nullptr");
+                    Log(PEAR_DEBUG, "onPearReceive(): getNodeById returned a nullptr\n");
                     return;
                 }
-                Serial.println("onPearReceive(): Calling processReceivedData on pear instance!");
+                Log(PEAR_DEBUG, "onPearReceive(): Calling processReceivedData on pear instance!\n");
                 Pear::getInstance().processReceivedData(doc, nodeTree);
             } else if (jsonContainsNewParent(doc)) {
                 uint32_t newTargetNodeId = doc[NEW_PARENT];

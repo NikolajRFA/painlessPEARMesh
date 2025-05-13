@@ -31,7 +31,7 @@ void sendMessage() {
 
 void logConnections() {
     Serial.print("TOPOLOGY: ");
-    Serial.println(mesh.subConnectionJson(true));
+    Serial.println(mesh.subConnectionJson());
     Serial.printf("Number of nodes in mesh: %i\n", countUniqueNodeIds(mesh.subConnectionJson()));
 }
 
@@ -57,7 +57,7 @@ void setup() {
     Serial.begin(115200);
 
     //mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
-    mesh.setDebugMsgTypes(PEAR | CONNECTION | ERROR | STARTUP | DEBUG | GENERAL | MESH_STATUS);
+    mesh.setDebugMsgTypes(DATA | PEAR );
     // set before init() so that you can see startup messages
 
     mesh.init(MESH_PREFIX1, MESH_PASSWORD, &userScheduler, MESH_PORT);
