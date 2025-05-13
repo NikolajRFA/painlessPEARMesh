@@ -41,7 +41,6 @@ void ICACHE_FLASH_ATTR StationScan::init(painlessmesh::wifi::Mesh *pMesh,
 void ICACHE_FLASH_ATTR StationScan::stationScan() {
   using namespace painlessmesh::logger;
   Log(CONNECTION, "stationScan(): %s\n", ssid.c_str());
-  removeStationFromAvailableNetworksIfInNodeSubs();
   if (checkStation()) {
     Log(PEAR, "Already connected to target - cancelling scan\n");
     return;
@@ -127,7 +126,7 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
   for (auto ap: aps) {
     mesh->availableNetworks.push_back(painlessmesh::tcp::encodeNodeId(ap.bssid));
   }
-
+  removeStationFromAvailableNetworksIfInNodeSubs();
 
   Log(CONNECTION, "\tFound %d nodes\n", aps.size());
 
@@ -359,7 +358,6 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
           "connectToAP(): Trying to connect, scan rate set to "
           "4*normal\n");
       task.delay(2 * SCAN_INTERVAL);
-      removeStationFromAvailableNetworksIfInNodeSubs();
     }
   }
 }
