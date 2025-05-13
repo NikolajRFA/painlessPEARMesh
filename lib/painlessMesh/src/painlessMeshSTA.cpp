@@ -217,10 +217,6 @@ bool ICACHE_FLASH_ATTR StationScan::checkStation()
     auto connection = mesh->subs.begin();
     while (connection != mesh->subs.end())
     {
-      if ((*connection)->station) {
-        Log(PEAR, "Removing station from available networks\n");
-        mesh->removeStationFromAvailableNetworks((*connection)->nodeId);
-      }
       if ((*connection)->station && (*connection)->nodeId == mesh->targetNodeId)
       {
         Log(PEAR, "Target nodeId is already connected\n");
@@ -262,6 +258,18 @@ void ICACHE_FLASH_ATTR StationScan::requestIP(WiFi_AP_Record_t& ap)
   Log(CONNECTION, "connectToAP(): WiFi begin: ssid: %s, password: %s, mesh: %i\n", ap.ssid.c_str(), password.c_str(), mesh->_meshChannel);
   WiFi.begin(ap.ssid.c_str(), password.c_str(), mesh->_meshChannel, ap.bssid);
   return;
+}
+
+void StationScan::removeStationFromAvailableNetworksIfInNodeSubs() {
+  auto connection = mesh->subs.begin();
+  while (connection != mesh->subs.end())
+  {
+    if ((*connection)->station) {
+      Log(logger::PEAR, "Removing station from available networks\n");
+      mesh->removeStationFromAvailableNetworks((*connection)->nodeId);
+    }
+    connection++;
+  }
 }
 
 void ICACHE_FLASH_ATTR StationScan::connectToAP() {
@@ -350,6 +358,7 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
           "connectToAP(): Trying to connect, scan rate set to "
           "4*normal\n");
       task.delay(2 * SCAN_INTERVAL);
+      removeStationFromAvailableNetworksIfInNodeSubs();
     }
   }
 }

@@ -47,6 +47,8 @@ protected:
 
   void requestIP(WiFi_AP_Record_t &ap);
 
+  void removeStationFromAvailableNetworksIfInNodeSubs();
+
   bool dontConnect = false;
   // Manually configure network and ip
   bool manual = false;

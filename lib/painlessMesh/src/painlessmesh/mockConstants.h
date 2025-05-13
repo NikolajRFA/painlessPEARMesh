@@ -9,6 +9,6 @@
 
 #define ENERGY_PROFILE_MAP const std::unordered_map<uint32_t, int> energyProfileMap = {{CHIP1, 0}, {CHIP3, 1}, {CHIP4, 1}, {CHIP5, 2}, {CHIP6, 2}, {CHIP7, 2}, {CHIP8, 2}, {CHIP9, 3}, {CHIP10, 3}, {CHIP11, 3}, {CHIP12, 3}, {CHIP13, 4}, {CHIP14, 4}, {CHIP15, 4}, {CHIP16, 4}, {CHIP17, 5}, {CHIP18, 3}, {CHIP19, 4}, {CHIP20, 5}, {CHIP21, 3}, {CHIP22, 2}, {CHIP23, 3}, {CHIP24, 4}, {CHIP25, 4}, {CHIP26, 5}, {CHIP27, 1}, {CHIP28, 2}, {CHIP29, 1}};
 
-#define ENERGY_PROFIlES const std::unordered_map<int, std::pair<int, int>> energyProfiles = {{1, {50, 20}}, {2, {45, 15}}, {3, {40, 10}}, {4, {35, 5}}, {5, {30, 0}}};
+#define ENERGY_PROFIlES const std::unordered_map<int, std::pair<int, int>> energyProfiles = {{1, {100, 40}}, {2, {90, 30}}, {3, {80, 20}}, {4, {70, 10}}, {5, {60, 5}}};
 
 #endif //MOCKCONSTANTS_H

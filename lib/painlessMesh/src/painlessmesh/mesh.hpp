@@ -149,7 +149,7 @@ namespace painlessmesh {
                     Pear::getInstance().reroutes.clear();
                 });
                 this->mScheduler->addTask(this->runPearTask);
-                this->runPearTask.enableDelayed(10*TASK_MINUTE);
+                this->runPearTask.enableDelayed(6*TASK_MINUTE);
             }
         }
 
