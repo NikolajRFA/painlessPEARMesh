@@ -42,6 +42,7 @@ void ICACHE_FLASH_ATTR StationScan::stationScan() {
   using namespace painlessmesh::logger;
   Log(CONNECTION, "stationScan(): %s\n", ssid.c_str());
   if (checkStation()) {
+    removeStationFromAvailableNetworksIfInNodeSubs();
     Log(PEAR, "Already connected to target - cancelling scan\n");
     return;
   }
