@@ -35,7 +35,7 @@ def build_undirected(node, G=None):
         build_undirected(child, G)
     return G
 
-for topology in extract_unique_topologies('pearV5-2.txt'):
+for topology in extract_unique_topologies('20_2_1305_1.txt'):
     UG = build_undirected(topology)
 
     root = next(n for n,d in UG.nodes(data=True) if d['root'])
