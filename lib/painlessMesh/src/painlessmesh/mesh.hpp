@@ -529,13 +529,14 @@ namespace painlessmesh {
             Log(PEAR_DEBUG, "onPearReceive(): isRoot(): %i\n", this->isRoot());
             if (this->isRoot()) {
                 auto tree = this->asNodeTree();
-                auto nodeTree = layout::getNodeById(std::make_shared<protocol::NodeTree>(tree), from);
+                auto sharedRootNode = std::make_shared<protocol::NodeTree>(tree);
+                auto nodeTree = layout::getNodeById(sharedRootNode, from);
                 if (nodeTree == nullptr) {
                     Log(PEAR_DEBUG, "onPearReceive(): getNodeById returned a nullptr\n");
                     return;
                 }
                 Log(PEAR_DEBUG, "onPearReceive(): Calling processReceivedData on pear instance!\n");
-                Pear::getInstance().processReceivedData(doc, nodeTree);
+                Pear::getInstance().processReceivedData(doc, nodeTree, sharedRootNode);
             } else if (jsonContainsNewParent(doc)) {
                 uint32_t newTargetNodeId = doc[NEW_PARENT];
                 setTargetNodeId(newTargetNodeId);

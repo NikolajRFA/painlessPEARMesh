@@ -306,7 +306,7 @@ namespace painlessmesh {
          * @note This method assumes that `layout::getNodeById()` can retrieve nodes from the `nodeTree` structure and that
          *       `PearNodeTree` has a constructor accepting a `NodeTree`, or a `NodeTree` with additional metadata like tx/rx and candidates.
          */
-        void processReceivedData(JsonDocument &pearData, const std::shared_ptr<protocol::NodeTree> &nodeTree) {
+        void processReceivedData(JsonDocument &pearData, const std::shared_ptr<protocol::NodeTree> &nodeTree, const std::shared_ptr<protocol::NodeTree> &rootNodeTree) {
             using namespace painlessmesh::logger;
             Log(PEAR_DEBUG, "processReceivedData(): Started processing received data!");
             const int periodTx = pearData[TX_PERIOD];
@@ -337,13 +337,25 @@ namespace painlessmesh {
                     parentCandidates.push_back(pearNodeTree);
                 }
                 if (id == rootNodeId) {
-                    // If a node has the root node as a parent candidate then we always want to reroute the node to the root
-                    Serial.println("Reroute to root available - adding reroute!");
+                    auto sub = rootNodeTree->subs.begin();
+                    bool nodeIsSubToRoot = false;
+                    while (sub != rootNodeTree->subs.end()) {
+                        if (nodeTree->nodeId == sub->nodeId) {
+                            nodeIsSubToRoot = true;
+                            break;
+                        }
+                        ++sub;
+                    }
 
-                    String jsonString = buildNewParentJson(rootNodeId);
+                    if (!nodeIsSubToRoot) {
+                        // If a node has the root node as a parent candidate then we always want to reroute the node to the root
+                        Serial.println("Reroute to root available - adding reroute!");
 
-                    reroutes.insert({nodeTree->nodeId, jsonString});
-                    break;
+                        String jsonString = buildNewParentJson(rootNodeId);
+
+                        reroutes.insert({nodeTree->nodeId, jsonString});
+                        break;
+                    }
                 }
             }
 
