@@ -523,7 +523,7 @@ namespace painlessmesh {
         void onPearReceive(uint32_t from, String &msg) {
             using namespace painlessmesh::logger;
             Log(PEAR, "Received %s from node %u\n", msg.c_str(), from);
-            Log(DATA, "%s\n", msg.c_str());
+            Log(DATA, "%u; %s\n", from, msg.c_str());
             JsonDocument doc;
             deserializeJson(doc, msg);
             Log(PEAR_DEBUG, "onPearReceive(): isRoot(): %i\n", this->isRoot());
