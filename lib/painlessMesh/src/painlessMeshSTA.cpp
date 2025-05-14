@@ -127,7 +127,7 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
   for (auto ap: aps) {
     mesh->availableNetworks.push_back(painlessmesh::tcp::encodeNodeId(ap.bssid));
   }
-
+  removeStationFromAvailableNetworksIfInNodeSubs();
 
   Log(CONNECTION, "\tFound %d nodes\n", aps.size());
 
@@ -269,6 +269,7 @@ void ICACHE_FLASH_ATTR StationScan::removeStationFromAvailableNetworksIfInNodeSu
       Log(logger::PEAR, "Removing station from available networks\n");
       mesh->removeStationFromAvailableNetworks((*connection)->nodeId);
     }
+    Log(logger::PEAR, "Nodes in available networks %i\n", mesh->availableNetworks.size());
     connection++;
   }
 }
@@ -359,7 +360,6 @@ void ICACHE_FLASH_ATTR StationScan::connectToAP() {
           "connectToAP(): Trying to connect, scan rate set to "
           "4*normal\n");
       task.delay(2 * SCAN_INTERVAL);
-      removeStationFromAvailableNetworksIfInNodeSubs();
     }
   }
 }

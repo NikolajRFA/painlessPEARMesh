@@ -115,8 +115,7 @@ namespace painlessmesh {
                 this->reportPearDataTask.set(TASK_MINUTE, TASK_FOREVER, [this]() {
                     Log(PEAR, "reportPearDataTask(): Sending pear data - time since last send: %i\n", Stopwatch::getInstance().timeSinceLastReportPearDataTask());
 
-                    const uint8_t summedTransmissions = this->txPeriod + this->baseLineTransmissions;
-                    const String pearDataString = buildPearReportJson(summedTransmissions, this->rxPeriod, this->getAvailableNetworks(true));
+                    const String pearDataString = buildPearReportJson(this->txPeriod, this->rxPeriod, this->getAvailableNetworks(true));
                     this->txPeriod = 0;
                     this->rxPeriod = 0;
                     this->sendPear(layout::getRootNodeId(this->asNodeTree()), pearDataString);
@@ -512,7 +511,6 @@ namespace painlessmesh {
     protected:
         uint32_t targetNodeId = 0; // Default to an invalid nodeId
         bool useTargetNodeId = false; // Flag to enable/disable targeting a specific nodeId
-        uint8_t baseLineTransmissions = 30;
         // Baseline set to 30 to simulate a homogenous network where each node sends 30 messages of their own every cycle.
         uint8_t txPeriod = 0;
         uint8_t rxPeriod = 0;
@@ -525,19 +523,20 @@ namespace painlessmesh {
         void onPearReceive(uint32_t from, String &msg) {
             using namespace painlessmesh::logger;
             Log(PEAR, "Received %s from node %u\n", msg.c_str(), from);
-
+            Log(DATA, "%u; %s\n", from, msg.c_str());
             JsonDocument doc;
             deserializeJson(doc, msg);
-            Serial.printf("onPearReceive(): isRoot(): %i\n", this->isRoot());
+            Log(PEAR_DEBUG, "onPearReceive(): isRoot(): %i\n", this->isRoot());
             if (this->isRoot()) {
                 auto tree = this->asNodeTree();
-                auto nodeTree = layout::getNodeById(std::make_shared<protocol::NodeTree>(tree), from);
+                auto sharedRootNode = std::make_shared<protocol::NodeTree>(tree);
+                auto nodeTree = layout::getNodeById(sharedRootNode, from);
                 if (nodeTree == nullptr) {
-                    Serial.printf("onPearReceive(): getNodeById returned a nullptr");
+                    Log(PEAR_DEBUG, "onPearReceive(): getNodeById returned a nullptr\n");
                     return;
                 }
-                Serial.println("onPearReceive(): Calling processReceivedData on pear instance!");
-                Pear::getInstance().processReceivedData(doc, nodeTree);
+                Log(PEAR_DEBUG, "onPearReceive(): Calling processReceivedData on pear instance!\n");
+                Pear::getInstance().processReceivedData(doc, nodeTree, sharedRootNode);
             } else if (jsonContainsNewParent(doc)) {
                 uint32_t newTargetNodeId = doc[NEW_PARENT];
                 setTargetNodeId(newTargetNodeId);
