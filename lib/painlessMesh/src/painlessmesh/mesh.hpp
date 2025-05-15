@@ -525,7 +525,8 @@ namespace painlessmesh {
             Log(PEAR, "Received %s from node %u\n", msg.c_str(), from);
             JsonDocument doc;
             deserializeJson(doc, msg);
-            Log(DATA, "%u;%u;  %s\n", from, doc[NODE_TIME], msg.c_str());
+            const uint32_t nodeTime = doc[NODE_TIME].as<uint32_t>();
+            Log(DATA, "%u;%u;  %s\n", from, nodeTime, msg.c_str());
             Log(PEAR_DEBUG, "onPearReceive(): isRoot(): %i\n", this->isRoot());
             if (this->isRoot()) {
                 auto tree = this->asNodeTree();
