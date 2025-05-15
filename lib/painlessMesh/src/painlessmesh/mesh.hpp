@@ -114,8 +114,8 @@ namespace painlessmesh {
                 Log(PEAR, "Scheduling reportPearDataTask()\n");
                 this->reportPearDataTask.set(TASK_MINUTE, TASK_FOREVER, [this]() {
                     Log(PEAR, "reportPearDataTask(): Sending pear data - time since last send: %i\n", Stopwatch::getInstance().timeSinceLastReportPearDataTask());
-
-                    const String pearDataString = buildPearReportJson(this->txPeriod, this->rxPeriod, this->getAvailableNetworks(true));
+                    const auto time = this->getNodeTime();
+                    const String pearDataString = buildPearReportJson(this->txPeriod, this->rxPeriod, this->getAvailableNetworks(true), time);
                     this->txPeriod = 0;
                     this->rxPeriod = 0;
                     this->sendPear(layout::getRootNodeId(this->asNodeTree()), pearDataString);
@@ -523,9 +523,9 @@ namespace painlessmesh {
         void onPearReceive(uint32_t from, String &msg) {
             using namespace painlessmesh::logger;
             Log(PEAR, "Received %s from node %u\n", msg.c_str(), from);
-            Log(DATA, "%u; %s\n", from, msg.c_str());
             JsonDocument doc;
             deserializeJson(doc, msg);
+            Log(DATA, "%u;%u;  %s\n", from, doc[NODE_TIME], msg.c_str());
             Log(PEAR_DEBUG, "onPearReceive(): isRoot(): %i\n", this->isRoot());
             if (this->isRoot()) {
                 auto tree = this->asNodeTree();

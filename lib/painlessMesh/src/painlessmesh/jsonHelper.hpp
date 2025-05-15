@@ -25,10 +25,11 @@ inline bool jsonContainsNewParent(JsonDocument json) {
     return json[NEW_PARENT].is<uint32_t>();
 }
 
-inline String buildPearReportJson(const uint8_t txPeriod, const uint8_t rxPeriod, const std::list<uint32_t>& networks) {
+inline String buildPearReportJson(const uint8_t txPeriod, const uint8_t rxPeriod, const std::list<uint32_t>& networks, const uint32_t nodeTime) {
     JsonDocument pearData;
     pearData[TX_PERIOD] = txPeriod;
     pearData[RX_PERIOD] = rxPeriod;
+    pearData[NODE_TIME] = nodeTime;
     Serial.println("buildPearReportJson(): Building pear report!\n");
     Serial.printf("buildPearReportJson(): txPeriod: %u, rxPeriod: %u\n", txPeriod, rxPeriod);
 
