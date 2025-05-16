@@ -97,7 +97,7 @@ def df_from_pear_reports(pear_reports: list[PearReport]):
     return df
 
 
-df = df_from_pear_reports(extract_pear_reports("20_1_1405_1.txt"))
+df = df_from_pear_reports(extract_pear_reports("data/20_1_1405_1.txt"))
 
 print(df.dtypes)
 
