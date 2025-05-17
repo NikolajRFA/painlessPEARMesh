@@ -3,7 +3,6 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 import re
-from matplotlib import pyplot as plt
 
 
 class PearReport:
@@ -70,34 +69,6 @@ def df_from_pear_reports(pear_reports: list[PearReport]):
     df['node_time'] = df['node_time'].interpolate()
     #df = df.astype(float)
     return df
-
-pear_reports, pear_stable_time = extract_pear_reports("data/20_4_1505_1.txt")
-
-df = df_from_pear_reports(pear_reports)
-
-sorted_df = df.sort_values(by=['from_node', 'node_time'])
-
-unique_node_ids = df['from_node'].unique()
-
-for node_id in unique_node_ids:
-    filtered_df = sorted_df[sorted_df['from_node'] == node_id]
-
-    filtered_df = df[df['from_node'] == node_id].copy()  # Ensures it's a separate copy
-    filtered_df['node_time'] = filtered_df['node_time'] / 1000
-
-    plt.plot(filtered_df['node_time'], filtered_df['tx_period'], marker='o', linestyle='-')
-    plt.axvline(x=360000, color='red', linestyle='--', label="PEAR first run")
-    plt.axvline(x=pear_stable_time, color='green', linestyle='--', label="PEAR stability reached")
-    plt.xticks(filtered_df['node_time'], labels=filtered_df['node_time'].round(0), rotation=45)
-
-    plt.title(f"Node {node_id}")
-    plt.xlabel("Time (ms)")
-    plt.ylabel("Transmissions last 60 seconds")
-
-    plt.grid()
-    plt.legend()
-    plt.tight_layout()
-    plt.show()
 
 #f = open("csv.csv", "w")
 #f.write(df.to_csv())
