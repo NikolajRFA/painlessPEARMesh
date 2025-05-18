@@ -70,5 +70,8 @@ def df_from_pear_reports(pear_reports: list[PearReport]):
     #df = df.astype(float)
     return df
 
-#f = open("csv.csv", "w")
-#f.write(df.to_csv())
+df = df_from_pear_reports(extract_pear_reports("data/20_4_1505_1.txt")[0])
+
+f = open("csv.csv", "w")
+f.write(df.to_csv())
+
