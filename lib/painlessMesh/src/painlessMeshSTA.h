@@ -30,9 +30,6 @@ public:
   void scanComplete();
   void filterAPs();
   bool checkStation();
-
-  uint32_t getStationIdFromSubs() const;
-
   void connectToAP();
   static bool compareWiFiAPRecords(const WiFi_AP_Record_t& a, const WiFi_AP_Record_t& b, bool useTargetNodeId, uint32_t targetNodeId);
   static bool containsTargetNodeId(const std::list<WiFi_AP_Record_t>& aps, uint32_t targetNodeId);
