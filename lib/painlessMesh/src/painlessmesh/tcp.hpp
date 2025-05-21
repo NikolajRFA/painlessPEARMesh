@@ -77,7 +77,6 @@ void connect(AsyncClient &client, IPAddress ip, uint16_t port, M &mesh) {
           auto conn = std::make_shared<T>(client, &mesh, true);
           conn->initTasks();
           mesh.subs.push_back(conn);
-          mesh.setStationId(conn->nodeId);
           Log(DEBUG, "Semaphore given by tcp_connect()\n");
           mesh.semaphoreGive();
         }

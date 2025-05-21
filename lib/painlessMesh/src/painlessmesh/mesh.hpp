@@ -115,6 +115,8 @@ namespace painlessmesh {
                 this->reportPearDataTask.set(TASK_MINUTE, TASK_FOREVER, [this]() {
                     Log(PEAR, "reportPearDataTask(): Sending pear data - time since last send: %i\n", Stopwatch::getInstance().timeSinceLastReportPearDataTask());
                     const auto time = this->getNodeTime();
+                    this->setStationId();
+                    Log(PEAR_DEBUG, "Station id is: %u\n", this->stationId);
                     const String pearDataString = buildPearReportJson(this->txPeriod, this->rxPeriod, this->getAvailableNetworks(true), this->stationId, time);
                     this->txPeriod = 0;
                     this->rxPeriod = 0;
@@ -508,8 +510,20 @@ namespace painlessmesh {
             availableNetworks.remove(currentStationId);
         }
 
-        void setStationId(const uint32_t stationId) {
-            this->stationId = stationId;
+        void setStationId() {
+            if (!this->subs.empty())
+            {
+                auto connection = this->subs.begin();
+                while (connection != this->subs.end())
+                {
+                    if ((*connection)->station)
+                    {
+                        this->stationId = (*connection)->nodeId;
+                        return;
+                    }
+                    ++connection;
+                }
+            }
         }
 
     protected:
