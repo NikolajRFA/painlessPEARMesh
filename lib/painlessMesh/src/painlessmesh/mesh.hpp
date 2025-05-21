@@ -509,7 +509,7 @@ namespace painlessmesh {
         }
 
         void setStationId(const uint32_t stationId) {
-
+            this->stationId = stationId;
         }
 
     protected:
