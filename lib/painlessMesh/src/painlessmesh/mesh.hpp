@@ -115,7 +115,7 @@ namespace painlessmesh {
                 this->reportPearDataTask.set(TASK_MINUTE, TASK_FOREVER, [this]() {
                     Log(PEAR, "reportPearDataTask(): Sending pear data - time since last send: %i\n", Stopwatch::getInstance().timeSinceLastReportPearDataTask());
                     const auto time = this->getNodeTime();
-                    const String pearDataString = buildPearReportJson(this->txPeriod, this->rxPeriod, this->getAvailableNetworks(true), time);
+                    const String pearDataString = buildPearReportJson(this->txPeriod, this->rxPeriod, this->getAvailableNetworks(true), this->stationId, time);
                     this->txPeriod = 0;
                     this->rxPeriod = 0;
                     this->sendPear(layout::getRootNodeId(this->asNodeTree()), pearDataString);
@@ -508,6 +508,10 @@ namespace painlessmesh {
             availableNetworks.remove(currentStationId);
         }
 
+        void setStationId(const uint32_t stationId) {
+
+        }
+
     protected:
         uint32_t targetNodeId = 0; // Default to an invalid nodeId
         bool useTargetNodeId = false; // Flag to enable/disable targeting a specific nodeId
@@ -515,6 +519,7 @@ namespace painlessmesh {
         uint8_t txPeriod = 0;
         uint8_t rxPeriod = 0;
         std::list<uint32_t> availableNetworks;
+        uint32_t stationId = 0;
 
         void clearTargetBSSID() {
             useTargetNodeId = false;

@@ -22,6 +22,7 @@ namespace painlessmesh {
         std::list<std::shared_ptr<PearNodeTree> > parentCandidates;
         int txThreshold = 38;
         int rxThreshold = 8;
+        uint32_t stationId = 0;
         int energyProfile = 999; // Initialised as 999 to indicate it hasn't been set.
 
         // Define the < operator for comparison
@@ -51,13 +52,14 @@ namespace painlessmesh {
             this->subs = nodeTree->subs;
         }
 
-        PearNodeTree(const std::shared_ptr<NodeTree> &nodeTree, const int periodTx, const int periodRx,
+        PearNodeTree(const std::shared_ptr<NodeTree> &nodeTree, const int periodTx, const int periodRx, const uint32_t stationId,
                      const std::list<std::shared_ptr<PearNodeTree> > &parentCandidates) {
             this->nodeId = nodeTree->nodeId;
             this->root = nodeTree->root;
             this->subs = nodeTree->subs;
             this->periodRx = periodRx;
             this->periodTx = periodTx;
+            this->stationId = stationId;
             this->parentCandidates = parentCandidates;
         }
 
@@ -243,6 +245,9 @@ namespace painlessmesh {
                 pearNodeTree->nodeId);
             std::set<std::shared_ptr<PearNodeTree> > descendingTxList;
             for (const auto &sub: pearNodeTree->subs) {
+                if (pearNodeTree->stationId != 0) {
+                    if (sub.nodeId == pearNodeTree->stationId) continue;
+                }
                 const auto it = pearNodeTreeMap.find(sub.nodeId);
                 if (it == pearNodeTreeMap.end()) {
                     Log(PEAR_DEBUG, "updateParent(): Sub not found in map");
@@ -311,6 +316,7 @@ namespace painlessmesh {
             Log(PEAR_DEBUG, "processReceivedData(): Started processing received data!");
             const int periodTx = pearData[TX_PERIOD];
             const int periodRx = pearData[RX_PERIOD];
+            const uint32_t stationId = pearData[STATION_ID];
             Log(PEAR_DEBUG, "processReceivedData(): pearData: periodTx: %i, periodRx: %i, nodeId: %u\n", periodTx,
                 periodRx, nodeTree->nodeId);
             const auto parentCandidatesJsonArray = pearData[PARENT_CANDIDATES].as<JsonArray>();
@@ -364,12 +370,13 @@ namespace painlessmesh {
                 const auto foundPearNodeTree = pearNodeTreeMap[nodeTree->nodeId];
                 foundPearNodeTree->periodTx = periodTx;
                 foundPearNodeTree->periodRx = periodRx;
+                foundPearNodeTree->stationId = stationId;
                 foundPearNodeTree->parentCandidates = parentCandidates;
                 foundPearNodeTree->subs = nodeTree->subs;
             } else {
                 Log(PEAR_DEBUG, "processReceivedData(): Node being processed NOT found in tree - inserting data\n");
                 pearNodeTreeMap.insert({
-                    nodeTree->nodeId, std::make_shared<PearNodeTree>(nodeTree, periodTx, periodRx, parentCandidates)
+                    nodeTree->nodeId, std::make_shared<PearNodeTree>(nodeTree, periodTx, periodRx, stationId, parentCandidates)
                 });
             }
         }

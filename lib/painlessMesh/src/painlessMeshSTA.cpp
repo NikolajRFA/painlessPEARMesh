@@ -128,6 +128,7 @@ void ICACHE_FLASH_ATTR StationScan::scanComplete() {
     mesh->availableNetworks.push_back(painlessmesh::tcp::encodeNodeId(ap.bssid));
   }
   removeStationFromAvailableNetworksIfInNodeSubs();
+  mesh->setStationId(getStationIdFromSubs());
 
   Log(CONNECTION, "\tFound %d nodes\n", aps.size());
 
@@ -238,6 +239,22 @@ bool ICACHE_FLASH_ATTR StationScan::checkStation()
     forceReconnect = true;
   }
   return false;
+}
+
+uint32_t ICACHE_FLASH_ATTR StationScan::getStationIdFromSubs() const {
+  if (!mesh->subs.empty())
+  {
+    auto connection = mesh->subs.begin();
+    while (connection != mesh->subs.end())
+    {
+      if ((*connection)->station)
+      {
+        return (*connection)->nodeId;
+      }
+      ++connection;
+    }
+  }
+  return 0;
 }
 
 bool ICACHE_FLASH_ATTR StationScan::compareWiFiAPRecords(const WiFi_AP_Record_t &a, const WiFi_AP_Record_t &b,

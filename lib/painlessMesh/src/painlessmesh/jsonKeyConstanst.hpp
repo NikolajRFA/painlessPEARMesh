@@ -8,5 +8,6 @@
 #define NODE_ID "nodeId"
 #define SUBS "subs"
 #define NODE_TIME "nodeTime"
+#define STATION_ID "stationId"
 
 #endif
