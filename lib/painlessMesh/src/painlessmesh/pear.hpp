@@ -246,7 +246,10 @@ namespace painlessmesh {
             std::set<std::shared_ptr<PearNodeTree> > descendingTxList;
             for (const auto &sub: pearNodeTree->subs) {
                 if (pearNodeTree->stationId != 0) {
-                    if (sub.nodeId == pearNodeTree->stationId) continue;
+                    if (sub.nodeId == pearNodeTree->stationId) {
+                        Log(PEAR_DEBUG, "Found station in subs - station will not be added to descendingTxList!\n");
+                        continue;
+                    }
                 }
                 const auto it = pearNodeTreeMap.find(sub.nodeId);
                 if (it == pearNodeTreeMap.end()) {
