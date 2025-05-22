@@ -1,4 +1,4 @@
-﻿def get_energy_profile(node_id) -> (int, int):
+﻿def get_energy_profile_id(node_id: int) -> int:
     energy_profile_id_map = {3206773453: 0,
                              3211408993: 1,
                              3211386233: 1,
@@ -28,6 +28,11 @@
                              2883641793: 2,
                              3294680957: 1}
 
+    return energy_profile_id_map[node_id]
+
+def get_energy_profile(node_id) -> (int, int):
+
+
     energy_profile_map = {0: (999, 999), 1: (40, 35), 2: (35, 30), 3: (30, 25), 4: (25, 20), 5: (20, 15)} #4th run
 
-    return energy_profile_map[energy_profile_id_map[node_id]]
+    return energy_profile_map[get_energy_profile_id(node_id)]
