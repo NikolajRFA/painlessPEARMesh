@@ -33,6 +33,14 @@
 def get_energy_profile(node_id) -> (int, int):
 
 
-    energy_profile_map = {0: (999, 999), 1: (40, 35), 2: (35, 30), 3: (30, 25), 4: (25, 20), 5: (20, 15)} #4th run
+    #energy_profile_map = {0: (999, 999), 1: (40, 35), 2: (35, 30), 3: (30, 25), 4: (25, 20), 5: (20, 15)} #4th run
+    energy_profile_map = {
+    0: (999, 999),
+    1: (25, 20),
+    2: (20, 15),
+    3: (15, 10),
+    4: (10, 5),
+    5: (5, 0)
+}
 
     return energy_profile_map[get_energy_profile_id(node_id)]

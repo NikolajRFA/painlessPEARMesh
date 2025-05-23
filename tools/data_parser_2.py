@@ -63,11 +63,14 @@ def extract_pear_reports(file_path):
     return pear_reports, pear_stable_time
 
 
-def df_from_pear_reports(pear_reports: list[PearReport]):
+def df_from_pear_reports(pear_reports: list[PearReport], run_id: int = 1):
     df = pd.DataFrame([vars(pear_report) for pear_report in pear_reports])
     df['node_time'] = df['node_time'].replace(0, np.nan)  # Convert 0s to NaN temporarily
     df['node_time'] = df['node_time'].interpolate()
-    #df = df.astype(float)
+
+    # Add the run_id column with the supplied integer
+    df["run_id"] = run_id
+
     return df
 
 df = df_from_pear_reports(extract_pear_reports("data/20_4_1505_1.txt")[0])
