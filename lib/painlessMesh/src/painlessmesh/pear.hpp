@@ -209,15 +209,20 @@ namespace painlessmesh {
             return false;
         }
 
-        static bool isNodeInSubs(const std::shared_ptr<PearNodeTree> &parentNode,
-                                 const std::shared_ptr<PearNodeTree> &potentialSub) {
-            for (const auto &sub: parentNode->subs) {
+        bool isNodeInDownwardsConnections(const std::shared_ptr<PearNodeTree> &parentNode,
+                          const std::shared_ptr<PearNodeTree> &potentialSub) {
+            for (const auto &sub : parentNode->subs) {
                 if (sub.nodeId == potentialSub->nodeId) {
+                    return true;
+                }
+                // Recursive call to check deeper levels
+                if (isNodeInDownwardsConnections(pearNodeTreeMap.find(sub.nodeId)->second, potentialSub)) {
                     return true;
                 }
             }
             return false;
         }
+
 
         /**
          * @brief Evaluates and updates potential parent nodes for the given PearNodeTree based on transmission priorities and thresholds.
@@ -245,6 +250,8 @@ namespace painlessmesh {
                 pearNodeTree->nodeId);
             std::set<std::shared_ptr<PearNodeTree> > descendingTxList;
             for (const auto &sub: pearNodeTree->subs) {
+                Log(PEAR_DEBUG, "updateParent(): Station id is: %u\n", pearNodeTree->stationId);
+                Log(PEAR_DEBUG, "updateParent(): Sub node id is: %u\n", pearNodeTree->stationId);
                 if (pearNodeTree->stationId != 0) {
                     if (sub.nodeId == pearNodeTree->stationId) {
                         Log(PEAR_DEBUG, "Found station in subs - station will not be added to descendingTxList!\n");
@@ -282,7 +289,7 @@ namespace painlessmesh {
                         Log(PEAR_DEBUG, "updateParent(): Checking candidate %u: rx %d, tx %d\n", candidate->nodeId,
                             candidate->periodRx, candidate->periodTx);
 
-                        if (deviceExceedsThreshold(candidate) || isNodeInSubs(nodeToReroute, candidate)) {
+                        if (deviceExceedsThreshold(candidate) || isNodeInDownwardsConnections(nodeToReroute, candidate)) {
                             continue;
                         }
 
@@ -376,11 +383,14 @@ namespace painlessmesh {
                 foundPearNodeTree->stationId = stationId;
                 foundPearNodeTree->parentCandidates = parentCandidates;
                 foundPearNodeTree->subs = nodeTree->subs;
+                Log(PEAR_DEBUG, "Adding subs to foundPearNodeTree: %u\n", foundPearNodeTree->subs.size());
             } else {
                 Log(PEAR_DEBUG, "processReceivedData(): Node being processed NOT found in tree - inserting data\n");
                 pearNodeTreeMap.insert({
                     nodeTree->nodeId, std::make_shared<PearNodeTree>(nodeTree, periodTx, periodRx, stationId, parentCandidates)
                 });
+                Log(PEAR_DEBUG, "Adding subs to new PearNodeTree: %u\n", nodeTree->subs.size());
+
             }
         }
 
@@ -415,7 +425,8 @@ namespace painlessmesh {
                 queue.pop();
 
                 Log(PEAR_DEBUG, "getAllDevicesBreadthFirst(): Adding node: %u to listOfAllDevices\n", current->nodeId);
-                result.push_back(current);
+                auto nodeFromTreeMap = pearNodeTreeMap.find(current->nodeId)->second;
+                result.push_back(nodeFromTreeMap);
 
                 for (const auto &child: current->subs) {
                     const auto it = pearNodeTreeMap.find(child.nodeId);
