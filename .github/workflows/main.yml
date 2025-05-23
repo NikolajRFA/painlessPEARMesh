@@ -8,5 +8,5 @@ jobs:
 
     steps:
       - name: PlatformIO Test
-        uses: NikolajRFA/PlatformIO-test-action@latest
+        uses: NikolajRFA/PlatformIO-test-action@v0.0.2
           
