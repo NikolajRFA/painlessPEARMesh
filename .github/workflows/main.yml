@@ -1,0 +1,14 @@
+name: PlatformIO unit tests
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubunto-latest
+
+    steps:
+      - name: PlatformIO Test
+      # You may pin to the exact commit or the version.
+      # uses: NikolajRFA/PlatformIO-test-action@b623e715a025dca55731261cad7ff6dc0aa0bfdd
+      - uses: NikolajRFA/PlatformIO-test-action@v0.0.1
+          
