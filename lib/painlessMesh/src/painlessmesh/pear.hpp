@@ -138,7 +138,7 @@ namespace painlessmesh {
                 Log(PEAR, "Running pear on device: %u\n", pearNodeTree->nodeId);
                 const bool hasReroute = reroutes.count(pearNodeTree->nodeId) > 0;
 
-                if (!hasReroute && deviceExceedsLimit(pearNodeTree->nodeId)) {
+                if (!hasReroute && deviceExceedsThreshold(pearNodeTree)) {
                     rerouteChild(pearNodeTree);
                     numberOfRunsWithoutReroutes = 0;
                 } else {
@@ -178,35 +178,6 @@ namespace painlessmesh {
 
             return pearNodeTree->periodRx > pearNodeTree->rxThreshold && pearNodeTree->periodTx > pearNodeTree->
                    txThreshold;
-        }
-
-        /**
-         * @brief Checks whether a device exceeds the defined energy profile thresholds.
-         *
-         * This function looks up a `PearNodeTree` by the given `deviceId` from the global `pearNodeTreeMap`. If the node is found,
-         * it evaluates whether the device exceeds a predefined threshold by calling `deviceExceedsThreshold()`. If the threshold is exceeded,
-         * the function returns `true`. Otherwise, it increments the global `noOfVerifiedDevices` counter and returns `false`.
-         *
-         * @param deviceId The unique identifier of the device to be evaluated.
-         *
-         * @return `true` if the device exceeds the operational threshold, `false` otherwise or if the device is not found.
-         */
-        bool deviceExceedsLimit(const uint32_t deviceId) {
-            using namespace painlessmesh::logger;
-            Log(PEAR_DEBUG, "deviceExceedsLimit(): Checking if node: %u exceeds limit\n", deviceId);
-            //auto pearNodeTree = findPearNodeTreeById(deviceId);
-            const auto it = pearNodeTreeMap.find(deviceId);
-            if (it == pearNodeTreeMap.end()) return false;
-            const auto pearNodeTree = it->second;
-            Log(PEAR_DEBUG, "deviceExceedsLimit(): Raw pointer: %p\n", pearNodeTree.get());
-            Log(PEAR_DEBUG, "deviceExceedsLimit(): Found pearNodeTree: %u (tx: %u, rx: %u)\n", pearNodeTree->nodeId,
-                pearNodeTree->periodTx, pearNodeTree->periodRx);
-            if (deviceExceedsThreshold(pearNodeTree)) {
-                Log(PEAR_DEBUG, "deviceExceedsLimit(): Node: %u exceeds the threshold: rx: %i, tx: %i\n", deviceId,
-                    pearNodeTree->rxThreshold, pearNodeTree->txThreshold);
-                return true;
-            }
-            return false;
         }
 
         bool isNodeInDownwardsConnections(const std::shared_ptr<PearNodeTree> &parentNode,
