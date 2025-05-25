@@ -195,6 +195,12 @@ namespace painlessmesh {
         }
 
 
+        void addReroute(const std::shared_ptr<PearNodeTree> &nodeToReroute, const std::shared_ptr<PearNodeTree> &candidate) {
+            String jsonString = buildNewParentJson(candidate->nodeId);
+            reroutes.insert({nodeToReroute->nodeId, jsonString});
+            Log(logger::PEAR, "rerouteChild(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
+        }
+
         /**
          * @brief Evaluates and updates potential parent nodes for the given PearNodeTree based on transmission priorities and thresholds.
          *
@@ -264,9 +270,7 @@ namespace painlessmesh {
                             continue;
                         }
 
-                        String jsonString = buildNewParentJson(candidate->nodeId);
-                        reroutes.insert({nodeToReroute->nodeId, jsonString});
-                        Log(PEAR, "rerouteChild(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
+                        addReroute(nodeToReroute, candidate);
                         break;
                     }
                 }
