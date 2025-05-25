@@ -112,7 +112,7 @@ namespace painlessmesh {
          * This function performs a breadth-first traversal of the given `rootNodeTree` to obtain a list of all devices
          * represented as `PearNodeTree` objects. It iterates through the list and, if the number of verified devices is below a limit (10),
          * it continues checking devices to see if they exceed energy profile thresholds using `deviceExceedsLimit()`. If so, it triggers a parent
-         * update for that device via `updateParent()`.
+         * update for that device via `rerouteChild()`.
          *
          * @param rootNodeTree The root of the device tree to be processed.
          *
@@ -137,7 +137,7 @@ namespace painlessmesh {
                 const bool hasReroute = reroutes.count(pearNodeTree->nodeId) > 0;
 
                 if (!hasReroute && deviceExceedsLimit(pearNodeTree->nodeId)) {
-                    updateParent(pearNodeTree);
+                    rerouteChild(pearNodeTree);
                     numberOfRunsWithoutReroutes = 0;
                 } else {
                     ++noOfVerifiedDevices;
@@ -237,15 +237,15 @@ namespace painlessmesh {
          * - `deviceExceedsThreshold(candidate)` is a predicate function used to check if a candidate node is eligible.
          * - `reroutes` is a globally accessible map used to track rerouted parent relationships.
          */
-        void updateParent(const std::shared_ptr<PearNodeTree> &pearNodeTree) {
+        void rerouteChild(const std::shared_ptr<PearNodeTree> &pearNodeTree) {
             using namespace painlessmesh::logger;
-            Log(PEAR_DEBUG, "updateParent(): Attempting to reroute the most consuming sub of node: %u\n",
+            Log(PEAR_DEBUG, "rerouteChild(): Attempting to reroute the most consuming sub of node: %u\n",
                 pearNodeTree->nodeId);
             std::set<std::shared_ptr<PearNodeTree> > descendingTxList;
             for (const auto &sub: pearNodeTree->subs) {
                 const auto it = pearNodeTreeMap.find(sub.nodeId);
                 if (it == pearNodeTreeMap.end()) {
-                    Log(PEAR_DEBUG, "updateParent(): Sub not found in map");
+                    Log(PEAR_DEBUG, "rerouteChild(): Sub not found in map");
                     continue;
                 }
                 const auto pearNodeTreeSub = it->second;
@@ -253,12 +253,12 @@ namespace painlessmesh {
             }
 
             if (descendingTxList.empty()) {
-                Log(PEAR_DEBUG, "updateParent(): No subs founds - unable to optimize DPDU!");
+                Log(PEAR_DEBUG, "rerouteChild(): No subs founds - unable to optimize DPDU!");
                 return;
             }
 
             for (const auto &nodeToReroute: descendingTxList) {
-                Log(PEAR_DEBUG, "updateParent(): Checking if node: %u is able to be rerouted to a valid candidate\n",
+                Log(PEAR_DEBUG, "rerouteChild(): Checking if node: %u is able to be rerouted to a valid candidate\n",
                     nodeToReroute->nodeId);
                 if (!nodeToReroute->parentCandidates.empty()) {
 
@@ -271,7 +271,7 @@ namespace painlessmesh {
                     }
 
                     for (const auto &candidate: parentCandidatesSortedByEnergyProfile) {
-                        Log(PEAR_DEBUG, "updateParent(): Checking candidate %u: rx %d, tx %d\n", candidate->nodeId,
+                        Log(PEAR_DEBUG, "rerouteChild(): Checking candidate %u: rx %d, tx %d\n", candidate->nodeId,
                             candidate->periodRx, candidate->periodTx);
 
                         if (deviceExceedsThreshold(candidate) || isNodeInSubs(nodeToReroute, candidate)) {
@@ -280,7 +280,7 @@ namespace painlessmesh {
 
                         String jsonString = buildNewParentJson(candidate->nodeId);
                         reroutes.insert({nodeToReroute->nodeId, jsonString});
-                        Log(PEAR, "updateParent(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
+                        Log(PEAR, "rerouteChild(): Rerouted %u to %u\n", nodeToReroute->nodeId, candidate->nodeId);
                         break;
                     }
                 }
