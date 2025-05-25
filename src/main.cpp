@@ -57,7 +57,7 @@ void setup() {
     Serial.begin(115200);
 
     //mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
-    mesh.setDebugMsgTypes(DATA | PEAR );
+    mesh.setDebugMsgTypes( DATA | PEAR | PEAR_DEBUG);
     // set before init() so that you can see startup messages
 
     mesh.init(MESH_PREFIX1, MESH_PASSWORD, &userScheduler, MESH_PORT);
