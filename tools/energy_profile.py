@@ -81,7 +81,7 @@ def get_energy_profile_id_H6L13(node_id: int) -> int:
 
     return energy_profile_id_map[node_id]
 
-def get_energy_f_profile_H6L13(energy_profile_id: int):
+def get_energy_profile_H6L13(energy_profile_id: int):
     energy_profile_map = {
         1: (60, 45),
         2: (20, 15),
@@ -90,4 +90,4 @@ def get_energy_f_profile_H6L13(energy_profile_id: int):
     return energy_profile_map[energy_profile_id]
 
 def get_energy_profile_from_node_H6L13(node_id: int):
-    return get_energy_f_profile_H6L13(get_energy_profile_id_H6L13(node_id))
+    return get_energy_profile_H6L13(get_energy_profile_id_H6L13(node_id))
