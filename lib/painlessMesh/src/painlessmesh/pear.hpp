@@ -227,11 +227,10 @@ namespace painlessmesh {
                 pearNodeTree->nodeId);
             std::set<std::shared_ptr<PearNodeTree> > descendingTxList;
             for (const auto &sub: pearNodeTree->subs) {
-                Log(PEAR_DEBUG, "updateParent(): Station id is: %u\n", pearNodeTree->stationId);
-                Log(PEAR_DEBUG, "updateParent(): Sub node id is: %u\n", pearNodeTree->stationId);
+                Log(PEAR_DEBUG, "updateParent(): Inspecting sub with id: %u\n", sub.nodeId);
                 if (pearNodeTree->stationId != 0) {
                     if (sub.nodeId == pearNodeTree->stationId) {
-                        Log(PEAR_DEBUG, "Found station in subs - station will not be added to descendingTxList!\n");
+                        Log(PEAR_DEBUG, "Found station of node being rerouted in subs - station will not be added to descendingTxList!\n");
                         continue;
                     }
                 }
