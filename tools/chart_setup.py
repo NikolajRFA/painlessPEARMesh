@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 # run_data: list[tuple[list[PearReport], int]] = [extract_pear_reports("data/7th set/20_7_1705_3.txt"), extract_pear_reports("data/7th set/20_7_1705_4.txt"), #extract_pear_reports("data/7th set/20_7_1705_6.txt"), extract_pear_reports("data/7th set/20_7_1705_7.txt"), extract_pear_reports("data/7th set/20_7_1705_8.txt")]
 
 
-def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map: dict):
+def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map: dict, chart_title: str = ""):
     # Get all file paths from the folder
     file_paths = get_file_paths_from_folder(data_path)
 
@@ -159,7 +159,7 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
 
     plt.xlabel("Time (minutes)")
     plt.ylabel("Total Messages Transmitted (2-minute window)")
-    plt.title("Messages Transmitted Over Time (Grouped by Run ID)")
+    plt.title(f'{chart_title + " " if chart_title != "" else ""}Messages Transmitted Over Time (Grouped by Run ID)')
     plt.legend(loc="upper right", fontsize="small")
     plt.grid()
     plt.tight_layout()
@@ -309,7 +309,7 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
         plt.xticks(x + bar_width / 2, labels=this_pivot_df.index.map(lambda node_id: get_short_node_id(node_id)))
         plt.xlabel("From Node")
         plt.ylabel("2 Minute Average Tx Sum")
-        plt.title(f"2 Minute Average Tx per Node (Energy Profile {energy_profile_id})")
+        plt.title(f"{chart_title + "" if chart_title != "" else ""}2 Minute Average Tx per Node (Energy Profile {energy_profile_id})")
         plt.legend()
         plt.grid(axis="y", linestyle="--")
 
