@@ -38,11 +38,11 @@ def get_energy_profile_from_node(node_id: int):
 def get_energy_profile(energy_profile_id: int):
     energy_profile_map = {
         0: (999, 999),
-        1: (25, 20),
-        2: (20, 15),
-        3: (15, 10),
-        4: (10, 5),
-        5: (5, 0)
+        1: (35, 30),
+        2: (30, 25),
+        3: (25, 20),
+        4: (20, 15),
+        5: (15, 10)
     }
 
     return energy_profile_map[energy_profile_id]
