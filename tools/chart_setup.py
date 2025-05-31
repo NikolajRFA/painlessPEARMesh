@@ -309,7 +309,7 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
         plt.xticks(x + bar_width / 2, labels=this_pivot_df.index.map(lambda node_id: get_short_node_id(node_id)))
         plt.xlabel("From Node")
         plt.ylabel("2 Minute Average Tx Sum")
-        plt.title(f"{chart_title + "" if chart_title != "" else ""}2 Minute Average Tx per Node (Energy Profile {energy_profile_id})")
+        plt.title(f"{chart_title + " " if chart_title != "" else ""}2 Minute Average Tx per Node (Energy Profile {energy_profile_id})")
         plt.legend()
         plt.grid(axis="y", linestyle="--")
 
