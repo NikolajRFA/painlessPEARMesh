@@ -159,14 +159,14 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
         plt.plot(last_x, last_y, marker="o", markersize=6, color="maroon")
 
     # Add reference horizontal line for the average transmissions without PEAR
-    plt.axhline(y=no_pear_2min_mean, color="green", linestyle="--", linewidth=1, label="Average messages w/o PEAR")
+    plt.axhline(y=no_pear_2min_mean, color="green", linestyle="--", linewidth=1, label="Average packages w/o PEAR")
 
     # Adjust x-ticks for better readability
     plt.xticks(df_agg["time_bin_min"], labels=df_agg["time_bin_min"].round(1), rotation=45)
 
     plt.xlabel("Time (minutes)")
-    plt.ylabel("Total Messages Transmitted (2-minute window)")
-    plt.title(f'{chart_title + " " if chart_title != "" else ""}Messages Transmitted Over Time (Grouped by Run ID)')
+    plt.ylabel("Total Packages Transmitted (2-minute window)")
+    plt.title(f'{chart_title + " " if chart_title != "" else ""}Packages Transmitted Over Time (Grouped by Run ID)')
     plt.legend(loc="upper right", fontsize="small")
     plt.grid()
     plt.tight_layout()
