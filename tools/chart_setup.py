@@ -1,4 +1,5 @@
-﻿from tools.fileHelper import get_file_paths_from_folder, get_short_node_id
+﻿from tools import data_parser
+from tools.fileHelper import get_file_paths_from_folder, get_short_node_id
 from tools.data_parser_2 import extract_pear_reports, df_from_pear_reports, PearReport
 # from tools.energy_profile import get_energy_profile_from_node, get_energy_profile_id, get_energy_profile, \
 #    get_energy_profile_from_node_H6L13, get_energy_profile_id_H6L13
@@ -11,7 +12,7 @@ import matplotlib.pyplot as plt
 # run_data: list[tuple[list[PearReport], int]] = [extract_pear_reports("data/7th set/20_7_1705_3.txt"), extract_pear_reports("data/7th set/20_7_1705_4.txt"), #extract_pear_reports("data/7th set/20_7_1705_6.txt"), extract_pear_reports("data/7th set/20_7_1705_7.txt"), extract_pear_reports("data/7th set/20_7_1705_8.txt")]
 
 
-def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map: dict, chart_title: str = ""):
+def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map: dict, chart_title: str = "", use_old_data_parser = False):
     # Get all file paths from the folder
     file_paths = get_file_paths_from_folder(data_path)
 
@@ -29,10 +30,15 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
             continue  # Skip files without a valid number
 
         # Extract pear reports
-        pear_reports, pear_stable_time1 = extract_pear_reports(file_path)
+        if use_old_data_parser:
+            pear_reports = data_parser.extract_pear_reports(file_path)
+            df = data_parser.df_from_pear_reports(pear_reports, run_id)
+        else:
+            pear_reports = extract_pear_reports(file_path)[0]
+            df = df_from_pear_reports(pear_reports, run_id)
 
         # Convert to DataFrame and add run_id column
-        df = df_from_pear_reports(pear_reports, run_id)
+
 
         # Append to list
         dfs.append(df)
@@ -107,6 +113,7 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
 
             last_time = row["node_time"]
 
+    #print(f'new_rows: {len(new_rows)}')
     # Append new rows to original dataframe
     temp_df = pd.concat([temp_df, pd.DataFrame(new_rows)], ignore_index=True)
 
@@ -278,6 +285,7 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
     bar_width = 0.4
 
     for energy_profile_id in sorted(df_pivoted["energy_profile_id"].unique()):
+        if energy_profile_id == 0: continue
         tx_threshold, rx_threshold = energy_profile_map[int(energy_profile_id)]
         tx_threshold *= 2
         rx_threshold *= 2

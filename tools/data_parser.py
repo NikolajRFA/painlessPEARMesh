@@ -1,5 +1,7 @@
 import json
 from typing import Optional
+
+import numpy as np
 import pandas as pd
 import re
 
@@ -9,6 +11,7 @@ class PearReport:
     tx_period: Optional[int]
     rx_period: Optional[int]
     parent_candidates: list[int]
+    node_time: int
 
     def __init__(self, from_node: int, tx_period: Optional[int], rx_period: Optional[int],
                  parent_candidates: list[int]):
@@ -68,38 +71,38 @@ def extract_pear_reports(file_path):
     return pear_reports
 
 
-def df_from_pear_reports(pear_reports: list[PearReport]):
-    cols: dict[str, list[Optional[int]]] = {}
+def df_from_pear_reports(pear_reports: list[PearReport], run_id: int = 1):
+    df = pd.DataFrame([vars(pear_report) for pear_report in pear_reports])
 
-    # Populate the dictionary
-    for pear_report in pear_reports:
-        if pear_report.from_node == 3206773453: continue
-        tx_key = f"{pear_report.from_node}tx"
-        rx_key = f"{pear_report.from_node}rx"
+    # Assuming `df` is your DataFrame containing PearReport data
+    df["node_time"] = 0  # Initialize node_time column
 
-        if tx_key not in cols:
-            cols[tx_key] = []
-            cols[rx_key] = []
+    # Dictionary to track the last seen time for each `from_node`
+    node_timestamps = {}
 
-        cols[tx_key].append(pear_report.tx_period)
-        cols[rx_key].append(pear_report.rx_period)
+    # Iterate through the DataFrame and assign node_time values
+    for index, row in df.iterrows():
+        from_node = row["from_node"]
 
-    # Find the maximum length of any list
-    max_length = max(len(lst) for lst in cols.values())
+        if from_node in node_timestamps:  # Seen before, increment time
+            node_timestamps[from_node] += 60 * 1_000_000 + 1000  # Add 60 seconds in microseconds
+        else:  # First occurrence, set time to 0
+            node_timestamps[from_node] = 1000
 
-    # Pad lists with zeros to match the maximum length
-    for key in cols:
-        while len(cols[key]) < max_length:
-            cols[key].append(0)
+        df.at[index, "node_time"] = node_timestamps[from_node]  # Assign interpolated node_time
 
-    df = pd.DataFrame(data=cols)
-    df = df.astype(float)
+    # Display the updated DataFrame
+    #print(df.head())
+
+    df['node_time'] = df['node_time'].replace(0, np.nan)  # Convert 0s to NaN temporarily
+    df['node_time'] = df['node_time'].interpolate()
+
+    # Add the run_id column with the supplied integer
+    df["run_id"] = run_id
+
     return df
 
 
-df = df_from_pear_reports(extract_pear_reports("data/20_1_1405_1.txt"))
+#df = df_from_pear_reports(extract_pear_reports("data/1st set/20_1_1405_1.txt"), 1)
 
-print(df.dtypes)
-
-f = open("csv.csv", "w")
-f.write(df.to_csv())
+#print(df.info())
