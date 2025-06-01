@@ -1,0 +1,873 @@
+--- Terminal on COM6 | 115200 8-N-1
+--- Available filters and text transformations: colorize, debug, default, direct, esp32_exception_decoder, hexlify, log2file, nocontrol, printable, send_on_enter, time
+--- More details at https://bit.ly/pio-monitor-filters
+--- Quit: Ctrl+C | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:1
+load:0x3fff0030,len:1344
+load:0x40078000,len:13964
+load:0x40080400,len:3600
+entry 0x400805f0
+
+setLogLevel: PEAR | DATA |
+Node id: 3206773453
+PEAR: Scheduling runPearTask()
+TOPOLOGY: {"nodeId":3206773453,"root":true}
+Number of nodes in mesh: 1
+PEAR: connectToAP(): record is: nodeId: 256
+TOPOLOGY: {"nodeId":3206773453,"root":true}
+Number of nodes in mesh: 1
+TOPOLOGY: {"nodeId":3206773453,"root":true}
+Number of nodes in mesh: 1
+TOPOLOGY: {"nodeId":3206773453,"root":true}
+Number of nodes in mesh: 1
+--> startHere: New Connection, nodeId = 2883627821
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821}]}
+Number of nodes in mesh: 2
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821}]}
+Number of nodes in mesh: 2
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821},{"nodeId":3211408993}]}
+Number of nodes in mesh: 3
+--> startHere: New Connection, nodeId = 3211408993
+PEAR: connectToAP(): record is: nodeId: 256
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821},{"nodeId":3211408993}]}
+Number of nodes in mesh: 3
+PEAR: Received {"txPeriod":36,"rxPeriod":6,"parentCandidates":[3206773453]} from node 2883627821
+DATA: 123123; {"txPeriod":36,"rxPeriod":6,"parentCandidates":[3206773453]}
+Reroute to root available - adding reroute!
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821},{"nodeId":3211408993,"subs":[{"nodeId":3211386233}]}]}
+Number of nodes in mesh: 4
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821},{"nodeId":3211408993,"subs":[{"nodeId":3211386233}]}]}
+Number of nodes in mesh: 4
+PEAR: Received {"txPeriod":40,"rxPeriod":10,"parentCandidates":[3206773453,2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":40,"rxPeriod":10,"parentCandidates":[3206773453,2883627821]}
+Reroute to root available - adding reroute!
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957}]}]}]}
+Number of nodes in mesh: 5
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957}]}]}]}
+Number of nodes in mesh: 5
+PEAR: Received {"txPeriod":41,"rxPeriod":11,"parentCandidates":[3294680957,3211408993,3206773453]} from node 3211386233
+DATA: 567567; {"txPeriod":41,"rxPeriod":11,"parentCandidates":[3294680957,3211408993,3206773453]}
+Reroute to root available - adding reroute!
+PEAR: connectToAP(): record is: nodeId: 256
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957}]}]}]}
+Number of nodes in mesh: 5
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 6
+PEAR: Received {"txPeriod":36,"rxPeriod":6,"parentCandidates":[3211386233]} from node 3294680957
+DATA: 123123; {"txPeriod":36,"rxPeriod":6,"parentCandidates":[3211386233]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 6
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 7
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 7
+PEAR: Received {"txPeriod":36,"rxPeriod":6,"parentCandidates":[3211408993,2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":36,"rxPeriod":6,"parentCandidates":[3211408993,2883627821]}
+Adjusted time 104505697. Offset = 32537
+Adjusted time 104588307. Offset = 0
+Adjusted time 104918876. Offset = 0
+Adjusted time 105104363. Offset = -26564
+Adjusted time 105498441. Offset = 0
+Adjusted time 105907857. Offset = 0
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793}]}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 8
+Adjusted time 106152267. Offset = -8103
+Adjusted time 106371045. Offset = 7725
+Adjusted time 106733066. Offset = 0
+Adjusted time 107135386. Offset = 0
+Adjusted time 107344685. Offset = 502
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793}]}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 8
+PEAR: Received {"txPeriod":47,"rxPeriod":17,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":47,"rxPeriod":17,"parentCandidates":[]}
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":37,"rxPeriod":8,"parentCandidates":[2883627821]} from node 2883681453
+DATA: 123123; {"txPeriod":37,"rxPeriod":8,"parentCandidates":[2883627821]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793}]}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 8
+PEAR: Received {"txPeriod":63,"rxPeriod":30,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":63,"rxPeriod":30,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":36,"rxPeriod":7,"parentCandidates":[3294680957]} from node 2883641793
+DATA: 123123; {"txPeriod":36,"rxPeriod":7,"parentCandidates":[3294680957]}
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 9
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 9
+PEAR: Received {"txPeriod":55,"rxPeriod":22,"parentCandidates":[3294680957,3206773453]} from node 3211386233
+DATA: 123123; {"txPeriod":55,"rxPeriod":22,"parentCandidates":[3294680957,3206773453]}
+Reroute to root available - adding reroute!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 9
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 10
+PEAR: Received {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3211386233,3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3211386233,3211408993,2930999053]}
+PEAR: Received {"txPeriod":52,"rxPeriod":21,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":52,"rxPeriod":21,"parentCandidates":[]}
+PEAR: connectToAP(): record is: nodeId: 256
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 10
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 11
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 11
+PEAR: Received {"txPeriod":36,"rxPeriod":6,"parentCandidates":[2883681453,2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":36,"rxPeriod":6,"parentCandidates":[2883681453,2883627821,2930999053]}
+PEAR: Received {"txPeriod":38,"rxPeriod":8,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":38,"rxPeriod":8,"parentCandidates":[2883627821]}
+Adjusted time 167364579. Offset = 1403
+Adjusted time 167372589. Offset = 1939
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 11
+PEAR: Received {"txPeriod":49,"rxPeriod":17,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":49,"rxPeriod":17,"parentCandidates":[]}
+PEAR: Received {"txPeriod":35,"rxPeriod":5,"parentCandidates":[3294680957,2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":35,"rxPeriod":5,"parentCandidates":[3294680957,2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":51,"rxPeriod":21,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":51,"rxPeriod":21,"parentCandidates":[]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 11
+PEAR: Received {"txPeriod":56,"rxPeriod":23,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":56,"rxPeriod":23,"parentCandidates":[2883627821]}
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":38,"rxPeriod":8,"parentCandidates":[]} from node 2883641793
+DATA: 123123; {"txPeriod":38,"rxPeriod":8,"parentCandidates":[]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 11
+PEAR: Received {"txPeriod":57,"rxPeriod":23,"parentCandidates":[3294680957,3206773453]} from node 3211386233
+DATA: 123123; {"txPeriod":57,"rxPeriod":23,"parentCandidates":[3294680957,3206773453]}
+Reroute to root available - adding reroute!
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 12
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 12
+PEAR: Received {"txPeriod":38,"rxPeriod":9,"parentCandidates":[3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":38,"rxPeriod":9,"parentCandidates":[3211408993,2930999053]}
+PEAR: Received {"txPeriod":59,"rxPeriod":26,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":59,"rxPeriod":26,"parentCandidates":[]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 12
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933}]},{"nodeId":2883619065}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 13
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":36,"rxPeriod":6,"parentCandidates":[417643029,2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":36,"rxPeriod":6,"parentCandidates":[417643029,2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933}]},{"nodeId":2883619065}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 13
+PEAR: Received {"txPeriod":45,"rxPeriod":16,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":45,"rxPeriod":16,"parentCandidates":[2883627821,2930999053]}
+PEAR: Received {"txPeriod":36,"rxPeriod":6,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":36,"rxPeriod":6,"parentCandidates":[2883627821]}
+Adjusted time 227379299. Offset = -3313
+Adjusted time 227767850. Offset = 0
+Adjusted time 228176500. Offset = 0
+Adjusted time 228388187. Offset = 504
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933}]},{"nodeId":2883619065}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 13
+PEAR: Received {"txPeriod":52,"rxPeriod":20,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":52,"rxPeriod":20,"parentCandidates":[]}
+PEAR: Received {"txPeriod":37,"rxPeriod":8,"parentCandidates":[2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":37,"rxPeriod":8,"parentCandidates":[2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":61,"rxPeriod":29,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":61,"rxPeriod":29,"parentCandidates":[]}
+PEAR: Received {"txPeriod":39,"rxPeriod":11,"parentCandidates":[2883681453]} from node 2883619065
+DATA: 123123; {"txPeriod":39,"rxPeriod":11,"parentCandidates":[2883681453]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933}]},{"nodeId":2883619065}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 13
+PEAR: Received {"txPeriod":57,"rxPeriod":23,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":57,"rxPeriod":23,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":37,"rxPeriod":8,"parentCandidates":[]} from node 2883641793
+DATA: 123123; {"txPeriod":37,"rxPeriod":8,"parentCandidates":[]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933}]},{"nodeId":2883619065}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 13
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":55,"rxPeriod":21,"parentCandidates":[3294680957,3206773453]} from node 3211386233
+DATA: 123123; {"txPeriod":55,"rxPeriod":21,"parentCandidates":[3294680957,3206773453]}
+Reroute to root available - adding reroute!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933}]},{"nodeId":2883619065}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 13
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3211408993,2930999053]}
+PEAR: Received {"txPeriod":51,"rxPeriod":18,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":51,"rxPeriod":18,"parentCandidates":[]}
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193}]}]},{"nodeId":2883619065}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 14
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193}]}]},{"nodeId":2883619065}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 14
+PEAR: Received {"txPeriod":42,"rxPeriod":13,"parentCandidates":[2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":42,"rxPeriod":13,"parentCandidates":[2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193}]}]},{"nodeId":2883619065}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 14
+PEAR: Received {"txPeriod":46,"rxPeriod":15,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":46,"rxPeriod":15,"parentCandidates":[2883627821,2930999053]}
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193}]}]},{"nodeId":2883619065},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 15
+PEAR: Received {"txPeriod":36,"rxPeriod":6,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":36,"rxPeriod":6,"parentCandidates":[2883627821]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193}]}]},{"nodeId":2883619065},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 15
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":48,"rxPeriod":16,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":48,"rxPeriod":16,"parentCandidates":[]}
+PEAR: Received {"txPeriod":44,"rxPeriod":16,"parentCandidates":[2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":44,"rxPeriod":16,"parentCandidates":[2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":64,"rxPeriod":30,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":64,"rxPeriod":30,"parentCandidates":[]}
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193}]}]},{"nodeId":2883619065},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 16
+PEAR: Received {"txPeriod":38,"rxPeriod":9,"parentCandidates":[]} from node 2883619065
+DATA: 123123; {"txPeriod":38,"rxPeriod":9,"parentCandidates":[]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193}]}]},{"nodeId":2883619065},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 16
+PEAR: Received {"txPeriod":62,"rxPeriod":28,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":62,"rxPeriod":28,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":38,"rxPeriod":9,"parentCandidates":[2883681453,3211321933,2930999053,417643029]} from node 3206780693
+DATA: 123123; {"txPeriod":38,"rxPeriod":9,"parentCandidates":[2883681453,3211321933,2930999053,417643029]}
+PEAR: Received {"txPeriod":44,"rxPeriod":16,"parentCandidates":[]} from node 2883641793
+DATA: 123123; {"txPeriod":44,"rxPeriod":16,"parentCandidates":[]}
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 17
+PEAR: Received {"txPeriod":39,"rxPeriod":10,"parentCandidates":[3211321933,2811362457]} from node 3101225193
+DATA: 123123; {"txPeriod":39,"rxPeriod":10,"parentCandidates":[3211321933,2811362457]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 17
+PEAR: Received {"txPeriod":61,"rxPeriod":29,"parentCandidates":[3294680957,3206773453]} from node 3211386233
+DATA: 123123; {"txPeriod":61,"rxPeriod":29,"parentCandidates":[3294680957,3206773453]}
+Reroute to root available - adding reroute!
+PEAR: Received {"txPeriod":36,"rxPeriod":6,"parentCandidates":[2883641793,2811362457,3211302717,3101225193]} from node 3211320821
+DATA: 123123; {"txPeriod":36,"rxPeriod":6,"parentCandidates":[2883641793,2811362457,3211302717,3101225193]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 17
+PEAR: Received {"txPeriod":43,"rxPeriod":13,"parentCandidates":[3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":43,"rxPeriod":13,"parentCandidates":[3211408993,2930999053]}
+PEAR: Received {"txPeriod":60,"rxPeriod":28,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":60,"rxPeriod":28,"parentCandidates":[]}
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":35,"rxPeriod":5,"parentCandidates":[2883619065,2883681453,3206780693]} from node 3294675181
+DATA: 123123; {"txPeriod":35,"rxPeriod":5,"parentCandidates":[2883619065,2883681453,3206780693]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 17
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 18
+PEAR: Received {"txPeriod":50,"rxPeriod":19,"parentCandidates":[2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":50,"rxPeriod":19,"parentCandidates":[2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 18
+PEAR: Received {"txPeriod":53,"rxPeriod":23,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":53,"rxPeriod":23,"parentCandidates":[2883627821,2930999053]}
+PEAR: Received {"txPeriod":36,"rxPeriod":6,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":36,"rxPeriod":6,"parentCandidates":[2883627821]}
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 19
+Adjusted time 349011978. Offset = 5607
+Adjusted time 349081993. Offset = 0
+Adjusted time 349420955. Offset = 0
+Adjusted time 349634866. Offset = -2926
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 19
+PEAR: Received {"txPeriod":55,"rxPeriod":22,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":55,"rxPeriod":22,"parentCandidates":[]}
+PEAR: Received {"txPeriod":38,"rxPeriod":9,"parentCandidates":[2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":38,"rxPeriod":9,"parentCandidates":[2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":73,"rxPeriod":37,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":73,"rxPeriod":37,"parentCandidates":[]}
+PEAR: Received {"txPeriod":48,"rxPeriod":18,"parentCandidates":[3101225193,3206780693,3211321933]} from node 1616231985
+DATA: 123123; {"txPeriod":48,"rxPeriod":18,"parentCandidates":[3101225193,3206780693,3211321933]}
+PEAR: Received {"txPeriod":53,"rxPeriod":21,"parentCandidates":[]} from node 2883619065
+DATA: 123123; {"txPeriod":53,"rxPeriod":21,"parentCandidates":[]}
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 20
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Running pear algorithm! - time since last run: 0
+PEAR: Running pear on device: 2883627821
+PEAR: Running pear on device: 3211408993
+PEAR: Running pear on device: 2883681453
+PEAR: Running pear on device: 3211386233
+PEAR: Running pear on device: 2930999053
+PEAR: Running pear on device: 417643029
+PEAR: Running pear on device: 2883619065
+PEAR: Running pear on device: 3206780693
+PEAR: Running pear on device: 3294680957
+PEAR: Running pear on device: 2811362457
+PEAR: sendPear(): dest=3211386233 msg={"newParent":3206773453}
+PEAR: sendPear(): dest=2883627821 msg={"newParent":3206773453}
+PEAR: sendPear(): dest=3211408993 msg={"newParent":3206773453}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":74,"rxPeriod":40,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":74,"rxPeriod":40,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":39,"rxPeriod":10,"parentCandidates":[3211321933,2930999053,417643029]} from node 3206780693
+DATA: 123123; {"txPeriod":39,"rxPeriod":10,"parentCandidates":[3211321933,2930999053,417643029]}
+PEAR: Received {"txPeriod":45,"rxPeriod":15,"parentCandidates":[]} from node 2883641793
+DATA: 123123; {"txPeriod":45,"rxPeriod":15,"parentCandidates":[]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":49,"rxPeriod":19,"parentCandidates":[2811362457]} from node 3101225193
+DATA: 123123; {"txPeriod":49,"rxPeriod":19,"parentCandidates":[2811362457]}
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 19
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693,"subs":[{"nodeId":2883624417}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":74,"rxPeriod":39,"parentCandidates":[3294680957,3206773453]} from node 3211386233
+DATA: 123123; {"txPeriod":74,"rxPeriod":39,"parentCandidates":[3294680957,3206773453]}
+Reroute to root available - adding reroute!
+PEAR: Received {"txPeriod":43,"rxPeriod":8,"parentCandidates":[2811362457,3211302717,3101225193]} from node 3211320821
+DATA: 123123; {"txPeriod":43,"rxPeriod":8,"parentCandidates":[2811362457,3211302717,3101225193]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693,"subs":[{"nodeId":2883624417}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":41,"rxPeriod":13,"parentCandidates":[3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":41,"rxPeriod":13,"parentCandidates":[3211408993,2930999053]}
+PEAR: Received {"txPeriod":64,"rxPeriod":32,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":64,"rxPeriod":32,"parentCandidates":[]}
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693,"subs":[{"nodeId":2883624417}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 19
+PEAR: Received {"txPeriod":43,"rxPeriod":15,"parentCandidates":[2883681453,3206780693]} from node 3294675181
+DATA: 123123; {"txPeriod":43,"rxPeriod":15,"parentCandidates":[2883681453,3206780693]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693,"subs":[{"nodeId":2883624417}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 19
+PEAR: Received {"txPeriod":36,"rxPeriod":6,"parentCandidates":[1616231985,3206780693,3294675181]} from node 2883624417
+DATA: 123123; {"txPeriod":36,"rxPeriod":6,"parentCandidates":[1616231985,3206780693,3294675181]}
+PEAR: connectToAP(): record is: nodeId: 256
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693,"subs":[{"nodeId":2883624417}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":54,"rxPeriod":24,"parentCandidates":[2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":54,"rxPeriod":24,"parentCandidates":[2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693,"subs":[{"nodeId":2883624417}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":57,"rxPeriod":25,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":57,"rxPeriod":25,"parentCandidates":[2883627821,2930999053]}
+PEAR: Received {"txPeriod":43,"rxPeriod":15,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":43,"rxPeriod":15,"parentCandidates":[2883627821]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693,"subs":[{"nodeId":2883624417}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":59,"rxPeriod":27,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":59,"rxPeriod":27,"parentCandidates":[]}
+PEAR: Received {"txPeriod":41,"rxPeriod":11,"parentCandidates":[2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":41,"rxPeriod":11,"parentCandidates":[2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":91,"rxPeriod":53,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":91,"rxPeriod":53,"parentCandidates":[]}
+PEAR: Received {"txPeriod":40,"rxPeriod":10,"parentCandidates":[3206780693,3211321933]} from node 1616231985
+DATA: 123123; {"txPeriod":40,"rxPeriod":10,"parentCandidates":[3206780693,3211321933]}
+PEAR: Received {"txPeriod":60,"rxPeriod":28,"parentCandidates":[]} from node 2883619065
+DATA: 123123; {"txPeriod":60,"rxPeriod":28,"parentCandidates":[]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693,"subs":[{"nodeId":2883624417}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]},{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":64,"rxPeriod":30,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":64,"rxPeriod":30,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":56,"rxPeriod":25,"parentCandidates":[3211321933,2930999053,417643029]} from node 3206780693
+DATA: 123123; {"txPeriod":56,"rxPeriod":25,"parentCandidates":[3211321933,2930999053,417643029]}
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693,"subs":[{"nodeId":2883624417}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 13
+PEAR: connectToAP(): record is: nodeId: 3211386233
+PEAR: Received {"txPeriod":52,"rxPeriod":21,"parentCandidates":[2811362457]} from node 3101225193
+DATA: 123123; {"txPeriod":52,"rxPeriod":21,"parentCandidates":[2811362457]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693,"subs":[{"nodeId":2883624417}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 13
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693,"subs":[{"nodeId":2883624417}]}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 13
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 12
+PEAR: Received {"txPeriod":40,"rxPeriod":13,"parentCandidates":[2883681453,3206780693]} from node 3294675181
+DATA: 123123; {"txPeriod":40,"rxPeriod":13,"parentCandidates":[2883681453,3206780693]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]}]}
+Number of nodes in mesh: 12
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 19
+--> startHere: New Connection, nodeId = 3211386233
+PEAR: Received {"txPeriod":52,"rxPeriod":22,"parentCandidates":[2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":52,"rxPeriod":22,"parentCandidates":[2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 19
+PEAR: Received {"txPeriod":54,"rxPeriod":23,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":54,"rxPeriod":23,"parentCandidates":[2883627821,2930999053]}
+PEAR: Received {"txPeriod":39,"rxPeriod":10,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":39,"rxPeriod":10,"parentCandidates":[2883627821]}
+PEAR: connectToAP(): record is: nodeId: 256
+!!!CONNECTIONS CHANGED!
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":58,"rxPeriod":26,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":58,"rxPeriod":26,"parentCandidates":[]}
+PEAR: Received {"txPeriod":37,"rxPeriod":7,"parentCandidates":[2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":37,"rxPeriod":7,"parentCandidates":[2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":78,"rxPeriod":44,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":78,"rxPeriod":44,"parentCandidates":[]}
+PEAR: Received {"txPeriod":45,"rxPeriod":14,"parentCandidates":[3206780693,3211321933]} from node 1616231985
+DATA: 123123; {"txPeriod":45,"rxPeriod":14,"parentCandidates":[3206780693,3211321933]}
+PEAR: Received {"txPeriod":50,"rxPeriod":18,"parentCandidates":[]} from node 2883619065
+DATA: 123123; {"txPeriod":50,"rxPeriod":18,"parentCandidates":[]}
+PEAR: Running pear algorithm! - time since last run: 120000
+PEAR: Running pear on device: 3211321933
+PEAR: Running pear on device: 3294675181
+PEAR: Running pear on device: 2883641793
+PEAR: Running pear on device: 3211302717
+PEAR: Running pear on device: 3101225193
+PEAR: Running pear on device: 3211320821
+PEAR: sendPear(): dest=3211386233 msg={"newParent":3206773453}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":48,"rxPeriod":17,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":48,"rxPeriod":17,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":42,"rxPeriod":13,"parentCandidates":[3211321933,2930999053,417643029]} from node 3206780693
+DATA: 123123; {"txPeriod":42,"rxPeriod":13,"parentCandidates":[3211321933,2930999053,417643029]}
+PEAR: Received {"txPeriod":41,"rxPeriod":12,"parentCandidates":[]} from node 2883641793
+DATA: 123123; {"txPeriod":41,"rxPeriod":12,"parentCandidates":[]}
+PEAR: Received {"txPeriod":45,"rxPeriod":14,"parentCandidates":[2811362457]} from node 3101225193
+DATA: 123123; {"txPeriod":45,"rxPeriod":14,"parentCandidates":[2811362457]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":50,"rxPeriod":19,"parentCandidates":[3294680957,3206773453,2811362457,3211408993,3211302717]} from node 3211386233
+DATA: 123123; {"txPeriod":50,"rxPeriod":19,"parentCandidates":[3294680957,3206773453,2811362457,3211408993,3211302717]}
+Reroute to root available - adding reroute!
+PEAR: Received {"txPeriod":43,"rxPeriod":13,"parentCandidates":[2811362457,3211302717,3101225193]} from node 3211320821
+DATA: 123123; {"txPeriod":43,"rxPeriod":13,"parentCandidates":[2811362457,3211302717,3101225193]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3211408993,2930999053]}
+PEAR: Received {"txPeriod":50,"rxPeriod":19,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":50,"rxPeriod":19,"parentCandidates":[]}
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3101225193]} from node 3101224829
+DATA: 123123; {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3101225193]}
+PEAR: Received {"txPeriod":38,"rxPeriod":9,"parentCandidates":[2883681453,3206780693]} from node 3294675181
+DATA: 123123; {"txPeriod":38,"rxPeriod":9,"parentCandidates":[2883681453,3206780693]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":36,"rxPeriod":7,"parentCandidates":[1616231985,3206780693,3294675181]} from node 2883624417
+DATA: 123123; {"txPeriod":36,"rxPeriod":7,"parentCandidates":[1616231985,3206780693,3294675181]}
+PEAR: Received {"txPeriod":43,"rxPeriod":13,"parentCandidates":[2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":43,"rxPeriod":13,"parentCandidates":[2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":46,"rxPeriod":15,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":46,"rxPeriod":15,"parentCandidates":[2883627821,2930999053]}
+PEAR: Received {"txPeriod":35,"rxPeriod":5,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":35,"rxPeriod":5,"parentCandidates":[2883627821]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":48,"rxPeriod":16,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":48,"rxPeriod":16,"parentCandidates":[]}
+PEAR: Received {"txPeriod":34,"rxPeriod":5,"parentCandidates":[2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":34,"rxPeriod":5,"parentCandidates":[2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":57,"rxPeriod":25,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":57,"rxPeriod":25,"parentCandidates":[]}
+PEAR: Received {"txPeriod":42,"rxPeriod":10,"parentCandidates":[3206780693,3211321933]} from node 1616231985
+DATA: 123123; {"txPeriod":42,"rxPeriod":10,"parentCandidates":[3206780693,3211321933]}
+PEAR: Received {"txPeriod":43,"rxPeriod":11,"parentCandidates":[]} from node 2883619065
+DATA: 123123; {"txPeriod":43,"rxPeriod":11,"parentCandidates":[]}
+PEAR: connectToAP(): record is: nodeId: 256
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":40,"rxPeriod":8,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":40,"rxPeriod":8,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":36,"rxPeriod":6,"parentCandidates":[3211321933,2930999053,417643029]} from node 3206780693
+DATA: 123123; {"txPeriod":36,"rxPeriod":6,"parentCandidates":[3211321933,2930999053,417643029]}
+PEAR: Received {"txPeriod":41,"rxPeriod":10,"parentCandidates":[]} from node 2883641793
+DATA: 123123; {"txPeriod":41,"rxPeriod":10,"parentCandidates":[]}
+PEAR: Received {"txPeriod":40,"rxPeriod":9,"parentCandidates":[2811362457]} from node 3101225193
+DATA: 123123; {"txPeriod":40,"rxPeriod":9,"parentCandidates":[2811362457]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":52,"rxPeriod":18,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]} from node 3211386233
+DATA: 123123; {"txPeriod":52,"rxPeriod":18,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]}
+PEAR: Received {"txPeriod":40,"rxPeriod":9,"parentCandidates":[2811362457,3211302717,3101225193]} from node 3211320821
+DATA: 123123; {"txPeriod":40,"rxPeriod":9,"parentCandidates":[2811362457,3211302717,3101225193]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":36,"rxPeriod":7,"parentCandidates":[3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":36,"rxPeriod":7,"parentCandidates":[3211408993,2930999053]}
+PEAR: Received {"txPeriod":48,"rxPeriod":15,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":48,"rxPeriod":15,"parentCandidates":[]}
+PEAR: Received {"txPeriod":34,"rxPeriod":5,"parentCandidates":[3101225193]} from node 3101224829
+DATA: 123123; {"txPeriod":34,"rxPeriod":5,"parentCandidates":[3101225193]}
+PEAR: Received {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2883681453,3206780693]} from node 3294675181
+DATA: 123123; {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2883681453,3206780693]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3206780693,3294675181]} from node 2883624417
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3206780693,3294675181]}
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":41,"rxPeriod":10,"parentCandidates":[2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":41,"rxPeriod":10,"parentCandidates":[2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":42,"rxPeriod":11,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":42,"rxPeriod":11,"parentCandidates":[2883627821,2930999053]}
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[2883627821]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":49,"rxPeriod":17,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":49,"rxPeriod":17,"parentCandidates":[]}
+PEAR: Received {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":65,"rxPeriod":30,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":65,"rxPeriod":30,"parentCandidates":[]}
+PEAR: Received {"txPeriod":43,"rxPeriod":11,"parentCandidates":[3206780693,3211321933]} from node 1616231985
+DATA: 123123; {"txPeriod":43,"rxPeriod":11,"parentCandidates":[3206780693,3211321933]}
+PEAR: Received {"txPeriod":44,"rxPeriod":13,"parentCandidates":[]} from node 2883619065
+DATA: 123123; {"txPeriod":44,"rxPeriod":13,"parentCandidates":[]}
+PEAR: Running pear algorithm! - time since last run: 120000
+PEAR: Running pear on device: 2883627821
+PEAR: Running pear on device: 3211408993
+PEAR: Running pear on device: 2883681453
+PEAR: Running pear on device: 3211386233
+PEAR: Running pear on device: 2930999053
+PEAR: Running pear on device: 417643029
+PEAR: Running pear on device: 2883619065
+PEAR: Running pear on device: 3206780693
+PEAR: Running pear on device: 3294680957
+PEAR: Running pear on device: 2811362457
+PEAR: sendPear(): dest=3211386233 msg={"newParent":3206773453}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":43,"rxPeriod":11,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":43,"rxPeriod":11,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3211321933,2930999053,417643029]} from node 3206780693
+DATA: 123123; {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3211321933,2930999053,417643029]}
+PEAR: Received {"txPeriod":52,"rxPeriod":20,"parentCandidates":[]} from node 2883641793
+DATA: 123123; {"txPeriod":52,"rxPeriod":20,"parentCandidates":[]}
+PEAR: Received {"txPeriod":43,"rxPeriod":12,"parentCandidates":[2811362457]} from node 3101225193
+DATA: 123123; {"txPeriod":43,"rxPeriod":12,"parentCandidates":[2811362457]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":55,"rxPeriod":22,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]} from node 3211386233
+DATA: 123123; {"txPeriod":55,"rxPeriod":22,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]}
+PEAR: Received {"txPeriod":49,"rxPeriod":19,"parentCandidates":[2811362457,3211302717,3101225193]} from node 3211320821
+DATA: 123123; {"txPeriod":49,"rxPeriod":19,"parentCandidates":[2811362457,3211302717,3101225193]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":34,"rxPeriod":5,"parentCandidates":[3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":34,"rxPeriod":5,"parentCandidates":[3211408993,2930999053]}
+PEAR: Received {"txPeriod":55,"rxPeriod":22,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":55,"rxPeriod":22,"parentCandidates":[]}
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3101225193]} from node 3101224829
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3101225193]}
+PEAR: Received {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2883681453,3206780693]} from node 3294675181
+DATA: 123123; {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2883681453,3206780693]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3206780693,3294675181]} from node 2883624417
+DATA: 123123; {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3206780693,3294675181]}
+PEAR: Received {"txPeriod":45,"rxPeriod":14,"parentCandidates":[2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":45,"rxPeriod":14,"parentCandidates":[2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":47,"rxPeriod":17,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":47,"rxPeriod":17,"parentCandidates":[2883627821,2930999053]}
+PEAR: Received {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2883627821]}
+PEAR: connectToAP(): record is: nodeId: 256
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":49,"rxPeriod":17,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":49,"rxPeriod":17,"parentCandidates":[]}
+PEAR: Received {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":60,"rxPeriod":25,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":60,"rxPeriod":25,"parentCandidates":[]}
+PEAR: Received {"txPeriod":41,"rxPeriod":10,"parentCandidates":[3206780693,3211321933]} from node 1616231985
+DATA: 123123; {"txPeriod":41,"rxPeriod":10,"parentCandidates":[3206780693,3211321933]}
+PEAR: Received {"txPeriod":41,"rxPeriod":11,"parentCandidates":[]} from node 2883619065
+DATA: 123123; {"txPeriod":41,"rxPeriod":11,"parentCandidates":[]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":43,"rxPeriod":11,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":43,"rxPeriod":11,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3211321933,2930999053,417643029]} from node 3206780693
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3211321933,2930999053,417643029]}
+PEAR: Received {"txPeriod":42,"rxPeriod":12,"parentCandidates":[]} from node 2883641793
+DATA: 123123; {"txPeriod":42,"rxPeriod":12,"parentCandidates":[]}
+PEAR: Received {"txPeriod":40,"rxPeriod":9,"parentCandidates":[2811362457]} from node 3101225193
+DATA: 123123; {"txPeriod":40,"rxPeriod":9,"parentCandidates":[2811362457]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":55,"rxPeriod":21,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]} from node 3211386233
+DATA: 123123; {"txPeriod":55,"rxPeriod":21,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]}
+PEAR: Received {"txPeriod":40,"rxPeriod":9,"parentCandidates":[2811362457,3211302717,3101225193]} from node 3211320821
+DATA: 123123; {"txPeriod":40,"rxPeriod":9,"parentCandidates":[2811362457,3211302717,3101225193]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3211408993,2930999053]}
+PEAR: Received {"txPeriod":53,"rxPeriod":20,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":53,"rxPeriod":20,"parentCandidates":[]}
+PEAR: Received {"txPeriod":34,"rxPeriod":4,"parentCandidates":[3101225193]} from node 3101224829
+DATA: 123123; {"txPeriod":34,"rxPeriod":4,"parentCandidates":[3101225193]}
+PEAR: Received {"txPeriod":35,"rxPeriod":5,"parentCandidates":[2883681453,3206780693]} from node 3294675181
+DATA: 123123; {"txPeriod":35,"rxPeriod":5,"parentCandidates":[2883681453,3206780693]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":36,"rxPeriod":6,"parentCandidates":[3206780693,3294675181]} from node 2883624417
+DATA: 123123; {"txPeriod":36,"rxPeriod":6,"parentCandidates":[3206780693,3294675181]}
+PEAR: Received {"txPeriod":43,"rxPeriod":13,"parentCandidates":[2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":43,"rxPeriod":13,"parentCandidates":[2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":46,"rxPeriod":15,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":46,"rxPeriod":15,"parentCandidates":[2883627821,2930999053]}
+PEAR: Received {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2883627821]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":48,"rxPeriod":16,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":48,"rxPeriod":16,"parentCandidates":[]}
+PEAR: Received {"txPeriod":34,"rxPeriod":4,"parentCandidates":[2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":34,"rxPeriod":4,"parentCandidates":[2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":64,"rxPeriod":29,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":64,"rxPeriod":29,"parentCandidates":[]}
+PEAR: Received {"txPeriod":42,"rxPeriod":12,"parentCandidates":[3206780693,3211321933]} from node 1616231985
+DATA: 123123; {"txPeriod":42,"rxPeriod":12,"parentCandidates":[3206780693,3211321933]}
+PEAR: Received {"txPeriod":49,"rxPeriod":17,"parentCandidates":[]} from node 2883619065
+DATA: 123123; {"txPeriod":49,"rxPeriod":17,"parentCandidates":[]}
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Running pear algorithm! - time since last run: 120000
+PEAR: Running pear on device: 3211321933
+PEAR: Running pear on device: 3294675181
+PEAR: Running pear on device: 2883641793
+PEAR: Running pear on device: 3211302717
+PEAR: Running pear on device: 3101225193
+PEAR: Running pear on device: 3211320821
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":42,"rxPeriod":10,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":42,"rxPeriod":10,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":36,"rxPeriod":7,"parentCandidates":[3211321933,2930999053,417643029]} from node 3206780693
+DATA: 123123; {"txPeriod":36,"rxPeriod":7,"parentCandidates":[3211321933,2930999053,417643029]}
+PEAR: Received {"txPeriod":42,"rxPeriod":11,"parentCandidates":[]} from node 2883641793
+DATA: 123123; {"txPeriod":42,"rxPeriod":11,"parentCandidates":[]}
+PEAR: Received {"txPeriod":44,"rxPeriod":12,"parentCandidates":[2811362457]} from node 3101225193
+DATA: 123123; {"txPeriod":44,"rxPeriod":12,"parentCandidates":[2811362457]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":53,"rxPeriod":19,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]} from node 3211386233
+DATA: 123123; {"txPeriod":53,"rxPeriod":19,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]}
+PEAR: Received {"txPeriod":41,"rxPeriod":10,"parentCandidates":[2811362457,3211302717,3101225193]} from node 3211320821
+DATA: 123123; {"txPeriod":41,"rxPeriod":10,"parentCandidates":[2811362457,3211302717,3101225193]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3211408993,2930999053]}
+PEAR: Received {"txPeriod":48,"rxPeriod":17,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":48,"rxPeriod":17,"parentCandidates":[]}
+PEAR: Received {"txPeriod":35,"rxPeriod":5,"parentCandidates":[3101225193]} from node 3101224829
+DATA: 123123; {"txPeriod":35,"rxPeriod":5,"parentCandidates":[3101225193]}
+PEAR: Received {"txPeriod":38,"rxPeriod":10,"parentCandidates":[2883681453,3206780693]} from node 3294675181
+DATA: 123123; {"txPeriod":38,"rxPeriod":10,"parentCandidates":[2883681453,3206780693]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":35,"rxPeriod":5,"parentCandidates":[3206780693,3294675181]} from node 2883624417
+DATA: 123123; {"txPeriod":35,"rxPeriod":5,"parentCandidates":[3206780693,3294675181]}
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":45,"rxPeriod":15,"parentCandidates":[2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":45,"rxPeriod":15,"parentCandidates":[2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":47,"rxPeriod":16,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":47,"rxPeriod":16,"parentCandidates":[2883627821,2930999053]}
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[2883627821]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":48,"rxPeriod":17,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":48,"rxPeriod":17,"parentCandidates":[]}
+PEAR: Received {"txPeriod":39,"rxPeriod":11,"parentCandidates":[2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":39,"rxPeriod":11,"parentCandidates":[2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":54,"rxPeriod":21,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":54,"rxPeriod":21,"parentCandidates":[]}
+PEAR: Received {"txPeriod":45,"rxPeriod":14,"parentCandidates":[3206780693,3211321933]} from node 1616231985
+DATA: 123123; {"txPeriod":45,"rxPeriod":14,"parentCandidates":[3206780693,3211321933]}
+PEAR: Received {"txPeriod":40,"rxPeriod":9,"parentCandidates":[]} from node 2883619065
+DATA: 123123; {"txPeriod":40,"rxPeriod":9,"parentCandidates":[]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":43,"rxPeriod":11,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":43,"rxPeriod":11,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":34,"rxPeriod":4,"parentCandidates":[3211321933,2930999053,417643029]} from node 3206780693
+DATA: 123123; {"txPeriod":34,"rxPeriod":4,"parentCandidates":[3211321933,2930999053,417643029]}
+PEAR: Received {"txPeriod":60,"rxPeriod":29,"parentCandidates":[]} from node 2883641793
+DATA: 123123; {"txPeriod":60,"rxPeriod":29,"parentCandidates":[]}
+PEAR: Received {"txPeriod":45,"rxPeriod":13,"parentCandidates":[2811362457]} from node 3101225193
+DATA: 123123; {"txPeriod":45,"rxPeriod":13,"parentCandidates":[2811362457]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":69,"rxPeriod":35,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]} from node 3211386233
+DATA: 123123; {"txPeriod":69,"rxPeriod":35,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]}
+PEAR: Received {"txPeriod":58,"rxPeriod":26,"parentCandidates":[2811362457,3211302717,3101225193]} from node 3211320821
+DATA: 123123; {"txPeriod":58,"rxPeriod":26,"parentCandidates":[2811362457,3211302717,3101225193]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3211408993,2930999053]}
+PEAR: Received {"txPeriod":78,"rxPeriod":43,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":78,"rxPeriod":43,"parentCandidates":[]}
+PEAR: Received {"txPeriod":44,"rxPeriod":17,"parentCandidates":[3101225193]} from node 3101224829
+DATA: 123123; {"txPeriod":44,"rxPeriod":17,"parentCandidates":[3101225193]}
+PEAR: Received {"txPeriod":35,"rxPeriod":5,"parentCandidates":[2883681453,3206780693]} from node 3294675181
+DATA: 123123; {"txPeriod":35,"rxPeriod":5,"parentCandidates":[2883681453,3206780693]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":36,"rxPeriod":7,"parentCandidates":[3206780693,3294675181]} from node 2883624417
+DATA: 123123; {"txPeriod":36,"rxPeriod":7,"parentCandidates":[3206780693,3294675181]}
+PEAR: Received {"txPeriod":42,"rxPeriod":11,"parentCandidates":[2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":42,"rxPeriod":11,"parentCandidates":[2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":43,"rxPeriod":12,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":43,"rxPeriod":12,"parentCandidates":[2883627821,2930999053]}
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[2883627821]}
+PEAR: connectToAP(): record is: nodeId: 256
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":51,"rxPeriod":19,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":51,"rxPeriod":19,"parentCandidates":[]}
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":68,"rxPeriod":33,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":68,"rxPeriod":33,"parentCandidates":[]}
+PEAR: Received {"txPeriod":40,"rxPeriod":9,"parentCandidates":[3206780693,3211321933]} from node 1616231985
+DATA: 123123; {"txPeriod":40,"rxPeriod":9,"parentCandidates":[3206780693,3211321933]}
+PEAR: Received {"txPeriod":44,"rxPeriod":13,"parentCandidates":[]} from node 2883619065
+DATA: 123123; {"txPeriod":44,"rxPeriod":13,"parentCandidates":[]}
+PEAR: Running pear algorithm! - time since last run: 120000
+PEAR: Running pear on device: 2883627821
+PEAR: Running pear on device: 3211408993
+PEAR: Running pear on device: 2883681453
+PEAR: Running pear on device: 3211386233
+PEAR: Running pear on device: 2930999053
+PEAR: Running pear on device: 417643029
+PEAR: Running pear on device: 2883619065
+PEAR: Running pear on device: 3206780693
+PEAR: Running pear on device: 3294680957
+PEAR: Running pear on device: 2811362457
+PEAR: NETWORK IS STABLE!
+Time since first pear run: 480031
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":41,"rxPeriod":9,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":41,"rxPeriod":9,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":38,"rxPeriod":9,"parentCandidates":[3211321933,2930999053,417643029]} from node 3206780693
+DATA: 123123; {"txPeriod":38,"rxPeriod":9,"parentCandidates":[3211321933,2930999053,417643029]}
+PEAR: Received {"txPeriod":45,"rxPeriod":14,"parentCandidates":[]} from node 2883641793
+DATA: 123123; {"txPeriod":45,"rxPeriod":14,"parentCandidates":[]}
+PEAR: Received {"txPeriod":40,"rxPeriod":9,"parentCandidates":[2811362457]} from node 3101225193
+DATA: 123123; {"txPeriod":40,"rxPeriod":9,"parentCandidates":[2811362457]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":54,"rxPeriod":20,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]} from node 3211386233
+DATA: 123123; {"txPeriod":54,"rxPeriod":20,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]}
+PEAR: Received {"txPeriod":42,"rxPeriod":12,"parentCandidates":[2811362457,3211302717,3101225193]} from node 3211320821
+DATA: 123123; {"txPeriod":42,"rxPeriod":12,"parentCandidates":[2811362457,3211302717,3101225193]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[3211408993,2930999053]}
+PEAR: Received {"txPeriod":52,"rxPeriod":19,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":52,"rxPeriod":19,"parentCandidates":[]}
+PEAR: Received {"txPeriod":34,"rxPeriod":4,"parentCandidates":[3101225193]} from node 3101224829
+DATA: 123123; {"txPeriod":34,"rxPeriod":4,"parentCandidates":[3101225193]}
+PEAR: Received {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2883681453,3206780693]} from node 3294675181
+DATA: 123123; {"txPeriod":36,"rxPeriod":7,"parentCandidates":[2883681453,3206780693]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":35,"rxPeriod":5,"parentCandidates":[3206780693,3294675181]} from node 2883624417
+DATA: 123123; {"txPeriod":35,"rxPeriod":5,"parentCandidates":[3206780693,3294675181]}
+PEAR: Received {"txPeriod":44,"rxPeriod":14,"parentCandidates":[2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":44,"rxPeriod":14,"parentCandidates":[2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":48,"rxPeriod":17,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":48,"rxPeriod":17,"parentCandidates":[2883627821,2930999053]}
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[2883627821]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":51,"rxPeriod":19,"parentCandidates":[]} from node 2883627821
+DATA: 123123; {"txPeriod":51,"rxPeriod":19,"parentCandidates":[]}
+PEAR: Received {"txPeriod":34,"rxPeriod":4,"parentCandidates":[2811362457,2883641793,3211386233]} from node 3211302717
+DATA: 123123; {"txPeriod":34,"rxPeriod":4,"parentCandidates":[2811362457,2883641793,3211386233]}
+PEAR: Received {"txPeriod":61,"rxPeriod":29,"parentCandidates":[]} from node 2883681453
+DATA: 123123; {"txPeriod":61,"rxPeriod":29,"parentCandidates":[]}
+PEAR: Received {"txPeriod":46,"rxPeriod":15,"parentCandidates":[3206780693,3211321933]} from node 1616231985
+DATA: 123123; {"txPeriod":46,"rxPeriod":15,"parentCandidates":[3206780693,3211321933]}
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":46,"rxPeriod":14,"parentCandidates":[]} from node 2883619065
+DATA: 123123; {"txPeriod":46,"rxPeriod":14,"parentCandidates":[]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":42,"rxPeriod":10,"parentCandidates":[2883627821]} from node 3211408993
+DATA: 123123; {"txPeriod":42,"rxPeriod":10,"parentCandidates":[2883627821]}
+PEAR: Received {"txPeriod":35,"rxPeriod":5,"parentCandidates":[3211321933,2930999053,417643029]} from node 3206780693
+DATA: 123123; {"txPeriod":35,"rxPeriod":5,"parentCandidates":[3211321933,2930999053,417643029]}
+PEAR: Received {"txPeriod":41,"rxPeriod":10,"parentCandidates":[]} from node 2883641793
+DATA: 123123; {"txPeriod":41,"rxPeriod":10,"parentCandidates":[]}
+PEAR: Received {"txPeriod":46,"rxPeriod":14,"parentCandidates":[2811362457]} from node 3101225193
+DATA: 123123; {"txPeriod":46,"rxPeriod":14,"parentCandidates":[2811362457]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":51,"rxPeriod":19,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]} from node 3211386233
+DATA: 123123; {"txPeriod":51,"rxPeriod":19,"parentCandidates":[3294680957,2811362457,3211408993,3211302717]}
+PEAR: Received {"txPeriod":40,"rxPeriod":9,"parentCandidates":[2811362457,3211302717,3101225193]} from node 3211320821
+DATA: 123123; {"txPeriod":40,"rxPeriod":9,"parentCandidates":[2811362457,3211302717,3101225193]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":35,"rxPeriod":5,"parentCandidates":[3211408993,2930999053]} from node 2811362457
+DATA: 123123; {"txPeriod":35,"rxPeriod":5,"parentCandidates":[3211408993,2930999053]}
+PEAR: Received {"txPeriod":47,"rxPeriod":15,"parentCandidates":[]} from node 3294680957
+DATA: 123123; {"txPeriod":47,"rxPeriod":15,"parentCandidates":[]}
+PEAR: Received {"txPeriod":37,"rxPeriod":8,"parentCandidates":[2883681453,3206780693]} from node 3294675181
+DATA: 123123; {"txPeriod":37,"rxPeriod":8,"parentCandidates":[2883681453,3206780693]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: connectToAP(): record is: nodeId: 256
+PEAR: Received {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3206780693,3294675181]} from node 2883624417
+DATA: 123123; {"txPeriod":37,"rxPeriod":8,"parentCandidates":[3206780693,3294675181]}
+PEAR: Received {"txPeriod":43,"rxPeriod":12,"parentCandidates":[2811362457,2930999053]} from node 3211321933
+DATA: 123123; {"txPeriod":43,"rxPeriod":12,"parentCandidates":[2811362457,2930999053]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
+PEAR: Received {"txPeriod":44,"rxPeriod":13,"parentCandidates":[2883627821,2930999053]} from node 417643029
+DATA: 123123; {"txPeriod":44,"rxPeriod":13,"parentCandidates":[2883627821,2930999053]}
+PEAR: Received {"txPeriod":35,"rxPeriod":6,"parentCandidates":[2883627821]} from node 2930999053
+DATA: 123123; {"txPeriod":35,"rxPeriod":6,"parentCandidates":[2883627821]}
+TOPOLOGY: {"nodeId":3206773453,"root":true,"subs":[{"nodeId":2883627821,"subs":[{"nodeId":2883681453,"subs":[{"nodeId":417643029,"subs":[{"nodeId":3211321933,"subs":[{"nodeId":3101225193,"subs":[{"nodeId":1616231985,"subs":[{"nodeId":2883624417}]}]}]}]},{"nodeId":2883619065,"subs":[{"nodeId":3294675181}]},{"nodeId":3206780693}]}]},{"nodeId":3211408993,"subs":[{"nodeId":2930999053}]},{"nodeId":3211386233,"subs":[{"nodeId":3294680957,"subs":[{"nodeId":2883641793,"subs":[{"nodeId":3211320821,"subs":[{"nodeId":3101224829}]}]},{"nodeId":3211302717}]},{"nodeId":2811362457}]}]}
+Number of nodes in mesh: 20
