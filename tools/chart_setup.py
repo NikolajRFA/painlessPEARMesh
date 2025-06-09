@@ -284,6 +284,9 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
     # Define bar width
     bar_width = 0.4
 
+    pre_pear_sum = 0
+    post_pear_sum = 0
+
     for energy_profile_id in sorted(df_pivoted["energy_profile_id"].unique()):
         if energy_profile_id == 0: continue
         tx_threshold, rx_threshold = energy_profile_map[int(energy_profile_id)]
@@ -309,9 +312,11 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
         for bar in bars_pre:
             plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f"{bar.get_height():.1f}",
                      ha="center", va="bottom", fontsize=10, color="black")
+            pre_pear_sum += bar.get_height()
         for bar in bars_post:
             plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f"{bar.get_height():.1f}",
                      ha="center", va="bottom", fontsize=10, color="black")
+            post_pear_sum += bar.get_height()
 
         # Formatting
         plt.xticks(x + bar_width / 2, labels=this_pivot_df.index.map(lambda node_id: get_short_node_id(node_id)))
@@ -330,6 +335,7 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
         print(f'Difference between max before and after PEAR {max_message_before - max_message_after}')
         print(100 - (max_message_after / max_message_before * 100))
 
+    print(f'pre-PEAR sum: {pre_pear_sum}, post-PEAR sum: {post_pear_sum}')
 
 """energy_profile_id_map = {
     3211408993: 1,
