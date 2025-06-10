@@ -1,4 +1,6 @@
-﻿from tools import data_parser
+﻿from statistics import mean
+
+from tools import data_parser
 from tools.fileHelper import get_file_paths_from_folder, get_short_node_id
 from tools.data_parser_2 import extract_pear_reports, df_from_pear_reports, PearReport
 # from tools.energy_profile import get_energy_profile_from_node, get_energy_profile_id, get_energy_profile, \
@@ -86,6 +88,7 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
     no_pear_df = no_pear_df.sort_values(by=["from_node", "node_time"])
 
     no_pear_2min_mean = no_pear_df['tx_period'].mean() * 19 * 2
+    print(f'no pear 2 min avg: {no_pear_2min_mean}')
 
     # Make a copy to work on
     temp_df = df.copy()
@@ -148,12 +151,14 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
     # plt.axvline(x=x, color="red", linestyle="--", linewidth=1, label="PEAR algorithm runs" if x == start_time_min else "")
 
     # Plot a separate curve for each run_id
+    last_ys = []
     for run_id, run_group in df_agg.groupby("run_id"):
         plt.plot(run_group["time_bin_min"], run_group["tx_period"], marker="", linestyle="-", label=f"Run {run_id}")
 
         # Get the last data point for each run_id
         last_x = run_group["time_bin_min"].iloc[-1]
         last_y = run_group["tx_period"].iloc[-1]
+        last_ys.append(last_y)
 
         # Plot only the last data point with marker "o"
         plt.plot(last_x, last_y, marker="o", markersize=6, color="maroon")
@@ -171,6 +176,9 @@ def chart_setup(data_path: str, energy_profile_id_map: dict, energy_profile_map:
     plt.grid()
     plt.tight_layout()
     plt.show()
+
+    print(f'avg consumption post-PEAR: {mean(last_ys)}')
+    print(f'% difference between pre and post-PEAR avg consumption: {100 - (mean(last_ys) / no_pear_2min_mean * 100)}')
 
     # Ensure each row retains its run_id before filtering
     success_rate_df = temp_df.groupby(["from_node", "run_id"]).tail(1).copy()
